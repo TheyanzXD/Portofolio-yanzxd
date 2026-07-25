@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portofolio - YanzXD</title>
+  <link rel="stylesheet" href="ui/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="container">
+    <a href="#" class="logo">&lt;Dev/&gt;</a>
+    <nav>
+      <a href="#about">Tentang</a>
+      <a href="#skills">Skills</a>
+      <a href="#playlist">Lagu Favorit</a>
+      <a href="#camera">Selfie</a>
+      <a href="#tools">Tools</a>
+    </nav>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <h1>Halo, YanzXD</h1>
+    <p class="subtitle">Full-Stack Developer | UI/UX Enthusiast | Creative Coder</p>
+    <div class="status-badge">
+      <span class="status-dot"></span>
+      <span>Website Status: <strong>ONLINE</strong></span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <h2><span class="icon">👋</span> Tentang Saya</h2>
+    <p>Saya adalah seorang web developer yang passionate dalam menciptakan pengalaman digital yang menarik dan fungsional. Berpengalaman dalam pengembangan web modern, UI/UX design, dan berbagai teknologi terkini.</p>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <h2><span class="icon">⚡</span> Keahlian</h2>
+    <div class="skills-grid">
+      <div class="skill-tag"><div class="skill-icon">🌐</div><div class="skill-name">HTML5</div></div>
+      <div class="skill-tag"><div class="skill-icon">🎨</div><div class="skill-name">CSS3</div></div>
+      <div class="skill-tag"><div class="skill-icon">⚡</div><div class="skill-name">JavaScript</div></div>
+      <div class="skill-tag"><div class="skill-icon">⚛️</div><div class="skill-name">React</div></div>
+      <div class="skill-tag"><div class="skill-icon">🟢</div><div class="skill-name">Node.js</div></div>
+      <div class="skill-tag"><div class="skill-icon">🐍</div><div class="skill-name">Python</div></div>
+      <div class="skill-tag"><div class="skill-icon">🗄️</div><div class="skill-name">Database</div></div>
+      <div class="skill-tag"><div class="skill-icon">📱</div><div class="skill-name">UI/UX Design</div></div>
+      <div class="skill-tag"><div class="skill-icon">🔧</div><div class="skill-name">Git</div></div>
+      <div class="skill-tag"><div class="skill-icon">☁️</div><div class="skill-name">Cloud</div></div>
+    </div>
+  </section>
+
+  <!-- PLAYLIST -->
+  <section id="playlist" class="playlist-section">
+    <div class="playlist-header">
+      <h2 style="border:none;margin:0"><span class="icon">🎵</span> Lagu Favorit</h2>
+      <button class="spotify-import-btn" onclick="openSpotifyImport()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        Saran playlist
+      </button>
+    </div>
+    <span class="playlist-count" id="playlist-count"></span>
+    <div class="playlist-grid" id="playlist-container"></div>
+    <div class="spotify-embed-container" id="spotify-embed-area" style="display:none">
+      <h3 style="color:var(--accent);margin-bottom:.8rem;font-size:1rem">🎶 Cuplikan Playlist</h3>
+      <iframe id="spotify-embed" style="width:100%;height:352px;border:0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" src=""></iframe>
+    </div>
+  </section>
+
+  <!-- CAMERA / VISITOR SELFIE -->
+  <section id="camera">
+    <h2><span class="icon">📸</span> Ambil Selfie</h2>
+    <div class="camera-section">
+      <div class="camera-area">
+        <div id="camera-viewfinder">
+          <video id="video" autoplay playsinline></video>
+          <canvas id="canvas"></canvas>
+        </div>
+        <div id="preview-container">
+          <img id="photo-preview" alt="Preview Selfie">
+        </div>
+        <div class="camera-buttons">
+          <button id="start-camera" class="cam-btn-main">
+            <span class="cam-btn-icon">📷</span> Aktifkan Kamera
+          </button>
+          <button id="capture-photo" class="cam-btn-main cam-btn-capture" style="display:none">
+            <span class="cam-btn-icon">📸</span> Ambil Foto
+          </button>
+          <button id="retake-photo" class="btn-secondary" style="display:none">
+            <span class="cam-btn-icon">🔄</span> Ulangi
+          </button>
+          <button id="send-photo" class="cam-btn-send" style="display:none">
+            <span class="cam-btn-icon">✅</span> Kirim
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NAME INPUT MODAL -->
+  <div id="name-modal" class="modal">
+    <div class="modal-content name-modal-box">
+      <span class="close" id="close-name-modal">&times;</span>
+      <div class="name-modal-icon">👋</div>
+      <h2>Siapa Nama Anda?</h2>
+      <p style="font-size:.9rem">Sebelum foto dikirim, perkenalkan diri Anda!</p>
+      <input type="text" id="visitor-name-input" placeholder="Ketik nama Anda..." maxlength="50" autocomplete="off">
+      <button id="submit-name-btn" class="cam-btn-send" style="width:100%;margin-top:.5rem">
+        <span class="cam-btn-icon">📸</span> Kirim Foto & Nama
+      </button>
+      <div id="sending-status" style="display:none;margin-top:.8rem;font-size:.85rem;color:var(--accent)">
+        <span class="spinner"></span> Mengirim ke Telegram...
+      </div>
+    </div>
+  </div>
+
+  <!-- THANK YOU MODAL (updated) -->
+  <div id="thankyou-modal" class="modal">
+    <div class="modal-content">
+      <div class="name-modal-icon">🎉</div>
+      <h2>Terima Kasih!</h2>
+      <p>Foto Anda berhasil dikirim ke Telegram. Terima kasih telah mengunjungi website ini!</p>
+      <button onclick="document.getElementById('thankyou-modal').style.display='none'" style="margin-top:1rem">Tutup</button>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <section id="tools">
+    <h2><span class="icon">🛠</span> Tools & Game Interaktif</h2>
+    <p style="color:var(--text3);margin-bottom:1rem;font-size:.9rem">Klik untuk membuka tools secara terpisah</p>
+    <div class="tools-grid">
+      <a href="kalkulator.html" class="tool-link-card">
+        <div class="tool-link-icon">🧮</div>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Kalkulator Mini</div>
+          <div class="tool-link-desc">Kalkulator dengan riwayat perhitungan</div>
+        </div>
+        <span class="tool-link-arrow">→</span>
+      </a>
+      <a href="tebak-angka.html" class="tool-link-card">
+        <div class="tool-link-icon">🎯</div>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Tebak Angka</div>
+          <div class="tool-link-desc">Uji keberuntunganmu 1-1000</div>
+        </div>
+        <span class="tool-link-arrow">→</span>
+      </a>
+      <a href="stopwatch.html" class="tool-link-card">
+        <div class="tool-link-icon">⏱</div>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Stopwatch</div>
+          <div class="tool-link-desc">Timer presisi dengan pencatatan putaran</div>
+        </div>
+        <span class="tool-link-arrow">→</span>
+      </a>
+      <a href="quotes.html" class="tool-link-card">
+        <div class="tool-link-icon">💬</div>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Quotes Motivasi</div>
+          <div class="tool-link-desc">Kata-kata bijak & favorit</div>
+        </div>
+        <span class="tool-link-arrow">→</span>
+      </a>
+      <a href="konversi-suhu.html" class="tool-link-card">
+        <div class="tool-link-icon">🌡</div>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Konversi Suhu</div>
+          <div class="tool-link-desc">Celsius, Fahrenheit, Kelvin</div>
+        </div>
+        <span class="tool-link-arrow">→</span>
+      </a>
+      <a href="random-picker.html" class="tool-link-card">
+        <div class="tool-link-icon">🎲</div>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Random Picker</div>
+          <div class="tool-link-desc">Pilih acak dari daftar</div>
+        </div>
+        <span class="tool-link-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="social-links">
+      <a href="https://github.com" target="_blank">GitHub</a>
+      <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+      <a href="https://twitter.com" target="_blank">Twitter</a>
+    </div>
+    <p>&copy; 2026 YanzXD. All rights reserved.</p>
+  </footer>
+
+</div>
+
+<!-- SPOTIFY IMPORT MODAL -->
+<div id="spotify-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="close-spotify-modal">&times;</span>
+    <h2>Import dari Spotify 🎵</h2>
+    <p style="font-size:.9rem">Tempel link playlist Spotify atau track Spotify untuk menambahkannya:</p>
+    <input type="text" id="spotify-url-input" placeholder="https://open.spotify.com/track/..." style="width:100%;padding:.6rem;border-radius:8px;border:1px solid var(--accent);background:var(--bg);color:var(--text);margin:.8rem 0;font-size:.9rem">
+    <button id="import-spotify-btn" style="width:100%">Import & Putar</button>
+    <p style="font-size:.8rem;color:var(--text3);margin-top:.5rem">Mendukung link track atau playlist Spotify</p>
+  </div>
+</div>
+
+<script>
+// ============================================
+// UTILITIES
+// ============================================
+function escapeHTML(str) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(str || ''));
+  return d.innerHTML;
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  Object.assign(t.style, {
+    position: 'fixed', bottom: '20px', right: '20px', background: 'var(--accent)',
+    color: 'var(--bg)', padding: '12px 20px', borderRadius: '8px', fontWeight: '600',
+    zIndex: '9999', animation: 'fadeUp .3s ease', fontSize: '.9rem'
+  });
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+// ============================================
+// 1. IP TRACKING & TELEGRAM NOTIFICATION
+// ============================================
+let visitorIP = 'unknown';
+
+(async function initSite() {
+  try {
+    const res = await fetch('https://api.ipify.org?format=json');
+    const { ip } = await res.json();
+    visitorIP = ip;
+    console.log('Visitor IP:', ip);
+
+    await fetch('/api/track-ip', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ip, userAgent: navigator.userAgent })
+    });
+  } catch (err) {
+    console.error('IP tracking error:', err);
+  }
+})();
+
+async function sendTelegramNotification(message) {
+  try {
+    await fetch('/api/send-telegram', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
+    });
+  } catch (e) {
+    console.log('Telegram send error:', e);
+  }
+}
+
+async function sendSelfieToTelegram(photoBase64, name) {
+  try {
+    const res = await fetch('/api/send-selfie', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ photo: photoBase64, name, ip: visitorIP })
+    });
+    const data = await res.json();
+    return data.ok;
+  } catch (e) {
+    console.error('Send selfie error:', e);
+    return false;
+  }
+}
+
+// ============================================
+// 1. PLAYLIST
+// ============================================
+async function loadPlaylist() {
+  try {
+    const response = await fetch('data/playlist.json');
+    const songs = await response.json();
+    const container = document.getElementById('playlist-container');
+    const countEl = document.getElementById('playlist-count');
+    container.innerHTML = '';
+    countEl.textContent = `${songs.length} lagu`;
+
+    songs.forEach((song, i) => {
+      const card = document.createElement('div');
+      card.className = 'song-card';
+      card.innerHTML = `
+        <div class="song-number">${i + 1}</div>
+        <div class="song-info">
+          <div class="song-title">${escapeHTML(song.title)}</div>
+          <div class="song-artist">${escapeHTML(song.artist)}</div>
+          ${song.genre ? `<div class="song-genre">${escapeHTML(song.genre)}</div>` : ''}
+        </div>
+        <div class="song-actions">
+          ${song.spotifyId ? `<a href="https://open.spotify.com/track/${escapeHTML(song.spotifyId)}" target="_blank" class="play-btn spotify">▶ Spotify</a>` : ''}
+          ${song.link && song.link.includes('youtube') ? `<a href="${escapeHTML(song.link)}" target="_blank" class="play-btn youtube">▶ YT</a>` : ''}
+          ${song.link && song.link.includes('spotify') ? `<a href="${escapeHTML(song.link)}" target="_blank" class="play-btn spotify">▶ Play</a>` : ''}
+        </div>`;
+      container.appendChild(card);
+    });
+
+    if (songs.length > 0 && songs[0].spotifyId) {
+      loadSpotifyEmbed(songs[0].spotifyId);
+    }
+  } catch (err) {
+    console.error('Gagal memuat playlist:', err);
+    document.getElementById('playlist-container').innerHTML = '<p style="color:var(--text3)">Playlist tidak tersedia.</p>';
+  }
+}
+
+function loadSpotifyEmbed(trackId) {
+  const area = document.getElementById('spotify-embed-area');
+  const embed = document.getElementById('spotify-embed');
+  if (area && embed) {
+    area.style.display = 'block';
+    embed.src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`;
+  }
+}
+
+function openSpotifyImport() {
+  document.getElementById('spotify-modal').style.display = 'block';
+}
+
+document.getElementById('close-spotify-modal')?.addEventListener('click', () => {
+  document.getElementById('spotify-modal').style.display = 'none';
+});
+
+document.getElementById('import-spotify-btn')?.addEventListener('click', () => {
+  const url = document.getElementById('spotify-url-input').value.trim();
+  if (!url) { alert('Masukkan link Spotify'); return; }
+
+  let embedId = '';
+  let type = 'track';
+
+  const playlistMatch = url.match(/spotify\.com\/playlist\/([a-zA-Z0-9]+)/);
+  const trackMatch = url.match(/spotify\.com\/track\/([a-zA-Z0-9]+)/);
+  const albumMatch = url.match(/spotify\.com\/album\/([a-zA-Z0-9]+)/);
+
+  if (playlistMatch) { embedId = playlistMatch[1]; type = 'playlist'; }
+  else if (trackMatch) { embedId = trackMatch[1]; type = 'track'; }
+  else if (albumMatch) { embedId = albumMatch[1]; type = 'album'; }
+  else { alert('Link Spotify tidak valid'); return; }
+
+  const area = document.getElementById('spotify-embed-area');
+  const embed = document.getElementById('spotify-embed');
+  area.style.display = 'block';
+  embed.src = `https://open.spotify.com/embed/${type}/${embedId}?utm_source=generator&theme=0`;
+  document.getElementById('spotify-modal').style.display = 'none';
+  showToast('Berhasil import dari Spotify!');
+});
+
+// ============================================
+// 2. KAMERA & SELFIE + NAME MODAL
+// ============================================
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const previewContainer = document.getElementById('preview-container');
+const photoPreview = document.getElementById('photo-preview');
+const startCameraBtn = document.getElementById('start-camera');
+const captureBtn = document.getElementById('capture-photo');
+const retakeBtn = document.getElementById('retake-photo');
+const sendBtn = document.getElementById('send-photo');
+const nameModal = document.getElementById('name-modal');
+const closeNameModal = document.getElementById('close-name-modal');
+const visitorNameInput = document.getElementById('visitor-name-input');
+const submitNameBtn = document.getElementById('submit-name-btn');
+const sendingStatus = document.getElementById('sending-status');
+let stream = null;
+let capturedPhotoBase64 = '';
+
+function resetCamera() {
+  previewContainer.style.display = 'none';
+  sendBtn.style.display = 'none';
+  retakeBtn.style.display = 'none';
+  startCameraBtn.style.display = 'inline-flex';
+  captureBtn.style.display = 'none';
+  photoPreview.src = '';
+  capturedPhotoBase64 = '';
+}
+
+startCameraBtn.addEventListener('click', async () => {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+    video.srcObject = stream;
+    video.style.display = 'block';
+    previewContainer.style.display = 'none';
+    startCameraBtn.style.display = 'none';
+    captureBtn.style.display = 'inline-flex';
+    retakeBtn.style.display = 'none';
+    sendBtn.style.display = 'none';
+  } catch (err) {
+    alert('Tidak dapat mengakses kamera. Pastikan izin diberikan.');
+    console.error(err);
+  }
+});
+
+captureBtn.addEventListener('click', () => {
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  capturedPhotoBase64 = canvas.toDataURL('image/jpeg', 1.0);
+  photoPreview.src = capturedPhotoBase64;
+  previewContainer.style.display = 'block';
+  sendBtn.style.display = 'inline-flex';
+  retakeBtn.style.display = 'inline-flex';
+  captureBtn.style.display = 'none';
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+    video.style.display = 'none';
+  }
+});
+
+retakeBtn.addEventListener('click', resetCamera);
+
+// Send button -> open name modal
+sendBtn.addEventListener('click', () => {
+  nameModal.style.display = 'block';
+  visitorNameInput.value = '';
+  visitorNameInput.focus();
+  sendingStatus.style.display = 'none';
+  submitNameBtn.disabled = false;
+});
+
+// Close name modal
+closeNameModal.addEventListener('click', () => {
+  nameModal.style.display = 'none';
+});
+
+// Submit name + photo to Telegram
+submitNameBtn.addEventListener('click', async () => {
+  const name = visitorNameInput.value.trim();
+  if (!name) {
+    visitorNameInput.style.borderColor = '#ff6b6b';
+    visitorNameInput.placeholder = 'Nama harus diisi!';
+    return;
+  }
+
+  submitNameBtn.disabled = true;
+  sendingStatus.style.display = 'block';
+
+  const ok = await sendSelfieToTelegram(capturedPhotoBase64, name);
+
+  nameModal.style.display = 'none';
+  sendingStatus.style.display = 'none';
+  submitNameBtn.disabled = false;
+  resetCamera();
+
+  if (ok) {
+    document.getElementById('thankyou-modal').style.display = 'block';
+  } else {
+    showToast('Gagal mengirim foto. Coba lagi.');
+  }
+});
+
+visitorNameInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') submitNameBtn.click();
+});
+visitorNameInput.addEventListener('input', () => {
+  visitorNameInput.style.borderColor = 'rgba(77,166,255,.4)';
+});
+
+// ============================================
+// 3. MODAL CLOSE
+// ============================================
+document.getElementById('close-modal')?.addEventListener('click', () => {
+  document.getElementById('thankyou-modal').style.display = 'none';
+});
+window.addEventListener('click', (e) => {
+  if (e.target.id === 'thankyou-modal' || e.target.id === 'spotify-modal' || e.target.id === 'name-modal') {
+    e.target.style.display = 'none';
+  }
+});
+
+// ============================================
+// INIT
+// ============================================
+loadPlaylist();
+</script>
+</body>
+</html>

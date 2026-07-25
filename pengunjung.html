@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="ui/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--bg:#0a192f;--bg2:#112240;--bg3:#1a2f4e;--accent:#4da6ff;--accent2:#66b3ff;--text:#ccd6f6;--text2:#8892b0;--text3:#64748b;--red:#ff6b6b;--radius:12px;--shadow:0 4px 20px rgba(0,0,0,.3)}
+    body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.7;overflow-x:hidden;min-height:100vh}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+    /* LOGIN OVERLAY */
+    #login-overlay{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}
+    #login-overlay.hidden{display:none}
+    .login-box{background:var(--bg2);border-radius:16px;padding:2.5rem;width:90%;max-width:380px;border:1px solid rgba(77,166,255,.1);box-shadow:var(--shadow);text-align:center;animation:scaleIn .4s ease}
+    .login-box .lock-icon{font-size:3rem;margin-bottom:1rem}
+    .login-box h2{color:var(--accent);margin-bottom:.5rem;font-size:1.3rem}
+    .login-box p{color:var(--text3);font-size:.85rem;margin-bottom:1.5rem}
+    .login-box input{width:100%;padding:.8rem;border-radius:10px;border:2px solid rgba(77,166,255,.2);background:var(--bg);color:var(--accent);font-size:1.1rem;text-align:center;font-family:monospace;letter-spacing:4px;transition:border-color .3s;margin-bottom:1rem}
+    .login-box input:focus{outline:none;border-color:var(--accent)}
+    .login-box button{width:100%;padding:.8rem;border:none;border-radius:10px;background:var(--accent);color:var(--bg);font-weight:700;font-size:1rem;cursor:pointer;transition:all .3s}
+    .login-box button:hover{background:var(--accent2)}
+    .login-error{color:var(--red);font-size:.85rem;margin-top:.5rem;display:none}
+    .login-hint{color:var(--text3);font-size:.7rem;margin-top:1rem;opacity:.5}
+
+    /* ADMIN LAYOUT */
+    #admin-panel{display:none;animation:fadeIn .5s ease}
+    #admin-panel.visible{display:block}
+    .admin-header{background:var(--bg2);border-bottom:1px solid rgba(77,166,255,.1);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+    .admin-header .logo{color:var(--accent);font-weight:700;font-size:1.1rem;text-decoration:none;display:flex;align-items:center;gap:.5rem}
+    .admin-header .header-right{display:flex;align-items:center;gap:1rem}
+    .admin-header .status{font-size:.8rem;color:var(--accent);display:flex;align-items:center;gap:.4rem}
+    .admin-header .status-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+    .admin-header .logout-btn{background:rgba(255,107,107,.15);color:var(--red);border:none;padding:.4rem .8rem;border-radius:6px;font-size:.8rem;cursor:pointer;transition:all .3s}
+    .admin-header .logout-btn:hover{background:rgba(255,107,107,.25)}
+    .admin-content{max-width:1200px;margin:0 auto;padding:2rem}
+
+    /* STATS */
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+    .stat-card{background:var(--bg2);border-radius:12px;padding:1.5rem;border:1px solid rgba(77,166,255,.05);transition:all .3s}
+    .stat-card:hover{border-color:rgba(77,166,255,.2);transform:translateY(-2px)}
+    .stat-card .stat-icon{font-size:1.5rem;margin-bottom:.5rem}
+    .stat-card .stat-value{font-size:1.8rem;font-weight:700;color:var(--accent)}
+    .stat-card .stat-label{font-size:.8rem;color:var(--text3);margin-top:.2rem}
+
+    /* TABS */
+    .tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+    .tab-btn{padding:.5rem 1rem;border-radius:8px;border:1px solid rgba(77,166,255,.1);background:transparent;color:var(--text3);cursor:pointer;font-size:.85rem;transition:all .3s}
+    .tab-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+    .tab-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
+    .tab-content{display:none}
+    .tab-content.active{display:block;animation:fadeIn .3s ease}
+
+    /* TABLES */
+    .data-table{width:100%;border-collapse:collapse;font-size:.85rem}
+    .data-table th{background:var(--bg3);color:var(--accent);padding:.7rem .8rem;text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;position:sticky;top:0}
+    .data-table td{padding:.7rem .8rem;border-bottom:1px solid rgba(77,166,255,.05);color:var(--text2)}
+    .data-table tr:hover td{background:rgba(77,166,255,.03)}
+    .table-wrapper{max-height:500px;overflow-y:auto;border-radius:10px;border:1px solid rgba(77,166,255,.05)}
+    .ip-badge{display:inline-block;padding:.2rem .5rem;background:rgba(77,166,255,.1);border-radius:4px;font-family:monospace;font-size:.8rem;color:var(--accent)}
+
+    /* SONGS */
+    .song-row{display:flex;align-items:center;gap:1rem;padding:.8rem;background:var(--bg);border-radius:8px;margin-bottom:.5rem;border:1px solid rgba(77,166,255,.05)}
+    .song-row .song-num{font-size:1.2rem;font-weight:700;color:var(--accent);min-width:2rem;text-align:center}
+    .song-row .song-info{flex:1}
+    .song-row .song-name{font-weight:600;color:var(--text)}
+    .song-row .song-art{font-size:.8rem;color:var(--text3)}
+    .song-row .song-link{font-size:.75rem;color:var(--accent);text-decoration:none;opacity:.7;transition:opacity .3s}
+    .song-row .song-link:hover{opacity:1}
+
+    /* SEARCH */
+    .search-bar{display:flex;gap:.5rem;margin-bottom:1rem}
+    .search-bar input{flex:1;padding:.6rem 1rem;border-radius:8px;border:1px solid rgba(77,166,255,.2);background:var(--bg);color:var(--text);font-size:.9rem;transition:border-color .3s}
+    .search-bar input:focus{outline:none;border-color:var(--accent)}
+    .search-bar button{padding:.6rem 1rem}
+
+    /* EXPORT BTN */
+    .export-btn{background:rgba(77,166,255,.1);color:var(--accent);border:1px solid rgba(77,166,255,.2);padding:.4rem .8rem;border-radius:6px;font-size:.8rem;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:.3rem}
+    .export-btn:hover{background:rgba(77,166,255,.2)}
+
+    /* TOOLS GRID */
+    .tools-admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem}
+    .tool-admin-card{background:var(--bg);border-radius:10px;padding:1rem;text-align:center;border:1px solid rgba(77,166,255,.05);text-decoration:none;color:var(--text);transition:all .3s}
+    .tool-admin-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+    .tool-admin-card .tool-icon{font-size:1.8rem;margin-bottom:.3rem}
+    .tool-admin-card .tool-name{font-size:.85rem;color:var(--text2)}
+
+    @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    @media(max-width:640px){.admin-content{padding:1rem}.stats-row{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay">
+  <div class="login-box">
+    <div class="lock-icon">🔐</div>
+    <h2>Admin Panel</h2>
+    <p>Masukkan password untuk mengakses panel administrasi</p>
+    <input type="password" id="login-password" placeholder="••••••••" maxlength="20" autofocus>
+    <button id="login-btn">Masuk</button>
+    <div class="login-error" id="login-error">Password salah! Silakan coba lagi.</div>
+    <div class="login-hint">Akses hanya untuk admin</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel">
+  <div class="admin-header">
+    <a href="index.html" class="logo">🔐 Admin Panel</a>
+    <div class="header-right">
+      <div class="status"><span class="status-dot"></span> Online</div>
+      <button class="logout-btn" id="logout-btn">Keluar</button>
+    </div>
+  </div>
+  <div class="admin-content">
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Pengunjung</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-value" id="stat-today">0</div>
+        <div class="stat-label">Hari Ini</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🎵</div>
+        <div class="stat-value" id="stat-songs">0</div>
+        <div class="stat-label">Total Lagu</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🛠</div>
+        <div class="stat-value">6</div>
+        <div class="stat-label">Tools Aktif</div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="visitors">👥 Pengunjung</button>
+      <button class="tab-btn" data-tab="songs">🎵 Playlist</button>
+      <button class="tab-btn" data-tab="tools">🛠 Tools</button>
+      <button class="tab-btn" data-tab="database">🗄 Database</button>
+    </div>
+
+    <!-- TAB: VISITORS -->
+    <div class="tab-content active" id="tab-visitors">
+      <div class="search-bar">
+        <input type="text" id="search-visitors" placeholder="Cari IP address...">
+        <button class="export-btn" id="export-csv">📥 Export CSV</button>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>IP Address</th><th>User Agent</th><th>Tanggal</th><th>Waktu</th></tr></thead>
+          <tbody id="visitor-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB: SONGS -->
+    <div class="tab-content" id="tab-songs">
+      <div id="songs-list"></div>
+    </div>
+
+    <!-- TAB: TOOLS -->
+    <div class="tab-content" id="tab-tools">
+      <p style="color:var(--text3);margin-bottom:1rem;font-size:.9rem">Semua tools yang tersedia di website:</p>
+      <div class="tools-admin-grid">
+        <a href="kalkulator.html" class="tool-admin-card"><div class="tool-icon">🧮</div><div class="tool-name">Kalkulator</div></a>
+        <a href="tebak-angka.html" class="tool-admin-card"><div class="tool-icon">🎯</div><div class="tool-name">Tebak Angka</div></a>
+        <a href="stopwatch.html" class="tool-admin-card"><div class="tool-icon">⏱</div><div class="tool-name">Stopwatch</div></a>
+        <a href="quotes.html" class="tool-admin-card"><div class="tool-icon">💬</div><div class="tool-name">Quotes</div></a>
+        <a href="konversi-suhu.html" class="tool-admin-card"><div class="tool-icon">🌡</div><div class="tool-name">Konversi Suhu</div></a>
+        <a href="random-picker.html" class="tool-admin-card"><div class="tool-icon">🎲</div><div class="tool-name">Random Picker</div></a>
+      </div>
+    </div>
+
+    <!-- TAB: DATABASE -->
+    <div class="tab-content" id="tab-database">
+      <div style="display:flex;gap:.8rem;margin-bottom:1rem;flex-wrap:wrap">
+        <button class="export-btn" id="export-db">📥 Download database.json</button>
+        <button class="export-btn" id="export-playlist">📥 Download playlist.json</button>
+      </div>
+      <div style="background:var(--bg);border-radius:10px;padding:1rem;border:1px solid rgba(77,166,255,.05);font-family:monospace;font-size:.8rem;color:var(--text3);max-height:400px;overflow:auto;white-space:pre-wrap" id="json-viewer"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  const PASSWORD='devcode';
+  const overlay=document.getElementById('login-overlay');
+  const panel=document.getElementById('admin-panel');
+  const passInput=document.getElementById('login-password');
+  const loginBtn=document.getElementById('login-btn');
+  const loginError=document.getElementById('login-error');
+  const logoutBtn=document.getElementById('logout-btn');
+
+  // Check session
+  if(sessionStorage.getItem('admin_auth')==='true'){
+    overlay.classList.add('hidden');
+    panel.classList.add('visible');
+    loadAllData();
+  }
+
+  loginBtn.addEventListener('click',tryLogin);
+  passInput.addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin();});
+
+  function tryLogin(){
+    if(passInput.value===PASSWORD){
+      sessionStorage.setItem('admin_auth','true');
+      overlay.classList.add('hidden');
+      panel.classList.add('visible');
+      loadAllData();
+    }else{
+      loginError.style.display='block';
+      passInput.value='';
+      passInput.focus();
+      passInput.style.borderColor='var(--red)';
+      setTimeout(()=>{passInput.style.borderColor='rgba(77,166,255,.2)';},1000);
+    }
+  }
+
+  logoutBtn.addEventListener('click',()=>{
+    sessionStorage.removeItem('admin_auth');
+    panel.classList.remove('visible');
+    overlay.classList.remove('hidden');
+    passInput.value='';
+    loginError.style.display='none';
+  });
+
+  // TABS
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // LOAD DATA
+  async function loadAllData(){
+    await loadVisitors();
+    await loadSongs();
+    loadDatabaseView();
+  }
+
+  async function loadVisitors(){
+    try{
+      const res=await fetch('/api/visitors');
+      const data=await res.json();
+      const visitors=data.visitors||[];
+      document.getElementById('stat-total').textContent=visitors.length;
+      const today=new Date().toLocaleDateString('id-ID');
+      document.getElementById('stat-today').textContent=visitors.filter(v=>v.date===today).length;
+      renderVisitorTable(visitors);
+    }catch(e){
+      console.error('Load visitors error:',e);
+    }
+  }
+
+  function renderVisitorTable(visitors){
+    const tbody=document.getElementById('visitor-tbody');
+    tbody.innerHTML='';
+    visitors.slice().reverse().forEach((v,i)=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML='<td>'+(visitors.length-i)+'</td><td><span class="ip-badge">'+esc(v.ip)+'</span></td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(v.userAgent||'')+'">'+esc(v.userAgent||'-')+'</td><td>'+( v.date||'-')+'</td><td>'+(v.time||'-')+'</td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.getElementById('search-visitors')?.addEventListener('input',async function(){
+    try{
+      const res=await fetch('/api/visitors');
+      const data=await res.json();
+      const q=this.value.toLowerCase();
+      const filtered=(data.visitors||[]).filter(v=>v.ip.toLowerCase().includes(q)||(v.userAgent||'').toLowerCase().includes(q));
+      renderVisitorTable(filtered);
+    }catch(e){}
+  });
+
+  async function loadSongs(){
+    try{
+      const res=await fetch('data/playlist.json');
+      const songs=await res.json();
+      document.getElementById('stat-songs').textContent=songs.length;
+      const list=document.getElementById('songs-list');
+      list.innerHTML=songs.map((s,i)=>
+        '<div class="song-row"><div class="song-num">'+(i+1)+'</div><div class="song-info"><div class="song-name">'+esc(s.title)+'</div><div class="song-art">'+esc(s.artist)+(s.genre?' · '+esc(s.genre):'')+'</div></div><a class="song-link" href="'+esc(s.link||s.spotifyId||'#')+'" target="_blank">'+(s.spotifyId?'Spotify':'Link')+'</a></div>'
+      ).join('');
+    }catch(e){
+      console.error('Load songs error:',e);
+    }
+  }
+
+  function loadDatabaseView(){
+    fetch('/api/visitors').then(r=>r.json()).then(d=>{
+      document.getElementById('json-viewer').textContent=JSON.stringify(d,null,2);
+    }).catch(e=>{});
+  }
+
+  // EXPORT CSV
+  document.getElementById('export-csv')?.addEventListener('click',async()=>{
+    try{
+      const res=await fetch('/api/visitors');
+      const data=await res.json();
+      const visitors=data.visitors||[];
+      let csv='No,IP Address,User Agent,Tanggal,Waktu\n';
+      visitors.forEach((v,i)=>{
+        csv+=(i+1)+',"'+(v.ip||'')+'","'+(v.userAgent||'')+'",'+('"'+(v.date||'')+'"')+','+('"'+(v.time||'')+'"')+'\n';
+      });
+      downloadFile('visitors.csv',csv,'text/csv');
+    }catch(e){alert('Gagal export');}
+  });
+
+  // EXPORT DB
+  document.getElementById('export-db')?.addEventListener('click',async()=>{
+    try{
+      const res=await fetch('/api/visitors');
+      const text=await res.text();
+      downloadFile('database.json',text,'application/json');
+    }catch(e){alert('Gagal download');}
+  });
+
+  document.getElementById('export-playlist')?.addEventListener('click',async()=>{
+    try{
+      const res=await fetch('data/playlist.json');
+      const text=await res.text();
+      downloadFile('playlist.json',text,'application/json');
+    }catch(e){alert('Gagal download');}
+  });
+
+  function downloadFile(name,content,type){
+    const blob=new Blob([content],{type:type});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download=name;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+})();
+</script>
+</body>
+</html>

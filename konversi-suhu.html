@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konversi Suhu</title>
+  <link rel="stylesheet" href="ui/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌡</text></svg>">
+  <style>
+    .page-wrapper{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+    .back-link{position:fixed;top:1.5rem;left:1.5rem;color:var(--accent);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .3s;z-index:10}
+    .back-link:hover{transform:translateX(-3px)}
+    .temp-wrapper{width:100%;max-width:500px;animation:scaleIn .5s ease}
+    .temp-header{text-align:center;margin-bottom:2rem}
+    .temp-header h1{font-size:2rem;color:var(--accent)}
+    .temp-header p{color:var(--text3);font-size:.9rem}
+    .temp-body{background:var(--bg2);border-radius:16px;padding:2rem;border:1px solid rgba(77,166,255,.1);box-shadow:var(--shadow)}
+    .temp-visual{text-align:center;margin:1.5rem 0}
+    .thermometer{position:relative;width:40px;height:180px;background:var(--bg);border-radius:20px;margin:0 auto;border:2px solid var(--bg3);overflow:hidden}
+    .thermo-fill{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,var(--accent),#ff6b6b);border-radius:0 0 18px 18px;transition:height .5s ease}
+    .thermo-bulb{width:50px;height:50px;background:var(--bg3);border-radius:50%;margin:0 auto;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--accent);font-weight:700;font-family:monospace}
+    .temp-converter{margin-top:1.5rem}
+    .temp-row{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;flex-wrap:wrap;justify-content:center}
+    .temp-row input{flex:1;min-width:150px;padding:.8rem;font-size:1.2rem;text-align:center;border-radius:10px;border:2px solid rgba(77,166,255,.2);background:var(--bg);color:var(--accent);font-family:monospace;font-weight:600;transition:border-color .3s}
+    .temp-row input:focus{outline:none;border-color:var(--accent)}
+    .temp-row select{padding:.8rem;border-radius:10px;border:2px solid rgba(77,166,255,.2);background:var(--bg2);color:var(--text);font-size:.95rem;cursor:pointer;transition:border-color .3s;min-width:120px}
+    .temp-row select:focus{outline:none;border-color:var(--accent)}
+    .temp-arrow{font-size:1.5rem;color:var(--accent)}
+    .temp-result{text-align:center;margin:1.5rem 0;padding:1.5rem;background:var(--bg);border-radius:12px;border:1px solid rgba(77,166,255,.1)}
+    .temp-result .result-val{font-size:2rem;font-weight:700;color:var(--accent);font-family:monospace}
+    .temp-result .result-label{font-size:.85rem;color:var(--text3);margin-top:.3rem}
+    .temp-formulas{margin-top:1.5rem}
+    .temp-formulas h3{color:var(--accent);font-size:.9rem;margin-bottom:.5rem}
+    .formula-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.5rem}
+    .formula-item{background:var(--bg);border-radius:8px;padding:.6rem .8rem;font-size:.75rem;color:var(--text3);font-family:monospace;border:1px solid rgba(77,166,255,.05)}
+    @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← Kembali ke Portofolio</a>
+  <div class="page-wrapper">
+    <div class="temp-wrapper">
+      <div class="temp-header">
+        <h1>Konversi Suhu</h1>
+        <p>Konversi antara Celsius, Fahrenheit, dan Kelvin</p>
+      </div>
+      <div class="temp-body">
+        <div class="temp-visual">
+          <div class="thermometer"><div class="thermo-fill" id="thermo-fill" style="height:30%"></div></div>
+          <div class="thermo-bulb" id="thermo-bulb">--°</div>
+        </div>
+        <div class="temp-converter">
+          <div class="temp-row">
+            <input type="number" id="temp-input" placeholder="0" value="0">
+            <select id="temp-from">
+              <option value="C">Celsius °C</option>
+              <option value="F">Fahrenheit °F</option>
+              <option value="K">Kelvin K</option>
+            </select>
+          </div>
+          <div style="text-align:center"><span class="temp-arrow">⇅</span></div>
+          <div class="temp-row">
+            <input type="number" id="temp-output" readonly placeholder="0">
+            <select id="temp-to">
+              <option value="F">Fahrenheit °F</option>
+              <option value="C">Celsius °C</option>
+              <option value="K">Kelvin K</option>
+            </select>
+          </div>
+        </div>
+        <div class="temp-result">
+          <div class="result-val" id="result-val">0 °C = 32 °F</div>
+          <div class="result-label">Hasil konversi</div>
+        </div>
+        <div class="temp-formulas">
+          <h3>rumus Konversi</h3>
+          <div class="formula-list">
+            <div class="formula-item">C → F: (C × 9/5) + 32</div>
+            <div class="formula-item">C → K: C + 273.15</div>
+            <div class="formula-item">F → C: (F − 32) × 5/9</div>
+            <div class="formula-item">F → K: (F − 32) × 5/9 + 273.15</div>
+            <div class="formula-item">K → C: K − 273.15</div>
+            <div class="formula-item">K → F: (K − 273.15) × 9/5 + 32</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    const input=document.getElementById('temp-input');
+    const output=document.getElementById('temp-output');
+    const from=document.getElementById('temp-from');
+    const to=document.getElementById('temp-to');
+    const resultVal=document.getElementById('result-val');
+    const thermoFill=document.getElementById('thermo-fill');
+    const thermoBulb=document.getElementById('thermo-bulb');
+
+    function convert(){
+      const v=parseFloat(input.value);
+      if(isNaN(v)){output.value='';resultVal.textContent='Masukkan angka';return;}
+      let r;
+      const key=from.value+to.value;
+      if(from.value===to.value)r=v;
+      else if(key==='CF')r=(v*9/5)+32;
+      else if(key==='CK')r=v+273.15;
+      else if(key==='FC')r=(v-32)*5/9;
+      else if(key==='FK')r=(v-32)*5/9+273.15;
+      else if(key==='KC')r=v-273.15;
+      else if(key==='KF')r=(v-273.15)*9/5+32;
+      output.value=r.toFixed(2);
+      resultVal.textContent=v+' '+from.value+' = '+r.toFixed(2)+' '+to.value;
+
+      let celsius;
+      if(from.value==='C')celsius=v;
+      else if(from.value==='F')celsius=(v-32)*5/9;
+      else celsius=v-273.15;
+      const pct=Math.min(100,Math.max(5,((celsius+40)/140)*100));
+      thermoFill.style.height=pct+'%';
+      thermoBulb.textContent=celsius.toFixed(0)+'°C';
+    }
+
+    input.addEventListener('input',convert);
+    from.addEventListener('change',convert);
+    to.addEventListener('change',convert);
+    convert();
+  })();
+  </script>
+</body>
+</html>

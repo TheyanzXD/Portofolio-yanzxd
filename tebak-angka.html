@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tebak Angka</title>
+  <link rel="stylesheet" href="ui/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+  <style>
+    .page-wrapper{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+    .back-link{position:fixed;top:1.5rem;left:1.5rem;color:var(--accent);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .3s;z-index:10}
+    .back-link:hover{transform:translateX(-3px)}
+    .guess-wrapper{width:100%;max-width:440px;animation:scaleIn .5s ease}
+    .guess-header{text-align:center;margin-bottom:2rem}
+    .guess-header h1{font-size:2rem;color:var(--accent)}
+    .guess-header p{color:var(--text3);font-size:.9rem}
+    .guess-body{background:var(--bg2);border-radius:16px;padding:2rem;border:1px solid rgba(77,166,255,.1);box-shadow:var(--shadow);text-align:center}
+    .guess-visual{position:relative;margin:1.5rem 0}
+    .guess-gauge{width:100%;height:8px;background:var(--bg);border-radius:4px;position:relative;overflow:hidden}
+    .guess-gauge-fill{height:100%;background:linear-gradient(90deg,#4da6ff,#ff6b6b);border-radius:4px;transition:width .3s ease}
+    .guess-gauge-marker{position:absolute;top:-6px;width:4px;height:20px;background:var(--accent);border-radius:2px;transition:left .3s ease;box-shadow:0 0 8px var(--accent)}
+    .guess-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--text3);margin-top:.5rem}
+    .guess-input-area{margin:1.5rem 0}
+    .guess-input{width:100%;max-width:200px;padding:.8rem;font-size:1.3rem;text-align:center;border-radius:10px;border:2px solid rgba(77,166,255,.2);background:var(--bg);color:var(--accent);font-weight:700;font-family:monospace;transition:border-color .3s}
+    .guess-input:focus{outline:none;border-color:var(--accent)}
+    .guess-btns{display:flex;gap:.8rem;justify-content:center;margin-top:1rem}
+    .guess-msg{font-size:1.1rem;margin:1rem 0;min-height:2rem;color:var(--text);transition:all .3s}
+    .guess-msg.correct{color:#4da6ff;font-weight:700}
+    .guess-msg.wrong{color:#ff6b6b}
+    .guess-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-top:1.5rem}
+    .stat-card{background:var(--bg);border-radius:10px;padding:.8rem;border:1px solid rgba(77,166,255,.1)}
+    .stat-card .stat-val{font-size:1.4rem;font-weight:700;color:var(--accent)}
+    .stat-card .stat-label{font-size:.7rem;color:var(--text3);margin-top:.2rem}
+    .guess-history{margin-top:1rem;display:flex;flex-wrap:wrap;gap:.3rem;justify-content:center}
+    .guess-tag{padding:.2rem .5rem;border-radius:4px;font-size:.7rem;font-family:monospace}
+    .guess-tag.low{background:rgba(100,150,255,.15);color:#6496ff}
+    .guess-tag.high{background:rgba(255,107,107,.15);color:#ff6b6b}
+    .guess-tag.correct{background:rgba(77,166,255,.15);color:var(--accent)}
+    .difficulty-btns{display:flex;gap:.5rem;justify-content:center;margin-bottom:1.5rem}
+    .diff-btn{padding:.4rem .8rem;border-radius:6px;border:1px solid rgba(77,166,255,.2);background:transparent;color:var(--text3);font-size:.8rem;cursor:pointer;transition:all .3s}
+    .diff-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+    .diff-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
+    @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← Kembali ke Portofolio</a>
+  <div class="page-wrapper">
+    <div class="guess-wrapper">
+      <div class="guess-header">
+        <h1>Tebak Angka</h1>
+        <p>Uji keberuntunganmu!</p>
+      </div>
+      <div class="guess-body">
+        <div class="difficulty-btns">
+          <button class="diff-btn active" data-max="100">Mudah (1-100)</button>
+          <button class="diff-btn" data-max="500">Sedang (1-500)</button>
+          <button class="diff-btn" data-max="1000">Sulit (1-1000)</button>
+        </div>
+        <div class="guess-visual">
+          <div class="guess-gauge"><div class="guess-gauge-fill" id="gauge-fill"></div><div class="guess-gauge-marker" id="gauge-marker"></div></div>
+          <div class="guess-labels"><span id="gauge-min">1</span><span id="gauge-max">100</span></div>
+        </div>
+        <p class="guess-msg" id="guess-msg">Tebak angka antara 1-100!</p>
+        <div class="guess-input-area">
+          <input type="number" class="guess-input" id="guess-input" min="1" max="100" placeholder="?">
+        </div>
+        <div class="guess-btns">
+          <button id="guess-btn" style="min-width:120px">Tebak!</button>
+          <button id="guess-reset" class="btn-secondary" style="min-width:120px">Permainan Baru</button>
+        </div>
+        <div class="guess-stats">
+          <div class="stat-card"><div class="stat-val" id="stat-attempts">0</div><div class="stat-label">Percobaan</div></div>
+          <div class="stat-card"><div class="stat-val" id="stat-wins">0</div><div class="stat-label">Kemenangan</div></div>
+          <div class="stat-card"><div class="stat-val" id="stat-streak">0</div><div class="stat-label">Streak</div></div>
+        </div>
+        <div class="guess-history" id="guess-history"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    let max=100,secret,attempts=0,wins=0,streak=0,history=[];
+    const msg=document.getElementById('guess-msg');
+    const input=document.getElementById('guess-input');
+    const gauge=document.getElementById('gauge-fill');
+    const marker=document.getElementById('gauge-marker');
+    const gaugeMin=document.getElementById('gauge-min');
+    const gaugeMax=document.getElementById('gauge-max');
+
+    function newGame(){
+      secret=Math.floor(Math.random()*max)+1;
+      attempts=0;
+      input.value='';
+      input.max=max;
+      input.disabled=false;
+      msg.textContent='Tebak angka antara 1-'+max+'!';
+      msg.className='guess-msg';
+      history=[];
+      updateStats();
+      updateGauge(50);
+      document.getElementById('guess-history').innerHTML='';
+    }
+
+    function updateStats(){
+      document.getElementById('stat-attempts').textContent=attempts;
+      document.getElementById('stat-wins').textContent=wins;
+      document.getElementById('stat-streak').textContent=streak;
+    }
+
+    function updateGauge(pct){
+      gauge.style.width=pct+'%';
+      marker.style.left='calc('+pct+'% - 2px)';
+    }
+
+    function renderHistory(){
+      const el=document.getElementById('guess-history');
+      el.innerHTML=history.map(h=>{
+        const cls=h.result==='correct'?'correct':h.guess<secret?'low':'high';
+        return '<span class="guess-tag '+cls+'">'+h.guess+'</span>';
+      }).join('');
+    }
+
+    document.getElementById('guess-btn').addEventListener('click',()=>{
+      const g=parseInt(input.value);
+      if(isNaN(g)||g<1||g>max){msg.textContent='Masukkan angka 1-'+max;msg.className='guess-msg wrong';return;}
+      attempts++;
+      const pct=Math.min(100,Math.max(0,(g/max)*100));
+      if(g===secret){
+        msg.textContent='Benar! Angka '+secret+' dalam '+attempts+' percobaan!';
+        msg.className='guess-msg correct';
+        wins++;streak++;
+        history.push({guess:g,result:'correct'});
+        input.disabled=true;
+      }else if(g<secret){
+        msg.textContent='Terlalu rendah! Coba lebih besar.';
+        msg.className='guess-msg wrong';
+        streak=0;
+        history.push({guess:g,result:'low'});
+        updateGauge(Math.min(95,(g/max)*100+5));
+      }else{
+        msg.textContent='Terlalu tinggi! Coba lebih kecil.';
+        msg.className='guess-msg wrong';
+        streak=0;
+        history.push({guess:g,result:'high'});
+        updateGauge(Math.max(5,(g/max)*100-5));
+      }
+      input.value='';
+      updateStats();
+      renderHistory();
+    });
+
+    input.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('guess-btn').click();});
+
+    document.getElementById('guess-reset').addEventListener('click',newGame);
+
+    document.querySelectorAll('.diff-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        max=parseInt(btn.dataset.max);
+        gaugeMin.textContent='1';
+        gaugeMax.textContent=max;
+        newGame();
+      });
+    });
+
+    newGame();
+  })();
+  </script>
+</body>
+</html>

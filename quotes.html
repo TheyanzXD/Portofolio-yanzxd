@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quotes Motivasi</title>
+  <link rel="stylesheet" href="ui/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+  <style>
+    .page-wrapper{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+    .back-link{position:fixed;top:1.5rem;left:1.5rem;color:var(--accent);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .3s;z-index:10}
+    .back-link:hover{transform:translateX(-3px)}
+    .quote-wrapper{width:100%;max-width:600px;animation:scaleIn .5s ease}
+    .quote-header{text-align:center;margin-bottom:2rem}
+    .quote-header h1{font-size:2rem;color:var(--accent)}
+    .quote-header p{color:var(--text3);font-size:.9rem}
+    .quote-card{background:var(--bg2);border-radius:16px;padding:3rem 2rem;border:1px solid rgba(77,166,255,.1);box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;transition:all .5s ease}
+    .quote-card::before{content:'"';position:absolute;top:-20px;left:20px;font-size:10rem;color:rgba(77,166,255,.05);font-family:serif;line-height:1}
+    .quote-card .quote-icon{font-size:2.5rem;margin-bottom:1rem}
+    .quote-card .quote-text{font-size:1.2rem;line-height:1.8;color:var(--text);font-style:italic;position:relative;z-index:1;min-height:80px}
+    .quote-card .quote-author{margin-top:1.5rem;font-size:.95rem;color:var(--accent);font-weight:600}
+    .quote-card .quote-category{display:inline-block;margin-top:.5rem;padding:.3rem .8rem;background:rgba(77,166,255,.1);border-radius:12px;font-size:.75rem;color:var(--accent)}
+    .quote-btns{display:flex;gap:.8rem;justify-content:center;margin-top:2rem;flex-wrap:wrap}
+    .quote-btns button{min-width:140px}
+    .quote-counter{text-align:center;margin-top:1rem;font-size:.8rem;color:var(--text3)}
+    .quote-fav{margin-top:1.5rem;text-align:left}
+    .quote-fav h3{color:var(--accent);font-size:1rem;margin-bottom:.5rem}
+    .fav-quote{background:var(--bg);border-radius:8px;padding:.8rem;margin-bottom:.5rem;font-size:.85rem;color:var(--text2);border-left:3px solid var(--accent);cursor:pointer;transition:all .3s}
+    .fav-quote:hover{background:rgba(77,166,255,.05)}
+    @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .quote-card .quote-text{animation:fadeIn .5s ease}
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← Kembali ke Portofolio</a>
+  <div class="page-wrapper">
+    <div class="quote-wrapper">
+      <div class="quote-header">
+        <h1>Quotes Motivasi</h1>
+        <p>Kata-kata bijak untuk hari ini</p>
+      </div>
+      <div class="quote-card" id="quote-card">
+        <div class="quote-icon">💡</div>
+        <div class="quote-text" id="quote-text">"Jadilah perubahan yang ingin Anda lihat di dunia."</div>
+        <div class="quote-author" id="quote-author">— Mahatma Gandhi</div>
+        <div class="quote-category" id="quote-cat">Inspirasi</div>
+      </div>
+      <div class="quote-btns">
+        <button id="next-quote">Quote Baru</button>
+        <button id="fav-quote" class="btn-secondary">❤️ Favorit</button>
+        <button id="share-quote" class="btn-secondary">📋 Salin</button>
+      </div>
+      <div class="quote-counter" id="quote-counter"></div>
+      <div class="quote-fav" id="fav-section" style="display:none">
+        <h3>❤️ Quote Favorit</h3>
+        <div id="fav-list"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    const quotes=[
+      {text:"Jadilah perubahan yang ingin Anda lihat di dunia.",author:"Mahatma Gandhi",cat:"Inspirasi"},
+      {text:"Hiduplah seolah-olah Anda akan mati besok. Belajarlah seolah-olah Anda akan hidup selamanya.",author:"Mahatma Gandhi",cat:"Kehidupan"},
+      {text:"Kesuksesan adalah kemampuan untuk beranjak dari kegagalan tanpa kehilangan antusiasme.",author:"Winston Churchill",cat:"Kesuksesan"},
+      {text:"Cara terbaik untuk memprediksi masa depan adalah dengan menciptakannya.",author:"Peter Drucker",cat:"Masa Depan"},
+      {text:"Jangan takut gagal. Kegagalan adalah batu loncatan menuju kesuksesan.",author:"Anonim",cat:"Motivasi"},
+      {text:"Kerja keras mengalahkan bakat ketika bakat tidak bekerja keras.",author:"Tim Notke",cat:"Kerja Keras"},
+      {text:"Satu-satunya cara untuk melakukan pekerjaan yang hebat adalah mencintai apa yang Anda lakukan.",author:"Steve Jobs",cat:"Passion"},
+      {text:"Masa depan milik mereka yang percaya pada keindahan impian mereka.",author:"Eleanor Roosevelt",cat:"Impian"},
+      {text:"Kita adalah apa yang kita kerjakan berulang kali. Maka, keunggulan bukanlah tindakan, melainkan kebiasaan.",author:"Aristoteles",cat:"Kebiasaan"},
+      {text:"Belajarlah tanpa lelah, tanamkan tanpa bosan.",author:"Socrates",cat:"Belajar"},
+      {text:"Tindakan kecil dalam satu arah mengubah segalanya.",author:"Anonim",cat:"Aksi"},
+      {text:"Semua impian menjadi kenyataan jika kita memiliki keberanian untuk mengejar mereka.",author:"Walt Disney",cat:"Keberanian"},
+      {text:"Jangan hitung hari-harimu, buatlah harimu berkesan.",author:"Anonim",cat:"Inspirasi"},
+      {text:"Hidup terlalu singkat untuk dihabiskan dengan orang yang salah.",author:"Anonim",cat:"Kehidupan"},
+      {text:"Kebahagiaan bukan sesuatu yang sudah jadi. Ia datang dari tindakanmu sendiri.",author:"Dalai Lama",cat:"Kebahagiaan"}
+    ];
+    let idx=0,favs=[];
+    const textEl=document.getElementById('quote-text');
+    const authorEl=document.getElementById('quote-author');
+    const catEl=document.getElementById('quote-cat');
+    const counterEl=document.getElementById('quote-counter');
+    const card=document.getElementById('quote-card');
+    const favList=document.getElementById('fav-list');
+    const favSection=document.getElementById('fav-section');
+
+    function show(i){
+      const q=quotes[i];
+      textEl.textContent='"'+q.text+'"';
+      authorEl.textContent='— '+q.author;
+      catEl.textContent=q.cat;
+      counterEl.textContent=(i+1)+' / '+quotes.length;
+      card.style.animation='none';
+      card.offsetHeight;
+      card.style.animation='scaleIn .4s ease';
+    }
+
+    function renderFavs(){
+      if(favs.length===0){favSection.style.display='none';return;}
+      favSection.style.display='block';
+      favList.innerHTML=favs.map((f,i)=>
+        '<div class="fav-quote" data-idx="'+i+'">"'+f.text+'" — <strong>'+f.author+'</strong></div>'
+      ).join('');
+    }
+
+    document.getElementById('next-quote').addEventListener('click',()=>{
+      idx=(idx+1)%quotes.length;
+      show(idx);
+    });
+
+    document.getElementById('fav-quote').addEventListener('click',()=>{
+      const q=quotes[idx];
+      if(!favs.find(f=>f.text===q.text)){
+        favs.push(q);
+        renderFavs();
+      }
+    });
+
+    document.getElementById('share-quote').addEventListener('click',()=>{
+      const q=quotes[idx];
+      const text='"'+q.text+'" — '+q.author;
+      navigator.clipboard.writeText(text).then(()=>{
+        document.getElementById('share-quote').textContent='Tersalin!';
+        setTimeout(()=>{document.getElementById('share-quote').textContent='📋 Salin';},1500);
+      });
+    });
+
+    show(0);
+  })();
+  </script>
+</body>
+</html>

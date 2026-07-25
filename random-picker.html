@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Picker</title>
+  <link rel="stylesheet" href="ui/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>">
+  <style>
+    .page-wrapper{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+    .back-link{position:fixed;top:1.5rem;left:1.5rem;color:var(--accent);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .3s;z-index:10}
+    .back-link:hover{transform:translateX(-3px)}
+    .rp-wrapper{width:100%;max-width:500px;animation:scaleIn .5s ease}
+    .rp-header{text-align:center;margin-bottom:2rem}
+    .rp-header h1{font-size:2rem;color:var(--accent)}
+    .rp-header p{color:var(--text3);font-size:.9rem}
+    .rp-body{background:var(--bg2);border-radius:16px;padding:2rem;border:1px solid rgba(77,166,255,.1);box-shadow:var(--shadow)}
+    .rp-input-area{margin-bottom:1.5rem}
+    .rp-input{width:100%;padding:.8rem;border-radius:10px;border:2px solid rgba(77,166,255,.2);background:var(--bg);color:var(--text);font-size:.95rem;transition:border-color .3s}
+    .rp-input:focus{outline:none;border-color:var(--accent)}
+    .rp-hint{font-size:.8rem;color:var(--text3);margin-top:.3rem}
+    .rp-items{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0;min-height:40px}
+    .rp-item{padding:.4rem .8rem;background:var(--bg3);border-radius:8px;font-size:.85rem;color:var(--text);display:flex;align-items:center;gap:.4rem;animation:fadeIn .3s ease}
+    .rp-item .rp-remove{cursor:pointer;color:#ff6b6b;font-size:.7rem;opacity:.6;transition:opacity .3s}
+    .rp-item .rp-remove:hover{opacity:1}
+    .rp-result-area{text-align:center;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:1rem 0}
+    .rp-result-text{font-size:2rem;font-weight:700;color:var(--accent);transition:all .1s}
+    .rp-result-text.spinning{animation:spin .1s linear infinite;color:var(--text3)}
+    @keyframes spin{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
+    .rp-btns{display:flex;gap:.8rem;justify-content:center}
+    .rp-btns button{min-width:140px}
+    .rp-history{margin-top:1.5rem}
+    .rp-history h3{color:var(--accent);font-size:.9rem;margin-bottom:.5rem}
+    .rp-history-list{display:flex;flex-wrap:wrap;gap:.3rem}
+    .rp-hist-item{padding:.3rem .6rem;background:var(--bg);border-radius:6px;font-size:.8rem;color:var(--text3)}
+    @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+    @keyframes fadeIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← Kembali ke Portofolio</a>
+  <div class="page-wrapper">
+    <div class="rp-wrapper">
+      <div class="rp-header">
+        <h1>Random Picker</h1>
+        <p>Pilih acak dari daftar pilihanmu!</p>
+      </div>
+      <div class="rp-body">
+        <div class="rp-input-area">
+          <input type="text" class="rp-input" id="rp-input" placeholder="Ketik pilihan, lalu Enter atau koma...">
+          <p class="rp-hint">Pisahkan dengan koma. Contoh: Merah, Biru, Hijau, Kuning</p>
+        </div>
+        <div class="rp-items" id="rp-items"></div>
+        <div class="rp-result-area">
+          <div class="rp-result-text" id="rp-result">?</div>
+        </div>
+        <div class="rp-btns">
+          <button id="rp-pick">🎲 Pilih Acak!</button>
+          <button id="rp-clear" class="btn-secondary">Hapus Semua</button>
+        </div>
+        <div class="rp-history" id="rp-history" style="display:none">
+          <h3>Riwayat Pilihan</h3>
+          <div class="rp-history-list" id="rp-history-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    let items=[],history=[];
+    const input=document.getElementById('rp-input');
+    const itemsEl=document.getElementById('rp-items');
+    const resultEl=document.getElementById('rp-result');
+    const historyEl=document.getElementById('rp-history');
+    const historyList=document.getElementById('rp-history-list');
+
+    function renderItems(){
+      itemsEl.innerHTML=items.map((item,i)=>
+        '<div class="rp-item"><span>'+escapeHTML(item)+'</span><span class="rp-remove" data-i="'+i+'">✕</span></div>'
+      ).join('');
+    }
+
+    function escapeHTML(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+    input.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===','){
+        e.preventDefault();
+        addItems(input.value);
+        input.value='';
+      }
+    });
+
+    input.addEventListener('input',e=>{
+      if(e.data===','){addItems(input.value.replace(/,/g,''));input.value='';}
+    });
+
+    function addItems(raw){
+      raw.split(',').forEach(s=>{
+        const item=s.trim();
+        if(item && !items.includes(item))items.push(item);
+      });
+      renderItems();
+    }
+
+    itemsEl.addEventListener('click',e=>{
+      if(e.target.classList.contains('rp-remove')){
+        items.splice(parseInt(e.target.dataset.i),1);
+        renderItems();
+      }
+    });
+
+    document.getElementById('rp-pick').addEventListener('click',()=>{
+      if(items.length<2){alert('Masukkan minimal 2 pilihan!');return;}
+      resultEl.classList.add('spinning');
+      let count=0;
+      const interval=setInterval(()=>{
+        resultEl.textContent=items[Math.floor(Math.random()*items.length)];
+        count++;
+        if(count>20){
+          clearInterval(interval);
+          const picked=items[Math.floor(Math.random()*items.length)];
+          resultEl.textContent=picked;
+          resultEl.classList.remove('spinning');
+          history.unshift(picked);
+          renderHistory();
+        }
+      },80);
+    });
+
+    document.getElementById('rp-clear').addEventListener('click',()=>{
+      items=[];renderItems();resultEl.textContent='?';
+    });
+
+    function renderHistory(){
+      if(history.length===0){historyEl.style.display='none';return;}
+      historyEl.style.display='block';
+      historyList.innerHTML=history.map(h=>'<div class="rp-hist-item">'+escapeHTML(h)+'</div>').join('');
+    }
+  })();
+  </script>
+</body>
+</html>

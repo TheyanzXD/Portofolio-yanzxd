@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Mini</title>
+  <link rel="stylesheet" href="ui/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
+  <style>
+    .page-wrapper{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+    .back-link{position:fixed;top:1.5rem;left:1.5rem;color:var(--accent);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .3s;z-index:10}
+    .back-link:hover{transform:translateX(-3px)}
+    .calc-wrapper{width:100%;max-width:360px;animation:scaleIn .5s ease}
+    .calc-header{text-align:center;margin-bottom:2rem}
+    .calc-header h1{font-size:2rem;color:var(--accent)}
+    .calc-header p{color:var(--text3);font-size:.9rem}
+    .calc-body{background:var(--bg2);border-radius:16px;padding:1.5rem;border:1px solid rgba(77,166,255,.1);box-shadow:var(--shadow)}
+    .calc-screen{background:var(--bg);border-radius:12px;padding:1.2rem;margin-bottom:1rem;text-align:right;border:1px solid rgba(77,166,255,.15)}
+    .calc-screen .expression{font-size:.9rem;color:var(--text3);min-height:1.2rem;font-family:monospace;word-break:break-all}
+    .calc-screen .result{font-size:2.2rem;color:var(--accent);font-weight:700;font-family:monospace;word-break:break-all}
+    .calc-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
+    .calc-btns button{padding:1rem;font-size:1.1rem;border-radius:10px;border:none;cursor:pointer;font-weight:600;transition:all .15s;background:var(--bg3);color:var(--text)}
+    .calc-btns button:hover{transform:scale(1.05);filter:brightness(1.2)}
+    .calc-btns button:active{transform:scale(.95)}
+    .calc-btns button.num{background:var(--bg3);color:var(--text)}
+    .calc-btns button.op{background:rgba(77,166,255,.15);color:var(--accent)}
+    .calc-btns button.op:hover{background:rgba(77,166,255,.25)}
+    .calc-btns button.eq{background:var(--accent);color:var(--bg)}
+    .calc-btns button.eq:hover{background:var(--accent2)}
+    .calc-btns button.func{background:rgba(255,107,107,.15);color:#ff6b6b}
+    .calc-btns button.func:hover{background:rgba(255,107,107,.25)}
+    .calc-btns button.paren{background:rgba(136,146,176,.15);color:var(--text2)}
+    .calc-history{margin-top:1rem;max-height:150px;overflow-y:auto}
+    .calc-history .hist-item{padding:.5rem .8rem;color:var(--text3);font-size:.8rem;font-family:monospace;border-bottom:1px solid rgba(77,166,255,.05);display:flex;justify-content:space-between}
+    .calc-history .hist-item:last-child{color:var(--accent);font-weight:600}
+    .calc-toggle{display:flex;justify-content:center;margin-top:.8rem}
+    .calc-toggle button{background:transparent;color:var(--text3);border:1px solid rgba(77,166,255,.1);padding:.3rem .8rem;font-size:.75rem;border-radius:6px}
+    .calc-toggle button:hover{color:var(--accent);border-color:var(--accent)}
+    @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← Kembali ke Portofolio</a>
+  <div class="page-wrapper">
+    <div class="calc-wrapper">
+      <div class="calc-header">
+        <h1>Kalkulator Mini</h1>
+        <p>Kalkulator dengan riwayat perhitungan</p>
+      </div>
+      <div class="calc-body">
+        <div class="calc-screen">
+          <div class="expression" id="calc-expression"></div>
+          <div class="result" id="calc-result">0</div>
+        </div>
+        <div class="calc-btns">
+          <button class="func" data-v="C">AC</button>
+          <button class="func" data-v="back">⌫</button>
+          <button class="paren" data-v="(">(</button>
+          <button class="op" data-v=")">)</button>
+          <button class="num" data-v="7">7</button>
+          <button class="num" data-v="8">8</button>
+          <button class="num" data-v="9">9</button>
+          <button class="op" data-v="/">÷</button>
+          <button class="num" data-v="4">4</button>
+          <button class="num" data-v="5">5</button>
+          <button class="num" data-v="6">6</button>
+          <button class="op" data-v="*">×</button>
+          <button class="num" data-v="1">1</button>
+          <button class="num" data-v="2">2</button>
+          <button class="num" data-v="3">3</button>
+          <button class="op" data-v="-">−</button>
+          <button class="num" data-v="0">0</button>
+          <button class="num" data-v=".">.</button>
+          <button class="eq" data-v="=">=</button>
+          <button class="op" data-v="+">+</button>
+        </div>
+        <div class="calc-toggle">
+          <button id="toggle-history">Riwayat ▾</button>
+        </div>
+        <div class="calc-history" id="calc-history" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    const expr=document.getElementById('calc-expression');
+    const res=document.getElementById('calc-result');
+    const hist=document.getElementById('calc-history');
+    const toggleBtn=document.getElementById('toggle-history');
+    let current='0', fullExpr='', history=[];
+    let justEvaluated=false;
+
+    function update(){
+      expr.textContent=fullExpr;
+      res.textContent=current;
+    }
+
+    function addToHistory(exp,result){
+      history.push({expr:exp,result:result});
+      if(history.length>20)history.shift();
+      renderHistory();
+    }
+
+    function renderHistory(){
+      hist.innerHTML=history.map(h=>
+        `<div class="hist-item"><span>${h.expr}</span><span>= ${h.result}</span></div>`
+      ).join('');
+    }
+
+    toggleBtn.addEventListener('click',()=>{
+      const isHidden=hist.style.display==='none';
+      hist.style.display=isHidden?'block':'none';
+      toggleBtn.textContent=isHidden?'Riwayat ▴':'Riwayat ▾';
+    });
+
+    document.querySelectorAll('.calc-btns button').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const v=btn.dataset.v;
+        if(v==='C'){current='0';fullExpr='';justEvaluated=false;update();return;}
+        if(v==='back'){
+          if(current.length>1)current=current.slice(0,-1);
+          else current='0';
+          update();return;
+        }
+        if(v==='='){
+          try{
+            const evalExpr=fullExpr+current;
+            const result=Function('"use strict";return ('+evalExpr+')')();
+            addToHistory(evalExpr,result);
+            current=String(result);
+            fullExpr='';
+            justEvaluated=true;
+          }catch(e){current='Error';}
+          update();return;
+        }
+        if(['+','-','*','/'].includes(v)){
+          if(justEvaluated){fullExpr=current+v;current='0';justEvaluated=false;}
+          else{fullExpr+=current+v;current='0';}
+          update();return;
+        }
+        if(v==='('||v===')'){
+          if(justEvaluated){fullExpr=v;current='0';justEvaluated=false;}
+          else{fullExpr+=v;}
+          update();return;
+        }
+        if(justEvaluated){current=v;justEvaluated=false;}
+        else{current=current==='0'?v:current+v;}
+        update();
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

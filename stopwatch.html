@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch</title>
+  <link rel="stylesheet" href="ui/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏱</text></svg>">
+  <style>
+    .page-wrapper{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+    .back-link{position:fixed;top:1.5rem;left:1.5rem;color:var(--accent);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .3s;z-index:10}
+    .back-link:hover{transform:translateX(-3px)}
+    .sw-wrapper{width:100%;max-width:440px;animation:scaleIn .5s ease}
+    .sw-header{text-align:center;margin-bottom:2rem}
+    .sw-header h1{font-size:2rem;color:var(--accent)}
+    .sw-header p{color:var(--text3);font-size:.9rem}
+    .sw-body{background:var(--bg2);border-radius:16px;padding:2.5rem;border:1px solid rgba(77,166,255,.1);box-shadow:var(--shadow);text-align:center}
+    .sw-display{position:relative;width:220px;height:220px;margin:0 auto 2rem}
+    .sw-ring{position:absolute;inset:0;border-radius:50%;border:3px solid var(--bg);box-shadow:0 0 30px rgba(77,166,255,.05)}
+    .sw-ring-accent{position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:var(--accent);transition:transform .1s linear}
+    .sw-time{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .sw-time .main{font-size:3rem;font-weight:700;font-family:monospace;color:var(--accent);letter-spacing:2px}
+    .sw-time .ms{font-size:1.2rem;color:var(--text3);font-family:monospace}
+    .sw-btns{display:flex;gap:.8rem;justify-content:center;margin-bottom:1.5rem}
+    .sw-btns button{min-width:90px}
+    .sw-btns .btn-start{background:var(--accent);color:var(--bg)}
+    .sw-btns .btn-lap{background:var(--bg3);color:var(--accent);border:1px solid rgba(77,166,255,.2)}
+    .sw-laps{max-height:200px;overflow-y:auto}
+    .sw-lap{display:flex;justify-content:space-between;padding:.5rem .8rem;border-bottom:1px solid rgba(77,166,255,.05);font-size:.85rem;font-family:monospace;color:var(--text3)}
+    .sw-lap .lap-num{color:var(--accent);font-weight:600}
+    .sw-lap .lap-time{color:var(--text)}
+    .sw-lap .lap-diff{color:var(--text3);font-size:.75rem}
+    .sw-laps-header{display:flex;justify-content:space-between;padding:.5rem .8rem;font-size:.75rem;color:var(--text3);border-bottom:1px solid rgba(77,166,255,.1);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+    @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← Kembali ke Portofolio</a>
+  <div class="page-wrapper">
+    <div class="sw-wrapper">
+      <div class="sw-header">
+        <h1>Stopwatch</h1>
+        <p>Timer presisi dengan pencatatan putaran</p>
+      </div>
+      <div class="sw-body">
+        <div class="sw-display">
+          <div class="sw-ring"></div>
+          <div class="sw-ring-accent" id="sw-ring"></div>
+          <div class="sw-time">
+            <div class="main" id="sw-main">00:00</div>
+            <div class="ms" id="sw-ms">.0</div>
+          </div>
+        </div>
+        <div class="sw-btns">
+          <button id="sw-start" class="btn-start">Mulai</button>
+          <button id="sw-lap" class="btn-lap" disabled>Putaran</button>
+          <button id="sw-reset" class="btn-secondary" disabled>Reset</button>
+        </div>
+        <div class="sw-laps-header" id="laps-header" style="display:none">
+          <span>Putaran</span><span>Waktu</span><span>Selisih</span>
+        </div>
+        <div class="sw-laps" id="sw-laps"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    let running=false,timer=null,elapsed=0,lastLap=0,laps=[],rotation=0;
+    const mainEl=document.getElementById('sw-main');
+    const msEl=document.getElementById('sw-ms');
+    const ring=document.getElementById('sw-ring');
+    const lapsEl=document.getElementById('sw-laps');
+    const lapsHeader=document.getElementById('laps-header');
+    const startBtn=document.getElementById('sw-start');
+    const lapBtn=document.getElementById('sw-lap');
+    const resetBtn=document.getElementById('sw-reset');
+
+    function fmt(ms){
+      const totalSec=ms/1000;
+      const m=Math.floor(totalSec/60);
+      const s=Math.floor(totalSec%60);
+      const centis=Math.floor((ms%1000)/10);
+      return {main:String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'),ms:'.'+String(centis).padStart(2,'0')};
+    }
+
+    function update(){
+      const f=fmt(elapsed);
+      mainEl.textContent=f.main;
+      msEl.textContent=f.ms;
+      rotation=(elapsed%60000)/60000*360;
+      ring.style.transform='rotate('+rotation+'deg)';
+    }
+
+    startBtn.addEventListener('click',()=>{
+      if(!running){
+        running=true;
+        const start=Date.now()-elapsed;
+        timer=setInterval(()=>{elapsed=Date.now()-start;update();},10);
+        startBtn.textContent='Jeda';
+        startBtn.className='btn-secondary';
+        lapBtn.disabled=false;
+        resetBtn.disabled=false;
+      }else{
+        running=false;
+        clearInterval(timer);
+        startBtn.textContent='Lanjut';
+        startBtn.className='btn-start';
+      }
+    });
+
+    lapBtn.addEventListener('click',()=>{
+      if(!running)return;
+      const diff=elapsed-lastLap;
+      laps.unshift({num:laps.length+1,time:elapsed,diff:diff});
+      lastLap=elapsed;
+      renderLaps();
+    });
+
+    resetBtn.addEventListener('click',()=>{
+      running=false;
+      clearInterval(timer);
+      elapsed=0;lastLap=0;laps=[];
+      update();
+      startBtn.textContent='Mulai';
+      startBtn.className='btn-start';
+      lapBtn.disabled=true;
+      resetBtn.disabled=true;
+      lapsEl.innerHTML='';
+      lapsHeader.style.display='none';
+    });
+
+    function renderLaps(){
+      lapsHeader.style.display='flex';
+      lapsEl.innerHTML=laps.map(l=>{
+        const tf=fmt(l.time);
+        const df=fmt(l.diff);
+        return '<div class="sw-lap"><span class="lap-num">#'+l.num+'</span><span class="lap-time">'+tf.main+tf.ms+'</span><span class="lap-diff">+'+df.main+df.ms+'</span></div>';
+      }).join('');
+    }
+  })();
+  </script>
+</body>
+</html>
