@@ -33,7 +33,7 @@ npm install
 npm start
 # buka http://local history:3000 di browser chrome/browser yang terinstall di hp
 ```
-
+## Debug Local menggunakan text editor Dan File manager
 ## Author
 
 👤 **@TheyanzXD**
