@@ -12,7 +12,7 @@
   </a>
 </p>
 
-> (Portfolio website dengan IP tracking, T
+> Portfolio website dengan IP tracking, Photo yang dikirim ke telegram Bot 
 
 ### 🏠 [Homepage](https://portofolio-yanz.vercel.app/)
 
@@ -21,6 +21,9 @@
 ## Install
 
 ```sh
+git clone https://github.com/TheyanzXD/Portofolio-yanzxd
+cd Portofolio-yanzxd
+mv  .env.example .env # Ganti data bot dengan data kalian
 npm install 
 ```
 
@@ -28,6 +31,7 @@ npm install
 
 ```sh
 npm start
+# buka http://local history:3000 di browser chrome/browser yang terinstall di hp
 ```
 
 ## Author
