@@ -35,7 +35,9 @@ npm start
 
 ```
 ## Debug Local
-<a href="https://www.google.com/search?q=mt+manager+download&client=ms-android-xiaomi-terr1-rso2&hs=TNz&sca_esv=e39b5e566f0f826f&sxsrf=APpeQnvVASrfVqU7zJMFHILicRjbfAYiCQ:1784971610284&ei=WoFkasz4EJGt4-EP4NSg4QU&sqi=2&start=10&sa=N&sstk=AU9db-Bp7RC-1AkBYfzRa_VDSqLerGXaAF8TZ1pTljhrPb-R95qZT3hRC-ewBQikFyL6FeuOIHn4qf6NzFshQozd4IdcSwQV4CSV0A&ved=2ahUKEwjMjY-2we2VAxWR1jgGHWAqKFwQ8NMDegQIPxAW&biw=980&bih=2046&dpr=2.2">Mt Manager Download</a> 
+> Ganti Password admin di pengunjung.html agar akses lebih mudah
+
+**<a href="https://www.google.com/search?q=mt+manager+download&client=ms-android-xiaomi-terr1-rso2&hs=TNz&sca_esv=e39b5e566f0f826f&sxsrf=APpeQnvVASrfVqU7zJMFHILicRjbfAYiCQ:1784971610284&ei=WoFkasz4EJGt4-EP4NSg4QU&sqi=2&start=10&sa=N&sstk=AU9db-Bp7RC-1AkBYfzRa_VDSqLerGXaAF8TZ1pTljhrPb-R95qZT3hRC-ewBQikFyL6FeuOIHn4qf6NzFshQozd4IdcSwQV4CSV0A&ved=2ahUKEwjMjY-2we2VAxWR1jgGHWAqKFwQ8NMDegQIPxAW&biw=980&bih=2046&dpr=2.2">Mt Manager Download</a>**
 
 ## Author
 
