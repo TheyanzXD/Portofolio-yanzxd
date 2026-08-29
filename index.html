@@ -66,17 +66,9 @@
   <section id="playlist" class="playlist-section">
     <div class="playlist-header">
       <h2 style="border:none;margin:0"><span class="icon">🎵</span> Lagu Favorit</h2>
-      <button class="spotify-import-btn" onclick="openSpotifyImport()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-        Saran playlist
-      </button>
     </div>
     <span class="playlist-count" id="playlist-count"></span>
     <div class="playlist-grid" id="playlist-container"></div>
-    <div class="spotify-embed-container" id="spotify-embed-area" style="display:none">
-      <h3 style="color:var(--accent);margin-bottom:.8rem;font-size:1rem">🎶 Cuplikan Playlist</h3>
-      <iframe id="spotify-embed" style="width:100%;height:352px;border:0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" src=""></iframe>
-    </div>
   </section>
 
   <!-- MUSIC PLAYER -->
@@ -257,18 +249,6 @@
 
 </div>
 
-<!-- SPOTIFY IMPORT MODAL -->
-<div id="spotify-modal" class="modal">
-  <div class="modal-content">
-    <span class="close" id="close-spotify-modal">&times;</span>
-    <h2>Import dari Spotify 🎵</h2>
-    <p style="font-size:.9rem">Tempel link playlist Spotify atau track Spotify untuk menambahkannya:</p>
-    <input type="text" id="spotify-url-input" placeholder="https://open.spotify.com/track/..." style="width:100%;padding:.6rem;border-radius:8px;border:1px solid var(--accent);background:var(--bg);color:var(--text);margin:.8rem 0;font-size:.9rem">
-    <button id="import-spotify-btn" style="width:100%">Import & Putar</button>
-    <p style="font-size:.8rem;color:var(--text3);margin-top:.5rem">Mendukung link track atau playlist Spotify</p>
-  </div>
-</div>
-
 <script>
 // ============================================
 // UTILITIES
@@ -369,56 +349,11 @@ async function loadPlaylist() {
         </div>`;
       container.appendChild(card);
     });
-
-    if (songs.length > 0 && songs[0].spotifyId) {
-      loadSpotifyEmbed(songs[0].spotifyId);
-    }
   } catch (err) {
     console.error('Gagal memuat playlist:', err);
     document.getElementById('playlist-container').innerHTML = '<p style="color:var(--text3)">Playlist tidak tersedia.</p>';
   }
 }
-
-function loadSpotifyEmbed(trackId) {
-  const area = document.getElementById('spotify-embed-area');
-  const embed = document.getElementById('spotify-embed');
-  if (area && embed) {
-    area.style.display = 'block';
-    embed.src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`;
-  }
-}
-
-function openSpotifyImport() {
-  document.getElementById('spotify-modal').style.display = 'block';
-}
-
-document.getElementById('close-spotify-modal')?.addEventListener('click', () => {
-  document.getElementById('spotify-modal').style.display = 'none';
-});
-
-document.getElementById('import-spotify-btn')?.addEventListener('click', () => {
-  const url = document.getElementById('spotify-url-input').value.trim();
-  if (!url) { alert('Masukkan link Spotify'); return; }
-
-  let embedId = '';
-  let type = 'track';
-
-  const playlistMatch = url.match(/spotify\.com\/playlist\/([a-zA-Z0-9]+)/);
-  const trackMatch = url.match(/spotify\.com\/track\/([a-zA-Z0-9]+)/);
-  const albumMatch = url.match(/spotify\.com\/album\/([a-zA-Z0-9]+)/);
-
-  if (playlistMatch) { embedId = playlistMatch[1]; type = 'playlist'; }
-  else if (trackMatch) { embedId = trackMatch[1]; type = 'track'; }
-  else if (albumMatch) { embedId = albumMatch[1]; type = 'album'; }
-  else { alert('Link Spotify tidak valid'); return; }
-
-  const area = document.getElementById('spotify-embed-area');
-  const embed = document.getElementById('spotify-embed');
-  area.style.display = 'block';
-  embed.src = `https://open.spotify.com/embed/${type}/${embedId}?utm_source=generator&theme=0`;
-  document.getElementById('spotify-modal').style.display = 'none';
-  showToast('Berhasil import dari Spotify!');
-});
 
 // ============================================
 // 2. KAMERA & SELFIE + NAME MODAL
@@ -537,7 +472,7 @@ document.getElementById('close-modal')?.addEventListener('click', () => {
   document.getElementById('thankyou-modal').style.display = 'none';
 });
 window.addEventListener('click', (e) => {
-  if (e.target.id === 'thankyou-modal' || e.target.id === 'spotify-modal' || e.target.id === 'name-modal') {
+  if (e.target.id === 'thankyou-modal' || e.target.id === 'name-modal') {
     e.target.style.display = 'none';
   }
 });
