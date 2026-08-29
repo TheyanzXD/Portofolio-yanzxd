@@ -6,3 +6,6 @@
 
 # Local backups
 *.bak
+
+# Local runtime data (Vercel uses /tmp instead)
+data/database.json

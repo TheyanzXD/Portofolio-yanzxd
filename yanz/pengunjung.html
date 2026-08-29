@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel</title>
-  <link rel="stylesheet" href="ui/style.css">
+  <link rel="stylesheet" href="../ui/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
@@ -112,7 +112,7 @@
 <!-- ADMIN PANEL -->
 <div id="admin-panel">
   <div class="admin-header">
-    <a href="index.html" class="logo">🔐 Admin Panel</a>
+    <a href="../index.html" class="logo">🔐 Admin Panel</a>
     <div class="header-right">
       <div class="status"><span class="status-dot"></span> Online</div>
       <button class="logout-btn" id="logout-btn">Keluar</button>
@@ -292,7 +292,7 @@
 
   async function loadSongs(){
     try{
-      const res=await fetch('data/playlist.json');
+      const res=await fetch('../data/playlist.json');
       const songs=await res.json();
       document.getElementById('stat-songs').textContent=songs.length;
       const list=document.getElementById('songs-list');
@@ -335,7 +335,7 @@
 
   document.getElementById('export-playlist')?.addEventListener('click',async()=>{
     try{
-      const res=await fetch('data/playlist.json');
+      const res=await fetch('../data/playlist.json');
       const text=await res.text();
       downloadFile('playlist.json',text,'application/json');
     }catch(e){alert('Gagal download');}
