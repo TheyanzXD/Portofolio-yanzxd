@@ -11,159 +11,314 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
   <style>
-    body{background:#0a0a12;color:#e8edf5;font-family:'Inter','Segoe UI',sans-serif;line-height:1.7;min-height:100vh}
-    .alight-wrap{max-width:760px;margin:0 auto;padding:2rem 1.5rem 3rem}
-    .back-link{color:#a855f7;text-decoration:none;font-size:.9rem;display:inline-flex;align-items:center;gap:.4rem;margin-bottom:1.5rem;transition:transform .2s}
-    .back-link:hover{transform:translateX(-3px)}
-    .alight-header{text-align:center;margin-bottom:2rem}
-    .alight-header h1{font-size:1.9rem;background:linear-gradient(135deg,#818cf8,#a855f7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
-    .alight-header p{color:rgba(255,255,255,.5);font-size:.9rem}
-    .alight-grid{display:grid;gap:1.2rem;grid-template-columns:1fr}
-    @media(min-width:640px){.alight-grid{grid-template-columns:1fr}}
-    .acard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.4rem;transition:border-color .3s,transform .3s}
-    .acard:hover{border-color:rgba(168,85,247,.4)}
-    .acard-head{display:flex;align-items:center;gap:.7rem;margin-bottom:1rem}
-    .acard-head .step{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0}
-    .acard-head h3{font-size:1.1rem;color:#fff;margin:0}
-    .acard-head .desc{font-size:.75rem;color:rgba(255,255,255,.45)}
-    .acard input{width:100%;background:#0a0a12;border:1px solid rgba(255,255,255,.12);color:#e8edf5;padding:.65rem .9rem;border-radius:8px;font-size:.9rem;margin-bottom:.7rem;font-family:inherit;transition:border-color .2s}
-    .acard input:focus{outline:none;border-color:#a855f7}
-    .acard input::placeholder{color:rgba(255,255,255,.3)}
-    .acard button{background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;border:none;border-radius:8px;padding:.65rem 1.2rem;font-size:.9rem;font-weight:600;cursor:pointer;width:100%;transition:transform .2s,filter .2s,opacity .2s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:.5rem}
-    .acard button:hover{filter:brightness(1.1);transform:scale(1.02)}
-    .acard button:active{transform:scale(.96)}
-    .acard button:disabled{opacity:.55;cursor:not-allowed;transform:none}
-    .aoutput{margin-top:.9rem;background:#0a0a12;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:.8rem;display:none;position:relative}
-    .aoutput.show{display:block;animation:mpSlide .25s ease}
-    .aoutput pre{margin:0;font-size:.75rem;color:#a78bfa;white-space:pre-wrap;word-break:break-all;max-height:220px;overflow-y:auto}
-    .aoutput .copy{position:absolute;top:.4rem;right:.4rem;background:rgba(255,255,255,.08);color:#e8edf5;border:none;border-radius:6px;padding:.3rem .6rem;font-size:.7rem;cursor:pointer}
-    .aoutput .copy:hover{background:rgba(168,85,247,.4)}
-    .okout{border-color:rgba(168,85,247,.4)}
-    .errout{border-color:rgba(244,63,94,.5)}
-    @keyframes mpSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-    footer{text-align:center;padding:1rem 0 2rem;color:rgba(255,255,255,.35);font-size:.8rem}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0a0a12;color:#e8edf5;font-family:'Inter','Segoe UI',sans-serif;line-height:1.7;min-height:100vh;
+      background-image:radial-gradient(1200px 500px at 50% -100px,rgba(168,85,247,.12),transparent 60%),
+                       radial-gradient(900px 400px at 100% 100%,rgba(99,102,241,.08),transparent 55%)}
+    .topbar{max-width:820px;margin:0 auto;padding:1.4rem 1.5rem 0}
+    .back-link{color:#c4b5fd;text-decoration:none;font-size:.9rem;display:inline-flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border-radius:10px;transition:all .2s;background:rgba(255,255,255,.03)}
+    .back-link:hover{background:rgba(168,85,247,.14);transform:translateX(-2px);color:#fff}
+    .wrap{max-width:820px;margin:0 auto;padding:2rem 1.5rem 3.5rem}
+    .hero{text-align:center;margin-bottom:2rem;animation:rise .5s ease}
+    .hero .badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#f5d0fe;background:rgba(168,85,247,.14);border:1px solid rgba(168,85,247,.3);padding:.3rem .9rem;border-radius:20px;margin-bottom:1rem}
+    .hero .badge .dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e;animation:pulse 1.8s infinite}
+    .hero h1{font-size:2.3rem;font-weight:800;background:linear-gradient(120deg,#c4b5fd,#a855f7 45%,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+    .hero p{color:rgba(255,255,255,.55);font-size:.95rem;max-width:520px;margin:0 auto}
+    .steps{display:flex;justify-content:center;gap:0;margin:1.6rem auto 2rem;max-width:480px}
+    .steps .st{display:flex;align-items:center;gap:.5rem}
+    .steps .st .num{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(168,85,247,.25);color:#c4b5fd;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;transition:all .3s}
+    .steps .st.done .num{background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(139,92,246,.4)}
+    .steps .st .lb{font-size:.72rem;color:rgba(255,255,255,.5)}
+    .steps .st.done .lb{color:#e9d5ff}
+    .steps .line{width:40px;height:2px;background:rgba(255,255,255,.1);margin:0 .6rem;border-radius:2px;overflow:hidden}
+    .steps .line i{display:block;height:100%;width:0;background:linear-gradient(90deg,#6366f1,#a855f7);transition:width .4s ease}
+    .steps .line.done i{width:100%}
+    .grid{display:flex;flex-direction:column;gap:1.3rem}
+    .card{position:relative;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:1.6rem;transition:border-color .3s,transform .3s,box-shadow .3s;overflow:hidden}
+    .card::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(168,85,247,.08),transparent 40%,rgba(99,102,241,.06));opacity:0;transition:opacity .3s;pointer-events:none}
+    .card:hover{border-color:rgba(168,85,247,.35);box-shadow:0 18px 50px rgba(0,0,0,.35)}
+    .card:hover::before{opacity:1}
+    .card-head{display:flex;align-items:center;gap:.9rem;margin-bottom:1.2rem;position:relative;z-index:1}
+    .card-head .step{border-radius:14px;min-width:48px;height:48px;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 6px 18px rgba(139,92,246,.35)}
+    .card-head .tt h3{font-size:1.05rem;color:#fff;font-weight:700;letter-spacing:.01em}
+    .card-head .tt .desc{font-size:.76rem;color:rgba(255,255,255,.5);margin-top:.15rem}
+    .field{margin-bottom:.8rem}
+    .field label{display:block;font-size:.72rem;font-weight:600;letter-spacing:.05em;color:rgba(255,255,255,.5);margin-bottom:.4rem;text-transform:uppercase}
+    .field input{width:100%;background:#0a0a12;border:1px solid rgba(255,255,255,.1);color:#fff;padding:.8rem 1rem;border-radius:12px;font-size:.95rem;font-family:inherit;transition:border-color .2s,box-shadow .2s}
+    .field input:focus{outline:none;border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.15)}
+    .field input::placeholder{color:rgba(255,255,255,.3)}
+    .btn{width:100%;border:none;border-radius:12px;padding:.85rem;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:.55rem;transition:transform .15s,filter .2s,box-shadow .2s;color:#fff;background:linear-gradient(135deg,#6366f1,#a855f7);box-shadow:0 8px 24px rgba(139,92,246,.3)}
+    .btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+    .btn:active{transform:scale(.97)}
+    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none;filter:grayscale(.2)}
+    .output{margin-top:1rem;display:none;background:#0a0a12;border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:1rem;position:relative;animation:rise .25s ease}
+    .output.show{display:block}
+    .output.ok{border-color:rgba(168,85,247,.45);background:linear-gradient(180deg,rgba(168,85,247,.06),rgba(0,0,0,.2))}
+    .output.err{border-color:rgba(244,63,94,.5);background:linear-gradient(180deg,rgba(244,63,94,.06),rgba(0,0,0,.2))}
+    .output .olabel{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+    .output.ok .olabel{color:#e9d5ff}
+    .output.err .olabel{color:#fda4af}
+    .output pre{margin:0;font-size:.78rem;color:#c4b5fd;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow:auto;line-height:1.6}
+    .mini-actions{display:flex;gap:.6rem;margin-top:.9rem;flex-wrap:wrap}
+    .mini{flex:1;min-width:120px;display:flex;align-items:center;justify-content:center;gap:.45rem;padding:.6rem .8rem;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid rgba(168,85,247,.3);background:rgba(168,85,247,.12);color:#e9d5ff;transition:all .2s}
+    .mini:hover{background:rgba(168,85,247,.28);transform:translateY(-1px)}
+    .mini:active{transform:scale(.96)}
+    .mini.mini-open{background:linear-gradient(135deg,#10b981,#059669);border-color:transparent;color:#fff;box-shadow:0 6px 16px rgba(16,185,129,.3)}
+    .mini.mini-open:hover{filter:brightness(1.1)}
+    .mini.mini-ghost{background:transparent;border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.8)}
+    .mini.mini-ghost:hover{background:rgba(255,255,255,.06)}
+    .hintbox{margin-top:1.4rem;background:rgba(168,85,247,.07);border:1px dashed rgba(168,85,247,.3);border-radius:14px;padding:1rem 1.2rem;font-size:.82rem;color:rgba(255,255,255,.65);animation:rise .5s ease .1s both}
+    .hintbox b{color:#e9d5ff}
+    .hintbox a{color:#a855f7;text-decoration:none;border-bottom:1px dotted #a855f7}
+    .hintbox a:hover{color:#c084fc}
+    footer{text-align:center;padding:1rem 0 2rem;color:rgba(255,255,255,.3);font-size:.8rem}
+    @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    #am-toast{position:fixed;bottom:22px;right:22px;z-index:9999;padding:14px 20px;border-radius:12px;font-weight:600;font-size:.9rem;color:#fff;max-width:330px;box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .3s,transform .3s;font-family:'Inter',sans-serif}
+    #am-toast.show{opacity:1;transform:translateY(0)}
+    #am-toast.ok{background:linear-gradient(135deg,#6366f1,#a855f7)}
+    #am-toast.err{background:linear-gradient(135deg,#dc2626,#ef4444)}
+    @media(max-width:520px){
+      .wrap{padding:1.5rem 1rem 2.5rem}
+      .hero h1{font-size:1.7rem}
+      .steps .line{width:24px;margin:0 .35rem}
+      .steps .st .lb{display:none}
+      .card{padding:1.2rem}
+    }
   </style>
 </head>
 <body>
-  <a href="../index.html" class="back-link">← Kembali ke Portofolio</a>
-  <div class="alight-wrap">
-    <div class="alight-header">
-      <h1>Alight Motion Tools</h1>
-      <p>Auto create email, kirim verifikasi, dan aktivasi akun Alight Motion</p>
+  <div class="topbar">
+    <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Kembali ke Portofolio</a>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <span class="badge"><span class="dot"></span> Alight Motion Tools</span>
+      <h1>Tools Aktivasi Alight Motion</h1>
+      <p>Buat email temporer, kirim verifikasi, lalu aktivasi akun — semua otomatis dalam 3 langkah.</p>
     </div>
 
-    <div class="alight-grid">
+    <div class="steps">
+      <div class="st done" id="st1"><div class="num">1</div><div class="lb">Buat Email</div></div>
+      <div class="line" id="ln1"><i></i></div>
+      <div class="st" id="st2"><div class="num">2</div><div class="lb">Kirim Verifikasi</div></div>
+      <div class="line" id="ln2"><i></i></div>
+      <div class="st" id="st3"><div class="num">3</div><div class="lb">Aktivasi</div></div>
+    </div>
+
+    <div class="grid">
       <!-- CARD 1: AUTO CREATE -->
-      <div class="acard">
-        <div class="acard-head">
-          <div class="step">1</div>
-          <div><h3>Auto Create</h3><div class="desc">Buat email temporer + inbox URL (1 tahun)</div></div>
+      <div class="card">
+        <div class="card-head">
+          <div class="step"><i class="fas fa-envelope-open-text"></i></div>
+          <div class="tt"><h3>1 · Auto Create Email</h3><div class="desc">Buat email temporer + inbox (berlaku 1 tahun)</div></div>
         </div>
-        <button id="autoBtn"><i class="fas fa-envelope"></i> Auto Create</button>
-        <div class="aoutput" id="autoOutput"><button class="copy" onclick="copyOut(this)">Salin</button><pre></pre></div>
+        <button class="btn" id="autoBtn" type="button"><i class="fas fa-wand-magic-sparkles"></i> Auto Create</button>
+        <div class="output ok" id="autoOutput">
+          <div class="olabel"><i class="fas fa-circle-check"></i> Email siap</div>
+          <pre id="autoPre">—</pre>
+          <div class="mini-actions">
+            <button class="mini mini-ghost" type="button" id="copyAutoEmailBtn"><i class="fas fa-copy"></i> Salin Email</button>
+            <button class="mini mini-open" type="button" id="openInboxBtn"><i class="fas fa-external-link-alt"></i> Buka Inbox Temp Mail</button>
+            <button class="mini mini-ghost" type="button" id="copyAutoBtn"><i class="fas fa-copy"></i> Salin JSON</button>
+          </div>
+        </div>
       </div>
 
       <!-- CARD 2: SEND -->
-      <div class="acard">
-        <div class="acard-head">
-          <div class="step">2</div>
-          <div><h3>Kirim Verifikasi</h3><div class="desc">Kirim link verifikasi ke email</div></div>
+      <div class="card">
+        <div class="card-head">
+          <div class="step"><i class="fas fa-paper-plane"></i></div>
+          <div class="tt"><h3>2 · Kirim Verifikasi</h3><div class="desc">Kirim link verifikasi ke email tujuan</div></div>
         </div>
-        <input id="sendEmail" type="email" placeholder="your@email.com" autocomplete="off">
-        <button id="sendBtn"><i class="fas fa-paper-plane"></i> Kirim Verifikasi</button>
-        <div class="aoutput" id="sendOutput"><button class="copy" onclick="copyOut(this)">Salin</button><pre></pre></div>
+        <div class="field">
+          <label for="sendEmail">Email Tujuan</label>
+          <input id="sendEmail" type="email" placeholder="your@email.com" autocomplete="off" spellcheck="false">
+        </div>
+        <button class="btn" id="sendBtn" type="button"><i class="fas fa-paper-plane"></i> Kirim Verifikasi</button>
+        <div class="output ok" id="sendOutput">
+          <div class="olabel" id="sendLabel"><i class="fas fa-circle-check"></i> Hasil</div>
+          <pre id="sendPre">—</pre>
+          <div class="mini-actions">
+            <button class="mini mini-ghost" type="button" id="copySendBtn"><i class="fas fa-copy"></i> Salin JSON</button>
+          </div>
+        </div>
       </div>
 
       <!-- CARD 3: VERIFY -->
-      <div class="acard">
-        <div class="acard-head">
-          <div class="step">3</div>
-          <div><h3>Aktivasi Akun</h3><div class="desc">Verifikasi email & link dari inbox</div></div>
+      <div class="card">
+        <div class="card-head">
+          <div class="step"><i class="fas fa-check-double"></i></div>
+          <div class="tt"><h3>3 · Aktivasi Akun</h3><div class="desc">Verifikasi email &amp; link dari inbox</div></div>
         </div>
-        <input id="verifyEmail" type="email" placeholder="Email" autocomplete="off">
-        <input id="verifyLink" type="text" placeholder="Link verifikasi" autocomplete="off">
-        <button id="verifyBtn"><i class="fas fa-check-double"></i> Aktivasi</button>
-        <div class="aoutput" id="verifyOutput"><button class="copy" onclick="copyOut(this)">Salin</button><pre></pre></div>
+        <div class="field">
+          <label for="verifyEmail">Email</label>
+          <input id="verifyEmail" type="email" placeholder="Email yang diverifikasi" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label for="verifyLink">Link Verifikasi</label>
+          <input id="verifyLink" type="text" placeholder="Tempel link verifikasi dari inbox" autocomplete="off" spellcheck="false">
+        </div>
+        <button class="btn" id="verifyBtn" type="button"><i class="fas fa-check-double"></i> Aktivasi Akun</button>
+        <div class="output ok" id="verifyOutput">
+          <div class="olabel" id="verifyLabel"><i class="fas fa-circle-check"></i> Hasil</div>
+          <pre id="verifyPre">—</pre>
+          <div class="mini-actions">
+            <button class="mini mini-ghost" type="button" id="copyVerifyBtn"><i class="fas fa-copy"></i> Salin JSON</button>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="hintbox">
+      <b>💡 Panduan:</b> 
+      1) Klik <b>Auto Create</b> → email &amp; inbox dibuat → klik <b>Buka Inbox Temp Mail</b> untuk membuka halaman inbox secara manual. 
+      2) Di kolom 2, email dari langkah 1 otomatis terisi → klik <b>Kirim Verifikasi</b>. 
+      3) Buka inbox, ambil link verifikasi, tempel di kolom 3 → klik <b>Aktivasi Akun</b>. Akun aktif selama 1 tahun.
+    </div>
   </div>
+
   <footer>&copy; 2026 YanzXD · Alight Motion Tools</footer>
 
   <script>
   (function(){
     const API_BASE='https://api.haidarxd.my.id/api/v1';
     const API_KEY='haidarapis-43ee0ef3199221b320f01c50';
+    let state={ inboxUrl:'', email:'' };
 
-    const run=async(id)=>{
-      if(!id)return;
-      let url=API_BASE+'/alight-motion/'+id;
-      if(id==='auto')url+='?';
-      else if(id==='send')url+='?email='+encodeURIComponent(document.getElementById('sendEmail').value.trim())+'&';
-      else if(id==='verify')url+='?email='+encodeURIComponent(document.getElementById('verifyEmail').value.trim())+'&link='+encodeURIComponent(document.getElementById('verifyLink').value.trim())+'&';
-      url+='apikey='+API_KEY;
-      const btn=document.getElementById(id+'Btn');
-      const box=document.getElementById(id+'Output');
-      const pre=box.querySelector('pre');
-      btn.disabled=true;
-      const old=btn.innerHTML;
-      btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Memproses...';
-      try{
-        const res=await fetch(url);
-        const data=await res.json();
-        box.classList.add('show');
-        box.classList.remove('okout','errout');
-        const ok=data&&data.status==='success';
-        box.classList.add(ok?'okout':'errout');
-        pre.textContent=JSON.stringify(ok?(data.data||data):(data.error||data),null,2);
-        if(ok&&id==='auto'&&data.data&&data.data.email){
-          document.getElementById('sendEmail').value=data.data.email;
-        }
-        toast(ok?'Berhasil':'Gagal',ok);
-      }catch(e){
-        box.classList.add('show','errout');
-        box.classList.remove('okout');
-        box.querySelector('pre').textContent=JSON.stringify({status:'error',message:'Network/API error: '+(e.message||'')},null,2);
-        toast('Kesalahan jaringan','error');
-      }finally{
-        btn.disabled=false;
-        btn.innerHTML=old;
+    const $=id=>document.getElementById(id);
+
+    function markStep(n){
+      for(let i=1;i<=n;i++){
+        const st=$('st'+i); if(st)st.classList.add('done');
+        const ln=$('ln'+(i-1)); if(ln)ln.classList.add('done');
       }
-    };
+    }
 
     function toast(msg,ok){
-      let t=document.getElementById('am-toast');
-      if(!t){t=document.createElement('div');t.id='am-toast';document.body.appendChild(t);}
+      let t=$('am-toast');
+      if(!t){t=document.createElement('div');t.id='am-toast';t.classList.add('show');document.body.appendChild(t);}
       t.textContent=msg;
-      t.className='am-toast-show '+(ok?'am-ok':'am-err');
+      t.className='show '+(ok?'ok':'err');
       clearTimeout(t._h);
       t._h=setTimeout(()=>{t.className='';},2600);
     }
 
-    document.getElementById('autoBtn').addEventListener('click',()=>run('auto'));
-    document.getElementById('sendBtn').addEventListener('click',()=>{
-      if(!document.getElementById('sendEmail').value.trim()){toast('Email wajib diisi','error');return;}
-      run('send');
+    async function api(id,params){
+      let url=API_BASE+'/alight-motion/'+id+'?';
+      const p=new URLSearchParams(params);
+      p.set('apikey',API_KEY);
+      url+=p.toString();
+      const res=await fetch(url);
+      return await res.json();
+    }
+
+    function pretty(d){
+      const lines=Object.entries(d||{}).map(([k,v])=>k+': '+v);
+      return lines.join('\n');
+    }
+
+    // ---- CARD 1: AUTO ----
+    $('autoBtn').addEventListener('click',async function(){
+      const btn=this; btn.disabled=true; const old=btn.innerHTML;
+      btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Membuat email...';
+      try{
+        const data=await api('auto',{});
+        const box=$('autoOutput'), pre=$('autoPre');
+        const ok=data&&data.status==='success';
+        box.classList.remove('err','ok'); if(!ok)box.classList.remove('ok');
+        box.classList.add(ok?'ok':'err');
+        if(ok){
+          state.email=data.data.email;
+          state.inboxUrl=data.data.inboxUrl;
+          pre.textContent='📧 Email   : '+data.data.email+'\n🔗 Inbox    : '+data.data.inboxUrl+'\n⏳ Berlaku : '+data.data.expiresAt;
+          $('sendEmail').value=data.data.email;
+          markStep(1);
+          toast('Email berhasil dibuat!','ok');
+        }else{
+          pre.textContent=pretty(data.error||data);
+        }
+        box.classList.add('show');
+      }catch(e){
+        const box=$('autoOutput');
+        box.classList.remove('ok'); box.classList.add('err','show');
+        $('autoPre').textContent='Error: '+(e.message||'');
+        toast('Kesalahan jaringan','err');
+      }finally{ btn.disabled=false; btn.innerHTML=old; }
     });
-    document.getElementById('verifyBtn').addEventListener('click',()=>{
-      if(!document.getElementById('verifyEmail').value.trim()||!document.getElementById('verifyLink').value.trim()){toast('Email & link wajib diisi','error');return;}
-      run('verify');
+
+    $('openInboxBtn').addEventListener('click',()=>{
+      if(state.inboxUrl){ window.open(state.inboxUrl,'_blank','noopener'); }
+      else toast('Belum ada inbox. Klik Auto Create dulu.','err');
+    });
+    $('copyAutoEmailBtn').addEventListener('click',async()=>{
+      if(!state.email)return toast('Belum ada email.','err');
+      try{ await navigator.clipboard.writeText(state.email); toast('Email disalin!','ok'); }
+      catch(e){ toast('Gagal menyalin','err'); }
+    });
+    $('copyAutoBtn').addEventListener('click',async()=>{
+      try{ await navigator.clipboard.writeText($('autoPre').textContent); toast('JSON disalin!','ok'); }
+      catch(e){ toast('Gagal menyalin','err'); }
+    });
+
+    // ---- CARD 2: SEND ----
+    $('sendBtn').addEventListener('click',async function(){
+      const email=$('sendEmail').value.trim();
+      if(!email){ toast('Email wajib diisi','err'); $('sendEmail').focus(); return; }
+      const btn=this; btn.disabled=true; const old=btn.innerHTML;
+      btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+      try{
+        const data=await api('send',{email});
+        const box=$('sendOutput'), pre=$('sendPre');
+        const ok=data&&data.status==='success';
+        box.classList.remove('err','ok'); box.classList.add(ok?'ok':'err');
+        $('sendLabel').innerHTML='<i class="fas '+(ok?'fa-circle-check':'fa-triangle-exclamation')+'"></i> '+(ok?'Terkirim':'Gagal kirim');
+        pre.textContent=ok?(pretty(data.data||data)):pretty(data.error||data);
+        if(ok) markStep(2);
+        box.classList.add('show');
+        toast(ok?'Verifikasi terkirim!':'Gagal mengirim','ok');
+      }catch(e){
+        const box=$('sendOutput'); box.classList.remove('ok'); box.classList.add('err','show');
+        $('sendLabel').innerHTML='<i class="fas fa-triangle-exclamation"></i> Kesalahan';
+        $('sendPre').textContent='Error: '+(e.message||'');
+        toast('Kesalahan jaringan','err');
+      }finally{ btn.disabled=false; btn.innerHTML=old; }
+    });
+    $('copySendBtn').addEventListener('click',async()=>{
+      try{ await navigator.clipboard.writeText($('sendPre').textContent); toast('JSON disalin!','ok'); }
+      catch(e){ toast('Gagal','err'); }
+    });
+
+    // ---- CARD 3: VERIFY ----
+    $('verifyBtn').addEventListener('click',async function(){
+      const email=$('verifyEmail').value.trim();
+      const link=$('verifyLink').value.trim();
+      if(!email||!link){ toast('Email & link wajib diisi','err'); return; }
+      const btn=this; btn.disabled=true; const old=btn.innerHTML;
+      btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Mengaktivasi...';
+      try{
+        const data=await api('verify',{email,link});
+        const box=$('verifyOutput'), pre=$('verifyPre');
+        const ok=data&&data.status==='success';
+        box.classList.remove('err','ok'); box.classList.add(ok?'ok':'err');
+        $('verifyLabel').innerHTML='<i class="fas '+(ok?'fa-circle-check':'fa-triangle-exclamation')+'"></i> '+(ok?'Akun Teraktivasi':'Gagal aktivasi');
+        pre.textContent=ok?(pretty(data.data||data)):pretty(data.error||data);
+        if(ok) markStep(3);
+        box.classList.add('show');
+        toast(ok?'Akun berhasil diaktifkan!':'Gagal aktivasi',ok);
+      }catch(e){
+        const box=$('verifyOutput'); box.classList.remove('ok'); box.classList.add('err','show');
+        $('verifyLabel').innerHTML='<i class="fas fa-triangle-exclamation"></i> Kesalahan';
+        $('verifyPre').textContent='Error: '+(e.message||'');
+        toast('Kesalahan jaringan','err');
+      }finally{ btn.disabled=false; btn.innerHTML=old; }
+    });
+    $('copyVerifyBtn').addEventListener('click',async()=>{
+      try{ await navigator.clipboard.writeText($('verifyPre').textContent); toast('JSON disalin!','ok'); }
+      catch(e){ toast('Gagal','err'); }
     });
   })();
-
-  function copyOut(btn){
-    const pre=btn.parentElement.querySelector('pre');
-    navigator.clipboard.writeText(pre.textContent).then(()=>{
-      const o=btn.textContent;btn.textContent='✓ Tersalin';
-      setTimeout(()=>{btn.textContent=o;},1400);
-    });
-  }
   </script>
-  <style>
-    #am-toast{position:fixed;bottom:20px;right:20px;color:#fff;padding:12px 20px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:9999;max-width:320px;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s;pointer-events:none;font-family:'Inter','Segoe UI',sans-serif}
-    #am-toast.am-ok{background:linear-gradient(135deg,#6366f1,#a855f7)}
-    #am-toast.am-err{background:linear-gradient(135deg,#dc2626,#ef4444)}
-    #am-toast.am-toast-show{opacity:1;transform:translateY(0)}
-    @media(max-width:320px){.alight-wrap{padding:1.5rem 1rem}}
-  </style>
 </body>
 </html>
