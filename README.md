@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  💜 **Portfolio personal tema ungu neon** — lengkap dengan music player, tools Alight Motion, IP tracking + notifikasi Telegram, dan mini tools interaktif.
+  💜 Portfolio personal tema ungu neon — lengkap dengan music player, tools Alight Motion, IP tracking + notifikasi Telegram, dan mini tools interaktif.
 </p>
 
 ---
