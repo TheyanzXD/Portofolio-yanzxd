@@ -96,7 +96,7 @@
 
     const run=async(id)=>{
       if(!id)return;
-      let url=API_BASE+'/'+id;
+      let url=API_BASE+'/alight-motion/'+id;
       if(id==='auto')url+='?';
       else if(id==='send')url+='?email='+encodeURIComponent(document.getElementById('sendEmail').value.trim())+'&';
       else if(id==='verify')url+='?email='+encodeURIComponent(document.getElementById('verifyEmail').value.trim())+'&link='+encodeURIComponent(document.getElementById('verifyLink').value.trim())+'&';
