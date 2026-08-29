@@ -3,3 +3,6 @@
 
 # Ada Library Information
 *.ali
+
+# Local backups
+*.bak

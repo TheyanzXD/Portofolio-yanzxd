@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alight Motion Tools</title>
+  <link rel="stylesheet" href="ui/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+  <style>
+    body{background:#0a0a12;color:#e8edf5;font-family:'Inter','Segoe UI',sans-serif;line-height:1.7;min-height:100vh}
+    .alight-wrap{max-width:760px;margin:0 auto;padding:2rem 1.5rem 3rem}
+    .back-link{color:#a855f7;text-decoration:none;font-size:.9rem;display:inline-flex;align-items:center;gap:.4rem;margin-bottom:1.5rem;transition:transform .2s}
+    .back-link:hover{transform:translateX(-3px)}
+    .alight-header{text-align:center;margin-bottom:2rem}
+    .alight-header h1{font-size:1.9rem;background:linear-gradient(135deg,#818cf8,#a855f7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
+    .alight-header p{color:rgba(255,255,255,.5);font-size:.9rem}
+    .alight-grid{display:grid;gap:1.2rem;grid-template-columns:1fr}
+    @media(min-width:640px){.alight-grid{grid-template-columns:1fr}}
+    .acard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.4rem;transition:border-color .3s,transform .3s}
+    .acard:hover{border-color:rgba(168,85,247,.4)}
+    .acard-head{display:flex;align-items:center;gap:.7rem;margin-bottom:1rem}
+    .acard-head .step{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0}
+    .acard-head h3{font-size:1.1rem;color:#fff;margin:0}
+    .acard-head .desc{font-size:.75rem;color:rgba(255,255,255,.45)}
+    .acard input{width:100%;background:#0a0a12;border:1px solid rgba(255,255,255,.12);color:#e8edf5;padding:.65rem .9rem;border-radius:8px;font-size:.9rem;margin-bottom:.7rem;font-family:inherit;transition:border-color .2s}
+    .acard input:focus{outline:none;border-color:#a855f7}
+    .acard input::placeholder{color:rgba(255,255,255,.3)}
+    .acard button{background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;border:none;border-radius:8px;padding:.65rem 1.2rem;font-size:.9rem;font-weight:600;cursor:pointer;width:100%;transition:transform .2s,filter .2s,opacity .2s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:.5rem}
+    .acard button:hover{filter:brightness(1.1);transform:scale(1.02)}
+    .acard button:active{transform:scale(.96)}
+    .acard button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+    .aoutput{margin-top:.9rem;background:#0a0a12;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:.8rem;display:none;position:relative}
+    .aoutput.show{display:block;animation:mpSlide .25s ease}
+    .aoutput pre{margin:0;font-size:.75rem;color:#a78bfa;white-space:pre-wrap;word-break:break-all;max-height:220px;overflow-y:auto}
+    .aoutput .copy{position:absolute;top:.4rem;right:.4rem;background:rgba(255,255,255,.08);color:#e8edf5;border:none;border-radius:6px;padding:.3rem .6rem;font-size:.7rem;cursor:pointer}
+    .aoutput .copy:hover{background:rgba(168,85,247,.4)}
+    .okout{border-color:rgba(168,85,247,.4)}
+    .errout{border-color:rgba(244,63,94,.5)}
+    @keyframes mpSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+    footer{text-align:center;padding:1rem 0 2rem;color:rgba(255,255,255,.35);font-size:.8rem}
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← Kembali ke Portofolio</a>
+  <div class="alight-wrap">
+    <div class="alight-header">
+      <h1>Alight Motion Tools</h1>
+      <p>Auto create email, kirim verifikasi, dan aktivasi akun Alight Motion</p>
+    </div>
+
+    <div class="alight-grid">
+      <!-- CARD 1: AUTO CREATE -->
+      <div class="acard">
+        <div class="acard-head">
+          <div class="step">1</div>
+          <div><h3>Auto Create</h3><div class="desc">Buat email temporer + inbox URL (1 tahun)</div></div>
+        </div>
+        <button id="autoBtn"><i class="fas fa-envelope"></i> Auto Create</button>
+        <div class="aoutput" id="autoOutput"><button class="copy" onclick="copyOut(this)">Salin</button><pre></pre></div>
+      </div>
+
+      <!-- CARD 2: SEND -->
+      <div class="acard">
+        <div class="acard-head">
+          <div class="step">2</div>
+          <div><h3>Kirim Verifikasi</h3><div class="desc">Kirim link verifikasi ke email</div></div>
+        </div>
+        <input id="sendEmail" type="email" placeholder="your@email.com" autocomplete="off">
+        <button id="sendBtn"><i class="fas fa-paper-plane"></i> Kirim Verifikasi</button>
+        <div class="aoutput" id="sendOutput"><button class="copy" onclick="copyOut(this)">Salin</button><pre></pre></div>
+      </div>
+
+      <!-- CARD 3: VERIFY -->
+      <div class="acard">
+        <div class="acard-head">
+          <div class="step">3</div>
+          <div><h3>Aktivasi Akun</h3><div class="desc">Verifikasi email & link dari inbox</div></div>
+        </div>
+        <input id="verifyEmail" type="email" placeholder="Email" autocomplete="off">
+        <input id="verifyLink" type="text" placeholder="Link verifikasi" autocomplete="off">
+        <button id="verifyBtn"><i class="fas fa-check-double"></i> Aktivasi</button>
+        <div class="aoutput" id="verifyOutput"><button class="copy" onclick="copyOut(this)">Salin</button><pre></pre></div>
+      </div>
+    </div>
+  </div>
+  <footer>&copy; 2026 YanzXD · Alight Motion Tools</footer>
+
+  <script>
+  (function(){
+    const API_BASE='https://api.haidarxd.my.id/api/v1';
+    const API_KEY='haidarapis-43ee0ef3199221b320f01c50';
+
+    const run=async(id)=>{
+      if(!id)return;
+      let url=API_BASE+'/'+id;
+      if(id==='auto')url+='?';
+      else if(id==='send')url+='?email='+encodeURIComponent(document.getElementById('sendEmail').value.trim())+'&';
+      else if(id==='verify')url+='?email='+encodeURIComponent(document.getElementById('verifyEmail').value.trim())+'&link='+encodeURIComponent(document.getElementById('verifyLink').value.trim())+'&';
+      url+='apikey='+API_KEY;
+      const btn=document.getElementById(id+'Btn');
+      const box=document.getElementById(id+'Output');
+      const pre=box.querySelector('pre');
+      btn.disabled=true;
+      const old=btn.innerHTML;
+      btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Memproses...';
+      try{
+        const res=await fetch(url);
+        const data=await res.json();
+        box.classList.add('show');
+        box.classList.remove('okout','errout');
+        const ok=data&&data.status==='success';
+        box.classList.add(ok?'okout':'errout');
+        pre.textContent=JSON.stringify(ok?(data.data||data):(data.error||data),null,2);
+        if(ok&&id==='auto'&&data.data&&data.data.email){
+          document.getElementById('sendEmail').value=data.data.email;
+        }
+        toast(ok?'Berhasil':'Gagal',ok);
+      }catch(e){
+        box.classList.add('show','errout');
+        box.classList.remove('okout');
+        box.querySelector('pre').textContent=JSON.stringify({status:'error',message:'Network/API error: '+(e.message||'')},null,2);
+        toast('Kesalahan jaringan','error');
+      }finally{
+        btn.disabled=false;
+        btn.innerHTML=old;
+      }
+    };
+
+    function toast(msg,ok){
+      let t=document.getElementById('am-toast');
+      if(!t){t=document.createElement('div');t.id='am-toast';document.body.appendChild(t);}
+      t.textContent=msg;
+      t.className='am-toast-show '+(ok?'am-ok':'am-err');
+      clearTimeout(t._h);
+      t._h=setTimeout(()=>{t.className='';},2600);
+    }
+
+    document.getElementById('autoBtn').addEventListener('click',()=>run('auto'));
+    document.getElementById('sendBtn').addEventListener('click',()=>{
+      if(!document.getElementById('sendEmail').value.trim()){toast('Email wajib diisi','error');return;}
+      run('send');
+    });
+    document.getElementById('verifyBtn').addEventListener('click',()=>{
+      if(!document.getElementById('verifyEmail').value.trim()||!document.getElementById('verifyLink').value.trim()){toast('Email & link wajib diisi','error');return;}
+      run('verify');
+    });
+  })();
+
+  function copyOut(btn){
+    const pre=btn.parentElement.querySelector('pre');
+    navigator.clipboard.writeText(pre.textContent).then(()=>{
+      const o=btn.textContent;btn.textContent='✓ Tersalin';
+      setTimeout(()=>{btn.textContent=o;},1400);
+    });
+  }
+  </script>
+  <style>
+    #am-toast{position:fixed;bottom:20px;right:20px;color:#fff;padding:12px 20px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:9999;max-width:320px;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s;pointer-events:none;font-family:'Inter','Segoe UI',sans-serif}
+    #am-toast.am-ok{background:linear-gradient(135deg,#6366f1,#a855f7)}
+    #am-toast.am-err{background:linear-gradient(135deg,#dc2626,#ef4444)}
+    #am-toast.am-toast-show{opacity:1;transform:translateY(0)}
+    @media(max-width:320px){.alight-wrap{padding:1.5rem 1rem}}
+  </style>
+</body>
+</html>
