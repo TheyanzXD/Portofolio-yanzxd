@@ -96,11 +96,11 @@ Integrasi → Telegram Bot API · Spotify API · API HaidarXD (ai.haidarxd.my.id
 
 ## 🎧 Music Player
 
-Streaming langsung dari Spotify via API **api.haidarxd.my.id**.
+Streaming langsung dari Spotify (di-proxy backend `/api`).
 
 ```text
-Search   → GET /api/v1/spotify/search?q={query}&limit=6&apikey={key}
-Download → GET /api/v1/downloader/spotify?url={url}&index=1&apikey={key}
+Search   → GET /api/spotify/search?q={query}&limit=6
+Download → GET /api/spotify/download?url={url}&index=1
 ```
 
 - Default lagu: **Secukupnya – Hindia**
@@ -120,22 +120,22 @@ Akses di **/tools/alight.html**. Tiga langkah aktivasi:
 2. **Kirim Verifikasi** → kirim link ke email
 3. **Aktivasi** → tempel email + link, aktifkan akun
 
-Tombol **"Buka Inbox Temp Mail"** membuka halaman inbox secara manual, contoh:
-`https://tempmailhaidar.vercel.app/{email@domain}`
+Tombol **"Buka Inbox Temp Mail"** membuka halaman inbox eksternal secara manual.
 
 **Inbox Realtime** (Card 4) menampilkan email masuk di halaman yang sama:
-- Auto-poll `tools/tempmail/inbox?email={email}` setiap **5 detik** (jeda saat tab tidak aktif)
-- Menampilkan OTP dengan tombol salin, judul, pengirim, waktu
-- `Start` otomatis saat auto create, plus tombol manual refresh
+- Auto-poll `/api/tempmail/inbox?email={email}` setiap **5 detik** (jeda saat tab tidak aktif)
+- Dukung email dari **Auto Create / Tempmail Baru**, atau **email custom** via kolom + tombol **Pantau**
+- Setiap pesan punya tombol **Buka Link** → ambil isi via `/api/tempmail/message`, tampilkan link login (bisa dibuka & disalin)
 
 ```text
-Auto   → GET /api/v1/alight-motion/auto
-Send   → GET /api/v1/alight-motion/send?email={email}
-Verify → GET /api/v1/alight-motion/verify?email={email}&link={link}
-Inbox  → GET /api/v1/tools/tempmail/inbox?email={email}
+Auto   → GET /api/alight/auto
+Send   → GET /api/alight/send?email={email}
+Verify → GET /api/alight/verify?email={email}&link={link}
+Inbox  → GET /api/tempmail/inbox?email={email}
+Detail → GET /api/tempmail/message?email={email}&id={id}
 ```
 
-> Semua endpoint butuh `apikey` → `haidarapis-...` (public demo key, terpasang di client).
+> Semua request API eksternal di-proxy lewat backend **`/api/*`** — API key tersimpan **server-side**, tidak bocor ke client.
 
 ---
 
@@ -149,10 +149,10 @@ Masukkan nomor (dengan kode negara, mis. `6285...`) lalu cek status:
 - Salin nomor / hasil JSON, Enter untuk cek
 
 ```text
-CekBan → GET /api/v1/tools/cekban?number={number}&apikey={key}
+CekBan → GET /api/tools/cekban?number={number}
 ```
 
-> Endpoint butuh `apikey` → `haidarapis-...` (public demo key).
+> Request di-proxy backend `/api` (key server-side).
 
 ---
 

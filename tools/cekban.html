@@ -66,8 +66,6 @@
 
   <script>
   (function(){
-    const API_BASE='https://api.haidarxd.my.id/api/v1';
-    const API_KEY='haidarapis-43ee0ef3199221b320f01c50';
     const $=id=>document.getElementById(id);
     let lastJson='';
 
@@ -90,8 +88,7 @@
       const box=$('ckOutput');
       try{
         lastJson=null;
-        const p=new URLSearchParams({number:num,apikey:API_KEY});
-        const res=await fetch(API_BASE+'/tools/cekban?'+p.toString());
+        const res=await fetch('/api/tools/cekban?number='+encodeURIComponent(num));
         const data=await res.json();
         lastJson=data;
         const ok=!!(data&&data.status==='success'&&data.data&&data.data.result);

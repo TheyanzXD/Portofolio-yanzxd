@@ -111,8 +111,6 @@
 
   <script>
   (function(){
-    const API_BASE='https://api.haidarxd.my.id/api/v1';
-    const API_KEY='haidarapis-43ee0ef3199221b320f01c50';
 
     const $=id=>document.getElementById(id);
 
@@ -126,8 +124,7 @@
     }
 
     async function bypass(url){
-      const p=new URLSearchParams({url,apikey:API_KEY});
-      const res=await fetch(API_BASE+'/tools/bypaslink?'+p.toString());
+      const res=await fetch('/api/tools/bypaslink?url='+encodeURIComponent(url));
       return await res.json();
     }
 

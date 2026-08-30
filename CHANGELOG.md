@@ -5,6 +5,15 @@ Semua perubahan penting pada proyek ini didokumentasikan di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/),
 versi mengikuti [Semantic Versioning](https://semver.org/).
 
+## [3.3.1] - 2026-08-30
+
+### Changed
+- Pindahkan **semua** panggilan API eksternal (Spotify, Alight, Tempmail, BypasLink, CekBan, FF) dari client ke backend `api/server.js` via route same-origin `/api/*`. API key `haidarapis-...` kini tersimpan **server-side**, tidak lagi di-hardcode di client.
+  - `/api/spotify/search|download` · `/api/alight/auto|send|verify` · `/api/tempmail/inbox|message` · `/api/tools/bypaslink|cekban` · `/api/ff/profile|prime`
+  - Client sudah tidak menyentuh `api.haidarxd.my.id` / `tempmailhaidar.vercel.app` langsung (hanya `api.ipify.org`, `data/playlist.json`, dan widget DOM murni yang tetap client-side).
+- **Alight Inbox Realtime** diarahkan ulang ke `/api/tempmail/*`. Tombol "Salin OTP" diganti **Buka Link** — fetch isi pesan (`/api/tempmail/message`) lalu ekstrak & tampilkan link login (buat dibuka/disalin). Alight tidak mengirim OTP angka.
+- **Alight** tambah kolom **email custom** + tombol **Pantau** di kartu Inbox — bisa pantau inbox email tersendiri tanpa harus Auto Create.
+
 ## [3.3.0] - 2026-08-30
 
 ### Added

@@ -136,8 +136,6 @@
 
   <script>
   (function(){
-    const API_BASE='https://api.haidarxd.my.id/api/v1';
-    const API_KEY='haidarapis-43ee0ef3199221b320f01c50';
 
     const $=id=>document.getElementById(id);
     let lastJson='';
@@ -154,8 +152,10 @@
     function showErr(elm,msg){elm.style.display='block';elm.textContent=msg;}
 
     async function api(path,params){
-      const p=new URLSearchParams(params);p.set('apikey',API_KEY);
-      const res=await fetch(API_BASE+'/'+path+'?'+p.toString());
+      const route=path==='stalker/cek-prime-ff'?'/api/ff/prime':'/api/ff/profile';
+      const p=new URLSearchParams(params);
+      p.delete('apikey');
+      const res=await fetch(route+'?'+p.toString());
       return await res.json();
     }
 

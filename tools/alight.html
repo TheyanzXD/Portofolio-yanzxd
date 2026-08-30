@@ -122,17 +122,22 @@
           <button class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold cursor-pointer text-white bg-gradient-to-br from-[#10b981] to-[#0d9488] shadow-[0_6px_16px_rgba(16,185,129,.3)] hover:brightness-110 transition-all" type="button" id="inboxNew"><i class="fas fa-plus"></i> Tempmail Baru</button>
           <button class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold cursor-pointer border border-emerald-500/30 bg-emerald-500/15 text-emerald-100 hover:bg-emerald-500/30 transition-all" type="button" id="inboxRefresh"><i class="fas fa-rotate"></i> Refresh</button>
         </div>
+        <div class="flex gap-2 mb-4">
+          <input id="inboxCustomEmail" type="email" placeholder="custom@email.com (manual)" autocomplete="off" spellcheck="false"
+            class="flex-1 min-w-0 bg-black/20 border border-white/10 text-white px-3.5 py-2.5 rounded-xl text-sm focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 placeholder-white/30 transition-all">
+          <button class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold cursor-pointer border border-emerald-500/30 bg-emerald-500/15 text-emerald-100 hover:bg-emerald-500/30 transition-all" type="button" id="inboxMonitor"><i class="fas fa-play"></i> Pantau</button>
+        </div>
         <div class="rounded-xl bg-black/20 border border-white/5 p-4" id="inboxList">
-          <div class="text-sm text-[#ffffff73] text-center py-8"><i class="fas fa-envelope-open-text text-2xl block mb-2 opacity-40"></i>Klik <b class="text-emerald-200">Tempmail Baru</b> di atas, atau <b class="text-emerald-200">Auto Create</b>, lalu pesan masuk muncul di sini otomatis.</div>
+          <div class="text-sm text-[#ffffff73] text-center py-8"><i class="fas fa-envelope-open-text text-2xl block mb-2 opacity-40"></i>Klik <b class="text-emerald-200">Tempmail Baru</b> / <b class="text-emerald-200">Auto Create</b>, atau <b class="text-emerald-200">masukkan email custom</b> lalu <b class="text-emerald-200">Pantau</b> — pesan masuk muncul di sini otomatis.</div>
         </div>
       </div>
     </div>
 
     <div class="mt-5 bg-purple-500/10 border border-dashed border-purple-500/40 rounded-2xl px-5 py-4 text-sm text-[#ffffffa6] anim-rise">
       <b class="text-purple-100">💡 Panduan:</b>
-      1) Klik <b class="text-purple-100">Auto Create</b> <i>atau</i> <b class="text-purple-100">Tempmail Baru</b> (di kartu Inbox) → email &amp; inbox dibuat → email otomatis terisi di langkah 2 &amp; inbox mulai memantau. 
+      1) Klik <b class="text-purple-100">Auto Create</b> <i>atau</i> <b class="text-purple-100">Tempmail Baru</b> (di kartu Inbox), <i>atau</i> isi <b class="text-purple-100">email custom</b> lalu klik <b class="text-purple-100">Pantau</b> → inbox mulai memantau.
       2) Klik <b class="text-purple-100">Kirim Verifikasi</b>. 
-      3) OTP / link muncul di <b class="text-purple-100">Inbox Realtime</b> (refresh otomatis tiap 5 detik) → salin OTP → klik <b class="text-purple-100">Aktivasi Akun</b>. Akun aktif selama 1 tahun.
+      3) Pesan muncul di <b class="text-purple-100">Inbox Realtime</b> (otomatis tiap 5 detik) → klik <b class="text-purple-100">Buka Link</b> utk ambil link login → salin link → klik <b class="text-purple-100">Aktivasi Akun</b>. Akun aktif selama 1 tahun.
     </div>
   </div>
 
@@ -140,8 +145,6 @@
 
   <script>
   (function(){
-    const API_BASE='https://api.haidarxd.my.id/api/v1';
-    const API_KEY='haidarapis-43ee0ef3199221b320f01c50';
     let state={ inboxUrl:'', email:'' };
 
     const $=id=>document.getElementById(id);
@@ -163,9 +166,8 @@
     }
 
     async function api(id,params){
-      let url=API_BASE+'/alight-motion/'+id+'?';
+      let url='/api/alight/'+id+'?';
       const p=new URLSearchParams(params);
-      p.set('apikey',API_KEY);
       url+=p.toString();
       const res=await fetch(url);
       return await res.json();
@@ -195,6 +197,35 @@
       try{return new Date(iso).toLocaleString('id-ID');}catch(e){return iso||'—';}
     }
 
+    function cleanFrom(raw){
+      return String(raw||'').replace(/[<>]/g,'').trim();
+    }
+
+    function extractLink(text,scanHref){
+      if(text){
+        if(scanHref){
+          const a=String(text).match(/href=["'](https?:\/\/[^"']+)["']/i);
+          if(a)return a[1];
+        }
+        const m=String(text).match(/https?:\/\/[^\s"'<>)\]]+/g);
+        if(m&&m.length)return m[m.length-1];
+      }
+      return '';
+    }
+
+    async function getMessageBody(id){
+      try{
+        const res=await fetch('/api/tempmail/message?email='+encodeURIComponent(state.email)+'&id='+encodeURIComponent(id));
+        const d=await res.json();
+        const msg=(d&&d.message)||{};
+        const html=(msg.body&&msg.body.html)||'';
+        const text=(msg.body&&msg.body.text)||'';
+        let link=extractLink(html,true);
+        if(!link)link=extractLink(text,false);
+        return {count:html.length+text.length, body:text, link};
+      }catch(e){return {body:'',link:''};}
+    }
+
     function renderInbox(data){
       const list=$('inboxList');
       const msgs=(data&&data.messages)||[];
@@ -208,26 +239,52 @@
         const isNew=!seenIds.has(m.id);
         if(isNew&&m.id)seenIds.add(m.id);
         rows.push(
-          '<div class="border border-white/5 bg-white/5 rounded-xl p-3 mb-2 '+(isNew?'ring-1 ring-emerald-500/40':'')+'">'+
-            '<div class="flex flex-wrap gap-2 items-center mb-1.5">'+
-              (m.otp?'<span class="text-lg font-extrabold tracking-widest text-emerald-300 bg-emerald-500/15 border border-emerald-500/40 rounded-lg px-3 py-1 font-mono">'+esc(m.otp)+'</span>':'')+
-              '<button class="ml-auto text-[11px] flex items-center gap-1 px-2 py-1 rounded-lg cursor-pointer border border-emerald-500/30 bg-emerald-500/15 text-emerald-100 hover:bg-emerald-500/30 transition-all" data-copy="'+esc(m.otp||'')+'" type="button"><i class="fas fa-copy"></i> Salin OTP</button>'+
-            '</div>'+
+          '<div class="border border-white/5 bg-white/5 rounded-xl p-3 mb-2 '+(isNew?'ring-1 ring-emerald-500/40':'')+'" id="msg-'+esc(m.id)+'">'+
             '<div class="text-sm text-white font-semibold break-words">'+esc(m.subject||'(tanpa subjek)')+'</div>'+
-            '<div class="text-xs text-[#ffffff66] mt-0.5 break-words">Dari: '+esc(m.from)+'</div>'+
-            (m.snippet?'<div class="text-xs text-[#ffffff8c] mt-1 break-words">'+esc(m.snippet)+'</div>':'')+
-            (m.body?'<div class="text-xs text-[#ffffff8c] mt-1 break-words max-h-20 overflow-auto">'+esc(m.body)+'</div>':'')+
-            '<div class="text-[11px] text-[#ffffff55] mt-1.5"><i class="fas fa-clock mr-1"></i>'+fmtTime(m.received_at)+'</div>'+
+            '<div class="text-xs text-[#ffffff66] mt-0.5 break-words">Dari: '+esc(cleanFrom(m.from))+'</div>'+
+            '<div class="text-[11px] text-[#ffffff55] mt-1.5"><i class="fas fa-clock mr-1"></i>'+fmtTime(m.date)+'</div>'+
+            '<div class="flex gap-2 mt-2 flex-wrap">'+
+              '<button class="text-[11px] flex items-center gap-1 px-2.5 py-1.5 rounded-lg cursor-pointer border border-emerald-500/30 bg-emerald-500/15 text-emerald-100 hover:bg-emerald-500/30 transition-all" data-link="'+esc(m.id)+'" type="button"><i class="fas fa-link"></i> Buka Link</button>'+
+              '<button class="text-[11px] flex items-center gap-1 px-2.5 py-1.5 rounded-lg cursor-pointer border border-white/10 bg-white/5 text-[#e8edf5] hover:bg-white/10 transition-all" data-copy="'+esc(m.id)+'" type="button"><i class="fas fa-copy"></i> Salin Subjek</button>'+
+            '</div>'+
+            '<div class="text-xs text-[#ffffff8c] mt-2 break-all hidden bg-black/30 rounded-lg p-2.5" data-body></div>'+
           '</div>'
         );
       });
       list.innerHTML=rows.join('');
+      list.querySelectorAll('[data-link]').forEach(b=>{
+        b.addEventListener('click',async()=>{
+          const id=b.dataset.link;
+          const card=document.getElementById('msg-'+id);
+          const bodyEl=card?card.querySelector('[data-body]'):null;
+          if(!card||!bodyEl)return;
+          if(bodyEl.dataset.loaded){bodyEl.classList.toggle('hidden');return;}
+          b.disabled=true;b.innerHTML='<i class="fas fa-spinner fa-spin"></i> Memuat...';
+          const {body,link}=await getMessageBody(id);
+          b.disabled=false;b.innerHTML='<i class="fas fa-link"></i> Buka Link';
+          if(link){
+            bodyEl.innerHTML='<div class="mb-1"><a class="text-emerald-300 underline break-all" href="'+esc(link)+'" target="_blank" rel="noopener">'+esc(link)+'</a></div>'+
+              '<button class="text-[11px] flex items-center gap-1 px-2.5 py-1.5 rounded-lg cursor-pointer bg-emerald-500/20 text-emerald-100 hover:bg-emerald-500/30 transition-all" data-copylink="'+esc(link)+'" type="button"><i class="fas fa-copy"></i> Salin Link</button>';
+            bodyEl.querySelector('[data-copylink]').addEventListener('click',async()=>{
+              try{await navigator.clipboard.writeText(link);toast('Link disalin!','ok');}catch(e){toast('Gagal menyalin','err');}
+            });
+          }else if(body){
+            bodyEl.textContent=body;
+          }else{
+            bodyEl.textContent='Tidak ada link/isi pesan.';
+          }
+          bodyEl.dataset.loaded='1';
+          bodyEl.classList.remove('hidden');
+        });
+      });
       list.querySelectorAll('[data-copy]').forEach(b=>{
         b.addEventListener('click',async()=>{
-          const v=b.dataset.copy;
-          if(!v)return toast('Tidak ada OTP di pesan ini','err');
-          try{await navigator.clipboard.writeText(v);toast('OTP disalin: '+v,'ok');}
-          catch(e){toast('Gagal menyalin','err');}
+          const id=b.dataset.copy;
+          const ms=msgs.find(x=>x.id===id);
+          try{
+            await navigator.clipboard.writeText(ms?String(ms.subject||''):'');
+            toast('Subjek disalin!','ok');
+          }catch(e){toast('Gagal menyalin','err');}
         });
       });
     }
@@ -236,10 +293,9 @@
       if(!state.email)return;
       if(!manual&&document.hidden)return;
       try{
-        const p=new URLSearchParams({email:state.email,apikey:API_KEY});
-        const res=await fetch(API_BASE+'/tools/tempmail/inbox?'+p.toString());
+        const res=await fetch('/api/tempmail/inbox?email='+encodeURIComponent(state.email));
         const data=await res.json();
-        if(data&&data.status==='success'&&data.data){renderInbox(data.data);}
+        if(data&&data.status==='success'){renderInbox(data);}
       }catch(e){
         $('inboxUpd').textContent='Gagal memuat inbox';
       }
@@ -257,6 +313,18 @@
     $('inboxRefresh').addEventListener('click',()=>pollInbox(true));
     document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollInbox(false);});
 
+    $('inboxMonitor').addEventListener('click',()=>{
+      const email=$('inboxCustomEmail').value.trim();
+      if(!email){ toast('Masukkan email custom dulu','err'); $('inboxCustomEmail').focus(); return; }
+      state.email=email;
+      $('inboxEmail').textContent=email;
+      $('sendEmail').value=email;
+      $('verifyEmail').value=email;
+      startInbox();
+      toast('Memantau inbox: '+email,'ok');
+    });
+    $('inboxCustomEmail').addEventListener('keydown',e=>{if(e.key==='Enter')$('inboxMonitor').click();});
+
     // ---- CARD 1: AUTO (juga dipakai Tombol Tempmail Baru) ----
     async function createEmail(btn){
       btn.disabled=true; const old=btn.innerHTML;
@@ -270,6 +338,7 @@
           setOutput('autoOutput',true,'<i class="fas fa-circle-check"></i> Email siap','📧 Email   : '+data.data.email+'\n🔗 Inbox    : '+data.data.inboxUrl+'\n⏳ Berlaku : '+data.data.expiresAt);
           $('sendEmail').value=data.data.email;
           $('verifyEmail').value=data.data.email;
+          $('inboxCustomEmail').value=data.data.email;
           markStep(1);
           $('inboxEmail').textContent=data.data.email;
           startInbox();
