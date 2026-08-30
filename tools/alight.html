@@ -119,17 +119,18 @@
         <div class="flex items-center gap-3 mb-4">
           <div class="w-12 h-12 rounded-xl flex items-center justify-center text-lg bg-gradient-to-br from-[#10b981] to-[#0d9488] shadow-[0_6px_18px_rgba(16,185,129,.35)]"><i class="fas fa-inbox text-white"></i></div>
           <div class="flex-1"><h3 class="text-white font-bold flex items-center gap-2">Inbox Realtime <span class="text-[10px] font-semibold tracking-wider uppercase bg-emerald-500/15 border border-emerald-500/40 text-emerald-200 rounded-full px-2 py-0.5"><i class="fas fa-sync-alt fa-fw"></i> 5 dtk</span></h3><div class="text-[#ffffff80] text-xs mt-0.5"><span id="inboxEmail">Belum ada email</span> · <span id="inboxUpd">—</span></div></div>
+          <button class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold cursor-pointer text-white bg-gradient-to-br from-[#10b981] to-[#0d9488] shadow-[0_6px_16px_rgba(16,185,129,.3)] hover:brightness-110 transition-all" type="button" id="inboxNew"><i class="fas fa-plus"></i> Tempmail Baru</button>
           <button class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold cursor-pointer border border-emerald-500/30 bg-emerald-500/15 text-emerald-100 hover:bg-emerald-500/30 transition-all" type="button" id="inboxRefresh"><i class="fas fa-rotate"></i> Refresh</button>
         </div>
         <div class="rounded-xl bg-black/20 border border-white/5 p-4" id="inboxList">
-          <div class="text-sm text-[#ffffff73] text-center py-8"><i class="fas fa-envelope-open-text text-2xl block mb-2 opacity-40"></i>Buat email dulu lewat <b class="text-emerald-200">Auto Create</b>, lalu pesan masuk muncul di sini otomatis.</div>
+          <div class="text-sm text-[#ffffff73] text-center py-8"><i class="fas fa-envelope-open-text text-2xl block mb-2 opacity-40"></i>Klik <b class="text-emerald-200">Tempmail Baru</b> di atas, atau <b class="text-emerald-200">Auto Create</b>, lalu pesan masuk muncul di sini otomatis.</div>
         </div>
       </div>
     </div>
 
     <div class="mt-5 bg-purple-500/10 border border-dashed border-purple-500/40 rounded-2xl px-5 py-4 text-sm text-[#ffffffa6] anim-rise">
       <b class="text-purple-100">💡 Panduan:</b>
-      1) Klik <b class="text-purple-100">Auto Create</b> → email &amp; inbox dibuat → email otomatis terisi di langkah 2 &amp; inbox mulai memantau. 
+      1) Klik <b class="text-purple-100">Auto Create</b> <i>atau</i> <b class="text-purple-100">Tempmail Baru</b> (di kartu Inbox) → email &amp; inbox dibuat → email otomatis terisi di langkah 2 &amp; inbox mulai memantau. 
       2) Klik <b class="text-purple-100">Kirim Verifikasi</b>. 
       3) OTP / link muncul di <b class="text-purple-100">Inbox Realtime</b> (refresh otomatis tiap 5 detik) → salin OTP → klik <b class="text-purple-100">Aktivasi Akun</b>. Akun aktif selama 1 tahun.
     </div>
@@ -256,9 +257,9 @@
     $('inboxRefresh').addEventListener('click',()=>pollInbox(true));
     document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollInbox(false);});
 
-    // ---- CARD 1: AUTO ----
-    $('autoBtn').addEventListener('click',async function(){
-      const btn=this; btn.disabled=true; const old=btn.innerHTML;
+    // ---- CARD 1: AUTO (juga dipakai Tombol Tempmail Baru) ----
+    async function createEmail(btn){
+      btn.disabled=true; const old=btn.innerHTML;
       btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Membuat email...';
       try{
         const data=await api('auto',{});
@@ -280,7 +281,9 @@
         setOutput('autoOutput',false,'<i class="fas fa-triangle-exclamation"></i> Kesalahan','Error: '+(e.message||''));
         toast('Kesalahan jaringan','err');
       }finally{ btn.disabled=false; btn.innerHTML=old; }
-    });
+    }
+    $('autoBtn').addEventListener('click',function(){ createEmail(this); });
+    $('inboxNew').addEventListener('click',function(){ createEmail(this); });
 
     $('openInboxBtn').addEventListener('click',()=>{
       if(state.inboxUrl){ window.open(state.inboxUrl,'_blank','noopener'); }
