@@ -66,6 +66,26 @@ function sendJson(res, data) {
   res.end(JSON.stringify(data));
 }
 
+// Daftar domain resmi tempmail (whitelist inbox). Di-seed dengan daftar
+// update dari /api/init lalu di-refresh berkala (cache 1 jam).
+let domCache = ['suarj.com','mfxis.com','anogz.com','jgkcr.com','vbgvd.com','wzjpj.com'];
+let domCacheAt = 0;
+async function getAllowedDomains() {
+  const now = Date.now();
+  if (domCache.length && now - domCacheAt < 3600000) return domCache;
+  const d = await fetchJson(`${TEMPM_BASE}/init`);
+  if (d && Array.isArray(d.domains) && d.domains.length) {
+    domCache = d.domains.map(x => x.toLowerCase());
+    domCacheAt = now;
+  }
+  return domCache;
+}
+function isValidTempmailEmail(email) {
+  if (!email || !email.includes('@')) return false;
+  const dom = email.split('@').pop().toLowerCase();
+  return domCache.some(x => x === dom);
+}
+
 const asyncHandler = fn => (req, res) => fn(req, res).catch(e => {
   console.error('[ERROR]', e.message);
   if (!res.headersSent) {
@@ -403,9 +423,17 @@ async function handleRequest(req, res) {
   // ----------------------------------------
   // PROXY: TEMPMAIL (langsung ke tempmailhaidar)
   // ----------------------------------------
+  if (pathname === '/api/tempmail/domains' && req.method === 'GET') {
+    sendJson(res, { status: 'success', domains: await getAllowedDomains() });
+    return;
+  }
   if (pathname === '/api/tempmail/inbox' && req.method === 'GET') {
     const email = urlObj.searchParams.get('email') || '';
     if (!email) { sendJson(res, { ok: false, error: { message: 'Param email wajib diisi' } }); return; }
+    if (!isValidTempmailEmail(email)) {
+      sendJson(res, { ok: false, error: { message: 'Domain email tidak terdaftar di tempmail. Gunakan email hasil Auto Create / Tempmail Baru.' } });
+      return;
+    }
     sendJson(res, await fetchJson(`${TEMPM_BASE}/inbox?email=${encodeURIComponent(email)}`));
     return;
   }
@@ -413,6 +441,10 @@ async function handleRequest(req, res) {
     const email = urlObj.searchParams.get('email') || '';
     const id = urlObj.searchParams.get('id') || '';
     if (!email || !id) { sendJson(res, { ok: false, error: { message: 'Param email & id wajib diisi' } }); return; }
+    if (!isValidTempmailEmail(email)) {
+      sendJson(res, { ok: false, error: { message: 'Domain email tidak terdaftar di tempmail. Gunakan email hasil Auto Create / Tempmail Baru.' } });
+      return;
+    }
     sendJson(res, await fetchJson(`${TEMPM_BASE}/message?email=${encodeURIComponent(email)}&id=${encodeURIComponent(id)}`));
     return;
   }

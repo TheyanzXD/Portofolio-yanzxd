@@ -124,18 +124,19 @@ Tombol **"Buka Inbox Temp Mail"** membuka halaman inbox eksternal secara manual.
 
 **Inbox Realtime** (Card 4) menampilkan email masuk di halaman yang sama:
 - Auto-poll `/api/tempmail/inbox?email={email}` setiap **5 detik** (jeda saat tab tidak aktif)
-- Dukung email dari **Auto Create / Tempmail Baru**, atau **email custom** via kolom + tombol **Pantau**
+- Dukung email dari **Auto Create / Tempmail Baru**, atau **email custom** via kolom + tombol **Pantau** (hanya domain tempmail terdaftar — email di luar whitelist ditolak)
 - Setiap pesan punya tombol **Buka Link** → ambil isi via `/api/tempmail/message`, tampilkan link login (bisa dibuka & disalin)
 
 ```text
-Auto   → GET /api/alight/auto
-Send   → GET /api/alight/send?email={email}
-Verify → GET /api/alight/verify?email={email}&link={link}
-Inbox  → GET /api/tempmail/inbox?email={email}
-Detail → GET /api/tempmail/message?email={email}&id={id}
+Auto    → GET /api/alight/auto
+Send    → GET /api/alight/send?email={email}
+Verify  → GET /api/alight/verify?email={email}&link={link}
+Domains → GET /api/tempmail/domains
+Inbox   → GET /api/tempmail/inbox?email={email}
+Detail  → GET /api/tempmail/message?email={email}&id={id}
 ```
 
-> Semua request API eksternal di-proxy lewat backend **`/api/*`** — API key tersimpan **server-side**, tidak bocor ke client.
+> **Inbox & Detail cuma menerima email ber-domain tempmail resmi** (dari `/api/tempmail/domains`, contoh: `suarj.com`, `anogz.com`, dll). Semua request API eksternal di-proxy lewat backend **`/api/*`** — API key tersimpan **server-side**, tidak bocor ke client.
 
 ---
 

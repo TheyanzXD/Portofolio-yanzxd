@@ -5,6 +5,12 @@ Semua perubahan penting pada proyek ini didokumentasikan di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/),
 versi mengikuti [Semantic Versioning](https://semver.org/).
 
+## [3.3.2] - 2026-08-30
+
+### Added
+- **Validasi domain inbox tempmail** — route `/api/tempmail/inbox` & `/api/tempmail/message` hanya menerima email dengan domain resmi tempmail (whitelist). Backend ambil daftar domain dari `/api/init` (cache 1 jam, seed 6 domain) via route baru `/api/tempmail/domains`. Email custom di luar whitelist (mis. gmail.com) ditolak.
+- **Alight Inbox**: kolom email custom di-validasi kala klik **Pantau** — domain yang tak terdaftar menampilkan toast error & tidak mulai polling.
+
 ## [3.3.1] - 2026-08-30
 
 ### Changed

@@ -145,9 +145,24 @@
 
   <script>
   (function(){
-    let state={ inboxUrl:'', email:'' };
+    let state={ inboxUrl:'', email:'', domains:[] };
 
     const $=id=>document.getElementById(id);
+
+    async function loadDomains(){
+      if(state.domains.length)return state.domains;
+      try{
+        const res=await fetch('/api/tempmail/domains');
+        const d=await res.json();
+        if(d&&Array.isArray(d.domains))state.domains=d.domains.map(x=>x.toLowerCase());
+      }catch(e){}
+      return state.domains;
+    }
+    function isAllowedEmail(email){
+      if(!email||email.indexOf('@')<0)return false;
+      const dom=email.split('@').pop().toLowerCase();
+      return state.domains.some(x=>x===dom);
+    }
 
     function markStep(n){
       for(let i=1;i<=n;i++){
@@ -314,9 +329,15 @@
     $('inboxRefresh').addEventListener('click',()=>pollInbox(true));
     document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollInbox(false);});
 
-    $('inboxMonitor').addEventListener('click',()=>{
+    $('inboxMonitor').addEventListener('click',async()=>{
       const email=$('inboxCustomEmail').value.trim();
       if(!email){ toast('Masukkan email custom dulu','err'); $('inboxCustomEmail').focus(); return; }
+      await loadDomains();
+      if(!isAllowedEmail(email)){
+        toast('Domain email tidak terdaftar di tempmail','err');
+        $('inboxUpd').textContent='Domain tidak valid · pakai hasil Auto Create/Tempmail Baru';
+        return;
+      }
       state.email=email;
       $('inboxEmail').textContent=email;
       $('sendEmail').value=email;
