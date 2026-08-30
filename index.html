@@ -490,11 +490,8 @@ visitorNameInput.addEventListener('input', () => {
 });
 
 // ============================================
-// 3. MODAL CLOSE
+// 3. MODAL CLOSE (nama & thankyou via tombol masing-masing)
 // ============================================
-document.getElementById('close-modal')?.addEventListener('click', () => {
-  document.getElementById('thankyou-modal').style.display = 'none';
-});
 window.addEventListener('click', (e) => {
   if (e.target.id === 'thankyou-modal' || e.target.id === 'name-modal') {
     e.target.style.display = 'none';

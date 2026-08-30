@@ -57,7 +57,7 @@
         </div>
         <button class="w-full border-0 rounded-xl py-3.5 text-sm font-bold cursor-pointer flex items-center justify-center gap-2 text-white bg-gradient-to-br from-indigo-500 to-purple-500 shadow-[0_8px_24px_rgba(139,92,246,.3)] hover:brightness-110 hover:-translate-y-px active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none transition-all" id="autoBtn" type="button"><i class="fas fa-wand-magic-sparkles"></i> Auto Create</button>
         <div class="hidden mt-4 bg-[#0a0a12] border border-purple-500/45 rounded-2xl p-4 anim-rise" id="autoOutput">
-          <div class="text-[11px] font-bold tracking-widest uppercase text-purple-100 mb-2 flex items-center gap-2"><i class="fas fa-circle-check"></i> Email siap</div>
+          <div class="text-[11px] font-bold tracking-widest uppercase text-purple-100 mb-2 flex items-center gap-2" id="autoLabel"><i class="fas fa-circle-check"></i> Email siap</div>
           <pre id="autoPre" class="text-[#c4b5fd] text-xs whitespace-pre-wrap break-all max-h-48 overflow-auto leading-6 mb-3 font-sans">—</pre>
           <div class="flex gap-3 flex-wrap">
             <button class="mini flex-1 min-w-[120px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold cursor-pointer bg-transparent border border-white/15 text-[#e8edf5] hover:bg-white/5 transition-all" type="button" id="copyAutoEmailBtn"><i class="fas fa-copy"></i> Salin Email</button>
@@ -182,7 +182,8 @@
       const box=$(id), pre=$(id.replace('Output','Pre'));
       box.classList.remove('hidden');box.classList.add('block');
       box.style.borderColor=ok?'rgba(168,85,247,.45)':'rgba(244,63,94,.5)';
-      $(id.replace('Output','Label')).innerHTML=labelHtml;
+      const lbl=$(id.replace('Output','Label'));
+      if(lbl)lbl.innerHTML=labelHtml;
       pre.textContent=preText;
     }
 
