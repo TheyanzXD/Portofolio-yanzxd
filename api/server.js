@@ -37,6 +37,35 @@ const CONFIG = {
 
 const MAX_BODY_SIZE = 5 * 1024 * 1024; // 5MB
 
+// -------------------------------------------------
+// EKSTERNAL API (semua proxy logic ada di backend)
+// -------------------------------------------------
+const HAIDAR_BASE = 'https://api.haidarxd.my.id/api/v1';
+const HAIDAR_API_KEY = 'haidarapis-43ee0ef3199221b320f01c50'; // ponytail: public demo key, hardcode per user request
+const TEMPM_BASE = 'https://tempmailhaidar.vercel.app/api';
+
+// GET eksternal, error-safe: selalu kembalikan JSON (bukan throw)
+function fetchJson(url) {
+  return new Promise((resolve) => {
+    const u = new URL(url);
+    const req = https.request({ hostname: u.hostname, port: 443, path: u.pathname + u.search, method: 'GET', headers: { 'User-Agent': 'yandev-portfolio' } }, res => {
+      let body = '';
+      res.on('data', c => body += c);
+      res.on('end', () => {
+        try { resolve(JSON.parse(body)); }
+        catch (e) { resolve({ ok: false, error: { message: 'Respons bukan JSON' } }); }
+      });
+    });
+    req.on('error', e => resolve({ ok: false, error: { message: e.message } }));
+    req.end();
+  });
+}
+
+function sendJson(res, data) {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(data));
+}
+
 const asyncHandler = fn => (req, res) => fn(req, res).catch(e => {
   console.error('[ERROR]', e.message);
   if (!res.headersSent) {
@@ -327,6 +356,96 @@ async function handleRequest(req, res) {
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ ok: true, filename }));
+    return;
+  }
+
+  // ----------------------------------------
+  // PROXY: SPOTIFY
+  // ----------------------------------------
+  if (pathname === '/api/spotify/search' && req.method === 'GET') {
+    const q = urlObj.searchParams.get('q') || '';
+    const limit = urlObj.searchParams.get('limit') || '6';
+    if (!q) { sendJson(res, { ok: false, error: { message: 'Param q wajib diisi' } }); return; }
+    const url = `${HAIDAR_BASE}/spotify/search?q=${encodeURIComponent(q)}&limit=${encodeURIComponent(limit)}&apikey=${HAIDAR_API_KEY}`;
+    sendJson(res, await fetchJson(url));
+    return;
+  }
+  if (pathname === '/api/spotify/download' && req.method === 'GET') {
+    const url = urlObj.searchParams.get('url') || '';
+    const index = urlObj.searchParams.get('index') || '1';
+    if (!url) { sendJson(res, { ok: false, error: { message: 'Param url wajib diisi' } }); return; }
+    const up = `${HAIDAR_BASE}/downloader/spotify?url=${encodeURIComponent(url)}&index=${encodeURIComponent(index)}&apikey=${HAIDAR_API_KEY}`;
+    sendJson(res, await fetchJson(up));
+    return;
+  }
+
+  // ----------------------------------------
+  // PROXY: ALIGHT MOTION
+  // ----------------------------------------
+  if (pathname === '/api/alight/auto' && req.method === 'GET') {
+    sendJson(res, await fetchJson(`${HAIDAR_BASE}/alight-motion/auto?apikey=${HAIDAR_API_KEY}`));
+    return;
+  }
+  if (pathname === '/api/alight/send' && req.method === 'GET') {
+    const email = urlObj.searchParams.get('email') || '';
+    if (!email) { sendJson(res, { ok: false, error: { message: 'Param email wajib diisi' } }); return; }
+    sendJson(res, await fetchJson(`${HAIDAR_BASE}/alight-motion/send?email=${encodeURIComponent(email)}&apikey=${HAIDAR_API_KEY}`));
+    return;
+  }
+  if (pathname === '/api/alight/verify' && req.method === 'GET') {
+    const email = urlObj.searchParams.get('email') || '';
+    const link = urlObj.searchParams.get('link') || '';
+    if (!email || !link) { sendJson(res, { ok: false, error: { message: 'Param email & link wajib diisi' } }); return; }
+    sendJson(res, await fetchJson(`${HAIDAR_BASE}/alight-motion/verify?email=${encodeURIComponent(email)}&link=${encodeURIComponent(link)}&apikey=${HAIDAR_API_KEY}`));
+    return;
+  }
+
+  // ----------------------------------------
+  // PROXY: TEMPMAIL (langsung ke tempmailhaidar)
+  // ----------------------------------------
+  if (pathname === '/api/tempmail/inbox' && req.method === 'GET') {
+    const email = urlObj.searchParams.get('email') || '';
+    if (!email) { sendJson(res, { ok: false, error: { message: 'Param email wajib diisi' } }); return; }
+    sendJson(res, await fetchJson(`${TEMPM_BASE}/inbox?email=${encodeURIComponent(email)}`));
+    return;
+  }
+  if (pathname === '/api/tempmail/message' && req.method === 'GET') {
+    const email = urlObj.searchParams.get('email') || '';
+    const id = urlObj.searchParams.get('id') || '';
+    if (!email || !id) { sendJson(res, { ok: false, error: { message: 'Param email & id wajib diisi' } }); return; }
+    sendJson(res, await fetchJson(`${TEMPM_BASE}/message?email=${encodeURIComponent(email)}&id=${encodeURIComponent(id)}`));
+    return;
+  }
+
+  // ----------------------------------------
+  // PROXY: TOOLS (bypaslink, cekban)
+  // ----------------------------------------
+  if (pathname === '/api/tools/bypaslink' && req.method === 'GET') {
+    const url = urlObj.searchParams.get('url') || '';
+    if (!url) { sendJson(res, { ok: false, error: { message: 'Param url wajib diisi' } }); return; }
+    sendJson(res, await fetchJson(`${HAIDAR_BASE}/tools/bypaslink?url=${encodeURIComponent(url)}&apikey=${HAIDAR_API_KEY}`));
+    return;
+  }
+  if (pathname === '/api/tools/cekban' && req.method === 'GET') {
+    const number = urlObj.searchParams.get('number') || '';
+    if (!number) { sendJson(res, { ok: false, error: { message: 'Param number wajib diisi' } }); return; }
+    sendJson(res, await fetchJson(`${HAIDAR_BASE}/tools/cekban?number=${encodeURIComponent(number)}&apikey=${HAIDAR_API_KEY}`));
+    return;
+  }
+
+  // ----------------------------------------
+  // PROXY: FREE FIRE CHECKER
+  // ----------------------------------------
+  if (pathname === '/api/ff/profile' && req.method === 'GET') {
+    const uid = urlObj.searchParams.get('uid') || '';
+    if (!uid) { sendJson(res, { ok: false, error: { message: 'Param uid wajib diisi' } }); return; }
+    sendJson(res, await fetchJson(`${HAIDAR_BASE}/stalker/ffchecker?uid=${encodeURIComponent(uid)}&apikey=${HAIDAR_API_KEY}`));
+    return;
+  }
+  if (pathname === '/api/ff/prime' && req.method === 'GET') {
+    const uid = urlObj.searchParams.get('uid') || '';
+    if (!uid) { sendJson(res, { ok: false, error: { message: 'Param uid wajib diisi' } }); return; }
+    sendJson(res, await fetchJson(`${HAIDAR_BASE}/stalker/cek-prime-ff?uid=${encodeURIComponent(uid)}&apikey=${HAIDAR_API_KEY}`));
     return;
   }
 

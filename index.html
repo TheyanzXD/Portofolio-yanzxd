@@ -505,8 +505,6 @@ window.addEventListener('click', (e) => {
 // MUSIC PLAYER (IIFE)
 // ============================================
 (function musicPlayer(){
-  const API_BASE='https://api.haidarxd.my.id/api/v1';
-  const API_KEY='haidarapis-43ee0ef3199221b320f01c50';
   const DEFAULT_ID='5drW6PGRxkE6MxttzVLNk5';
   const DEFAULT_TITLE='Secukupnya';
   const DEFAULT_ARTIST='Hindia';
@@ -543,7 +541,7 @@ window.addEventListener('click', (e) => {
     artistEl.textContent=artist;
     playIcon.className='fas fa-spinner fa-spin';
     try{
-      const url=`${API_BASE}/downloader/spotify?url=https%3A%2F%2Fopen.spotify.com%2Ftrack%2F${encodeURIComponent(id)}&index=1&apikey=${API_KEY}`;
+      const url=`/api/spotify/download?url=${encodeURIComponent('https://open.spotify.com/track/'+id)}&index=1`;
       const res=await fetch(url);
       const data=await res.json();
       if(!res.ok||data.status!=='success'||!data.data||!data.data.mp3)throw new Error(data?.error?.message||'Gagal mengambil lagu');
@@ -595,7 +593,7 @@ window.addEventListener('click', (e) => {
     if(!q)return;
     results.innerHTML='<div class="res-note">Mencari...</div>';
     try{
-      const res=await fetch(`${API_BASE}/spotify/search?q=${encodeURIComponent(q)}&limit=6&apikey=${API_KEY}`);
+      const res=await fetch(`/api/spotify/search?q=${encodeURIComponent(q)}&limit=6`);
       const data=await res.json();
       if(!res.ok||data.status!=='success')throw new Error(data?.error?.message||'Gagal mencari');
       const list=data.data.results||[];
