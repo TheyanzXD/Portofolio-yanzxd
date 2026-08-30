@@ -12,7 +12,7 @@
 
 </div>
 
-<h2 align="center">🎧 Musuh · Streaming · 🎬 Tools · 🔐 Admin</h2>
+<h2 align="center">🎧 Music · Streaming · 🎬 Tools · 🔐 Admin</h2>
 
 <p align="center">
   <img alt="Version" src="https://img.shields.io/badge/version-3.1.0-8b5cf6.svg?style=for-the-badge&logo=vercel" />
