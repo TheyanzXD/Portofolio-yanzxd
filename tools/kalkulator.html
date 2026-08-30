@@ -4,83 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kalkulator Mini</title>
-  <link rel="stylesheet" href="../ui/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
   <style>
-    .page-wrapper{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
-    .back-link{position:fixed;top:1.5rem;left:1.5rem;color:var(--accent);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .3s;z-index:10}
-    .back-link:hover{transform:translateX(-3px)}
-    .calc-wrapper{width:100%;max-width:360px;animation:scaleIn .5s ease}
-    .calc-header{text-align:center;margin-bottom:2rem}
-    .calc-header h1{font-size:2rem;color:var(--accent)}
-    .calc-header p{color:var(--text3);font-size:.9rem}
-    .calc-body{background:var(--bg2);border-radius:16px;padding:1.5rem;border:1px solid rgba(168,85,247,.1);box-shadow:var(--shadow)}
-    .calc-screen{background:var(--bg);border-radius:12px;padding:1.2rem;margin-bottom:1rem;text-align:right;border:1px solid rgba(168,85,247,.15)}
-    .calc-screen .expression{font-size:.9rem;color:var(--text3);min-height:1.2rem;font-family:monospace;word-break:break-all}
-    .calc-screen .result{font-size:2.2rem;color:var(--accent);font-weight:700;font-family:monospace;word-break:break-all}
-    .calc-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
-    .calc-btns button{padding:1rem;font-size:1.1rem;border-radius:10px;border:none;cursor:pointer;font-weight:600;transition:all .15s;background:var(--bg3);color:var(--text)}
-    .calc-btns button:hover{transform:scale(1.05);filter:brightness(1.2)}
-    .calc-btns button:active{transform:scale(.95)}
-    .calc-btns button.num{background:var(--bg3);color:var(--text)}
-    .calc-btns button.op{background:rgba(168,85,247,.15);color:var(--accent)}
-    .calc-btns button.op:hover{background:rgba(168,85,247,.25)}
-    .calc-btns button.eq{background:var(--accent);color:var(--bg)}
-    .calc-btns button.eq:hover{background:var(--accent2)}
-    .calc-btns button.func{background:rgba(255,107,107,.15);color:#ff6b6b}
-    .calc-btns button.func:hover{background:rgba(255,107,107,.25)}
-    .calc-btns button.paren{background:rgba(136,146,176,.15);color:var(--text2)}
-    .calc-history{margin-top:1rem;max-height:150px;overflow-y:auto}
-    .calc-history .hist-item{padding:.5rem .8rem;color:var(--text3);font-size:.8rem;font-family:monospace;border-bottom:1px solid rgba(168,85,247,.05);display:flex;justify-content:space-between}
-    .calc-history .hist-item:last-child{color:var(--accent);font-weight:600}
-    .calc-toggle{display:flex;justify-content:center;margin-top:.8rem}
-    .calc-toggle button{background:transparent;color:var(--text3);border:1px solid rgba(168,85,247,.1);padding:.3rem .8rem;font-size:.75rem;border-radius:6px}
-    .calc-toggle button:hover{color:var(--accent);border-color:var(--accent)}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter','Segoe UI',sans-serif}
+    .grad-text{background:linear-gradient(120deg,#c4b5fd,#a855f7 45%,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
     @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+    .anim-in{animation:scaleIn .5s ease}
+    .hist-item{display:flex;justify-content:space-between;padding:.5rem .8rem;font-size:.8rem;font-family:monospace;border-bottom:1px solid rgba(168,85,247,.05);color:#7a7899}
+    .hist-item:last-child{color:#a855f7;font-weight:600}
   </style>
 </head>
-<body>
-  <a href="../index.html" class="back-link">← Kembali ke Portofolio</a>
-  <div class="page-wrapper">
-    <div class="calc-wrapper">
-      <div class="calc-header">
-        <h1>Kalkulator Mini</h1>
-        <p>Kalkulator dengan riwayat perhitungan</p>
+<body class="min-h-screen bg-[#0a0a12] text-[#e8edf5] flex flex-col items-center justify-center px-6 py-8"
+  style="background-image:radial-gradient(1200px 500px at 50% -100px,rgba(168,85,247,.12),transparent 60%),radial-gradient(900px 400px at 100% 100%,rgba(99,102,241,.08),transparent 55%)">
+
+  <a href="../index.html" class="fixed top-6 left-6 text-[#c4b5fd] bg-white/5 hover:bg-purple-500/15 hover:text-white rounded-xl px-3 py-2 text-sm inline-flex items-center gap-2 transition-transform hover:-translate-x-0.5 z-10"><i class="fas fa-arrow-left"></i> Kembali ke Portofolio</a>
+
+  <div class="w-full max-w-[360px] anim-in">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-extrabold grad-text">Kalkulator Mini</h1>
+      <p class="text-[#ffffff66] text-sm mt-1">Kalkulator dengan riwayat perhitungan</p>
+    </div>
+    <div class="bg-[#14141f] rounded-2xl p-6 border border-purple-500/10 shadow-[0_4px_20px_rgba(0,0,0,.3)]">
+      <div class="bg-[#0a0a12] rounded-xl p-4 mb-4 text-right border border-purple-500/15">
+        <div class="text-sm text-[#ffffff66] min-h-[1.2rem] font-mono break-all" id="calc-expression"></div>
+        <div class="text-4xl font-bold text-purple-500 font-mono break-all" id="calc-result">0</div>
       </div>
-      <div class="calc-body">
-        <div class="calc-screen">
-          <div class="expression" id="calc-expression"></div>
-          <div class="result" id="calc-result">0</div>
-        </div>
-        <div class="calc-btns">
-          <button class="func" data-v="C">AC</button>
-          <button class="func" data-v="back">⌫</button>
-          <button class="paren" data-v="(">(</button>
-          <button class="op" data-v=")">)</button>
-          <button class="num" data-v="7">7</button>
-          <button class="num" data-v="8">8</button>
-          <button class="num" data-v="9">9</button>
-          <button class="op" data-v="/">÷</button>
-          <button class="num" data-v="4">4</button>
-          <button class="num" data-v="5">5</button>
-          <button class="num" data-v="6">6</button>
-          <button class="op" data-v="*">×</button>
-          <button class="num" data-v="1">1</button>
-          <button class="num" data-v="2">2</button>
-          <button class="num" data-v="3">3</button>
-          <button class="op" data-v="-">−</button>
-          <button class="num" data-v="0">0</button>
-          <button class="num" data-v=".">.</button>
-          <button class="eq" data-v="=">=</button>
-          <button class="op" data-v="+">+</button>
-        </div>
-        <div class="calc-toggle">
-          <button id="toggle-history">Riwayat ▾</button>
-        </div>
-        <div class="calc-history" id="calc-history" style="display:none"></div>
+      <div class="calc-btns grid grid-cols-4 gap-2">
+        <button class="func" data-v="C">AC</button>
+        <button class="func" data-v="back">⌫</button>
+        <button class="paren" data-v="(">(</button>
+        <button class="op" data-v=")">)</button>
+        <button class="num" data-v="7">7</button>
+        <button class="num" data-v="8">8</button>
+        <button class="num" data-v="9">9</button>
+        <button class="op" data-v="/">÷</button>
+        <button class="num" data-v="4">4</button>
+        <button class="num" data-v="5">5</button>
+        <button class="num" data-v="6">6</button>
+        <button class="op" data-v="*">×</button>
+        <button class="num" data-v="1">1</button>
+        <button class="num" data-v="2">2</button>
+        <button class="num" data-v="3">3</button>
+        <button class="op" data-v="-">−</button>
+        <button class="num" data-v="0">0</button>
+        <button class="num" data-v=".">.</button>
+        <button class="eq" data-v="=">=</button>
+        <button class="op" data-v="+">+</button>
       </div>
+      <div class="flex justify-center mt-4">
+        <button id="toggle-history" class="bg-transparent text-[#ffffff66] border border-purple-500/10 px-3 py-1 text-xs rounded-lg hover:text-purple-400 hover:border-purple-500 transition-colors">Riwayat ▾</button>
+      </div>
+      <div class="mt-3 max-h-[150px] overflow-y-auto" id="calc-history" style="display:none"></div>
     </div>
   </div>
+
+  <style>
+    .calc-btns button{display:flex;align-items:center;justify-content:center;padding:1rem;font-size:1.1rem;border-radius:10px;border:none;cursor:pointer;font-weight:600;transition:all .15s;font-family:inherit}
+    .calc-btns button:hover{transform:scale(1.05);filter:brightness(1.2)}
+    .calc-btns button:active{transform:scale(.95)}
+    .calc-btns button.num{background:#1f1f2e;color:#e8edf5}
+    .calc-btns button.op{background:rgba(168,85,247,.15);color:#a855f7}
+    .calc-btns button.op:hover{background:rgba(168,85,247,.25)}
+    .calc-btns button.eq{background:#a855f7;color:#0a0a12}
+    .calc-btns button.eq:hover{background:#6366f1}
+    .calc-btns button.func{background:rgba(255,107,107,.15);color:#ff6b6b}
+    .calc-btns button.func:hover{background:rgba(255,107,107,.25)}
+    .calc-btns button.paren{background:rgba(136,146,176,.15);color:#a9a6cf}
+    @media(max-width:400px){.calc-btns button{padding:.7rem}}
+  </style>
+
   <script>
   (function(){
     const expr=document.getElementById('calc-expression');

@@ -4,182 +4,138 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alight Motion Tools</title>
-  <link rel="stylesheet" href="../ui/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{background:#0a0a12;color:#e8edf5;font-family:'Inter','Segoe UI',sans-serif;line-height:1.7;min-height:100vh;
-      background-image:radial-gradient(1200px 500px at 50% -100px,rgba(168,85,247,.12),transparent 60%),
-                       radial-gradient(900px 400px at 100% 100%,rgba(99,102,241,.08),transparent 55%)}
-    .topbar{max-width:820px;margin:0 auto;padding:1.4rem 1.5rem 0}
-    .back-link{color:#c4b5fd;text-decoration:none;font-size:.9rem;display:inline-flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border-radius:10px;transition:all .2s;background:rgba(255,255,255,.03)}
-    .back-link:hover{background:rgba(168,85,247,.14);transform:translateX(-2px);color:#fff}
-    .wrap{max-width:820px;margin:0 auto;padding:2rem 1.5rem 3.5rem}
-    .hero{text-align:center;margin-bottom:2rem;animation:rise .5s ease}
-    .hero .badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#f5d0fe;background:rgba(168,85,247,.14);border:1px solid rgba(168,85,247,.3);padding:.3rem .9rem;border-radius:20px;margin-bottom:1rem}
-    .hero .badge .dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e;animation:pulse 1.8s infinite}
-    .hero h1{font-size:2.3rem;font-weight:800;background:linear-gradient(120deg,#c4b5fd,#a855f7 45%,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
-    .hero p{color:rgba(255,255,255,.55);font-size:.95rem;max-width:520px;margin:0 auto}
-    .steps{display:flex;justify-content:center;gap:0;margin:1.6rem auto 2rem;max-width:480px}
-    .steps .st{display:flex;align-items:center;gap:.5rem}
-    .steps .st .num{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(168,85,247,.25);color:#c4b5fd;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;transition:all .3s}
-    .steps .st.done .num{background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(139,92,246,.4)}
-    .steps .st .lb{font-size:.72rem;color:rgba(255,255,255,.5)}
-    .steps .st.done .lb{color:#e9d5ff}
-    .steps .line{width:40px;height:2px;background:rgba(255,255,255,.1);margin:0 .6rem;border-radius:2px;overflow:hidden}
-    .steps .line i{display:block;height:100%;width:0;background:linear-gradient(90deg,#6366f1,#a855f7);transition:width .4s ease}
-    .steps .line.done i{width:100%}
-    .grid{display:flex;flex-direction:column;gap:1.3rem}
-    .card{position:relative;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:1.6rem;transition:border-color .3s,transform .3s,box-shadow .3s;overflow:hidden}
-    .card::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(168,85,247,.08),transparent 40%,rgba(99,102,241,.06));opacity:0;transition:opacity .3s;pointer-events:none}
-    .card:hover{border-color:rgba(168,85,247,.35);box-shadow:0 18px 50px rgba(0,0,0,.35)}
-    .card:hover::before{opacity:1}
-    .card-head{display:flex;align-items:center;gap:.9rem;margin-bottom:1.2rem;position:relative;z-index:1}
-    .card-head .step{border-radius:14px;min-width:48px;height:48px;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 6px 18px rgba(139,92,246,.35)}
-    .card-head .tt h3{font-size:1.05rem;color:#fff;font-weight:700;letter-spacing:.01em}
-    .card-head .tt .desc{font-size:.76rem;color:rgba(255,255,255,.5);margin-top:.15rem}
-    .field{margin-bottom:.8rem}
-    .field label{display:block;font-size:.72rem;font-weight:600;letter-spacing:.05em;color:rgba(255,255,255,.5);margin-bottom:.4rem;text-transform:uppercase}
-    .field input{width:100%;background:#0a0a12;border:1px solid rgba(255,255,255,.1);color:#fff;padding:.8rem 1rem;border-radius:12px;font-size:.95rem;font-family:inherit;transition:border-color .2s,box-shadow .2s}
-    .field input:focus{outline:none;border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.15)}
-    .field input::placeholder{color:rgba(255,255,255,.3)}
-    .btn{width:100%;border:none;border-radius:12px;padding:.85rem;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:.55rem;transition:transform .15s,filter .2s,box-shadow .2s;color:#fff;background:linear-gradient(135deg,#6366f1,#a855f7);box-shadow:0 8px 24px rgba(139,92,246,.3)}
-    .btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
-    .btn:active{transform:scale(.97)}
-    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none;filter:grayscale(.2)}
-    .output{margin-top:1rem;display:none;background:#0a0a12;border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:1rem;position:relative;animation:rise .25s ease}
-    .output.show{display:block}
-    .output.ok{border-color:rgba(168,85,247,.45);background:linear-gradient(180deg,rgba(168,85,247,.06),rgba(0,0,0,.2))}
-    .output.err{border-color:rgba(244,63,94,.5);background:linear-gradient(180deg,rgba(244,63,94,.06),rgba(0,0,0,.2))}
-    .output .olabel{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
-    .output.ok .olabel{color:#e9d5ff}
-    .output.err .olabel{color:#fda4af}
-    .output pre{margin:0;font-size:.78rem;color:#c4b5fd;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow:auto;line-height:1.6}
-    .mini-actions{display:flex;gap:.6rem;margin-top:.9rem;flex-wrap:wrap}
-    .mini{flex:1;min-width:120px;display:flex;align-items:center;justify-content:center;gap:.45rem;padding:.6rem .8rem;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid rgba(168,85,247,.3);background:rgba(168,85,247,.12);color:#e9d5ff;transition:all .2s}
-    .mini:hover{background:rgba(168,85,247,.28);transform:translateY(-1px)}
-    .mini:active{transform:scale(.96)}
-    .mini.mini-open{background:linear-gradient(135deg,#10b981,#059669);border-color:transparent;color:#fff;box-shadow:0 6px 16px rgba(16,185,129,.3)}
-    .mini.mini-open:hover{filter:brightness(1.1)}
-    .mini.mini-ghost{background:transparent;border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.8)}
-    .mini.mini-ghost:hover{background:rgba(255,255,255,.06)}
-    .hintbox{margin-top:1.4rem;background:rgba(168,85,247,.07);border:1px dashed rgba(168,85,247,.3);border-radius:14px;padding:1rem 1.2rem;font-size:.82rem;color:rgba(255,255,255,.65);animation:rise .5s ease .1s both}
-    .hintbox b{color:#e9d5ff}
-    .hintbox a{color:#a855f7;text-decoration:none;border-bottom:1px dotted #a855f7}
-    .hintbox a:hover{color:#c084fc}
-    footer{text-align:center;padding:1rem 0 2rem;color:rgba(255,255,255,.3);font-size:.8rem}
-    @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    body{font-family:'Inter','Segoe UI',sans-serif}
+    .grad-text{background:linear-gradient(120deg,#c4b5fd,#a855f7 45%,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .dot-live{box-shadow:0 0 8px #22c55e;animation:pulse 1.8s infinite}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .anim-rise{animation:rise .5s ease both}
     #am-toast{position:fixed;bottom:22px;right:22px;z-index:9999;padding:14px 20px;border-radius:12px;font-weight:600;font-size:.9rem;color:#fff;max-width:330px;box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .3s,transform .3s;font-family:'Inter',sans-serif}
     #am-toast.show{opacity:1;transform:translateY(0)}
     #am-toast.ok{background:linear-gradient(135deg,#6366f1,#a855f7)}
     #am-toast.err{background:linear-gradient(135deg,#dc2626,#ef4444)}
-    @media(max-width:520px){
-      .wrap{padding:1.5rem 1rem 2.5rem}
-      .hero h1{font-size:1.7rem}
-      .steps .line{width:24px;margin:0 .35rem}
-      .steps .st .lb{display:none}
-      .card{padding:1.2rem}
-    }
   </style>
 </head>
-<body>
-  <div class="topbar">
-    <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Kembali ke Portofolio</a>
+<body class="min-h-screen bg-[#0a0a12] text-[#e8edf5]"
+  style="background-image:radial-gradient(1200px 500px at 50% -100px,rgba(168,85,247,.12),transparent 60%),radial-gradient(900px 400px at 100% 100%,rgba(99,102,241,.08),transparent 55%)">
+
+  <div class="max-w-[820px] mx-auto px-5 pt-6">
+    <a href="../index.html" class="inline-flex items-center gap-2 text-[#c4b5fd] bg-white/5 hover:bg-purple-500/15 hover:text-white rounded-xl px-3 py-2 text-sm transition-transform hover:-translate-x-0.5"><i class="fas fa-arrow-left"></i> Kembali ke Portofolio</a>
   </div>
 
-  <div class="wrap">
-    <div class="hero">
-      <span class="badge"><span class="dot"></span> Alight Motion Tools</span>
-      <h1>Tools Aktivasi Alight Motion</h1>
-      <p>Buat email temporer, kirim verifikasi, lalu aktivasi akun — semua otomatis dalam 3 langkah.</p>
+  <div class="max-w-[820px] mx-auto px-5 py-8 pb-14">
+    <div class="text-center mb-8 anim-rise">
+      <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-purple-100 bg-purple-500/15 border border-purple-500/30 rounded-full px-4 py-1 mb-4"><span class="w-2 h-2 rounded-full bg-green-500 dot-live"></span> Alight Motion Tools</span>
+      <h1 class="text-4xl font-extrabold grad-text mb-2">Tools Aktivasi Alight Motion</h1>
+      <p class="text-[#ffffff8c] text-sm max-w-[560px] mx-auto">Buat email temporer, kirim verifikasi, lalu aktivasi akun — semua otomatis dalam 3 langkah, + inbox realtime.</p>
     </div>
 
-    <div class="steps">
-      <div class="st done" id="st1"><div class="num">1</div><div class="lb">Buat Email</div></div>
-      <div class="line" id="ln1"><i></i></div>
-      <div class="st" id="st2"><div class="num">2</div><div class="lb">Kirim Verifikasi</div></div>
-      <div class="line" id="ln2"><i></i></div>
-      <div class="st" id="st3"><div class="num">3</div><div class="lb">Aktivasi</div></div>
+    <div class="flex justify-center mb-8 max-w-[480px] mx-auto text-xs">
+      <div class="flex items-center gap-2"><div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white font-bold flex items-center justify-center shadow-[0_4px_14px_rgba(139,92,246,.4)] anim-rise" id="st1">1</div><span class="text-[#ffffff80] hidden sm:inline" id="st1lb">Buat Email</span></div>
+      <div class="w-10 h-0.5 self-center bg-white/10 mx-2 overflow-hidden rounded anim-rise"><i class="block h-full w-full bg-gradient-to-r from-indigo-500 to-purple-500 anim-rise" id="ln1" style="width:0"></i></div>
+      <div class="flex items-center gap-2"><div class="w-9 h-9 rounded-full border border-purple-500/25 bg-white/5 text-[#c4b5fd] font-bold flex items-center justify-center anim-rise" id="st2" style="animation-delay:.05s">2</div><span class="text-[#ffffff80] hidden sm:inline!">Kirim Verifikasi</span></div>
+      <div class="w-10 h-0.5 self-center bg-white/10 mx-2 overflow-hidden rounded anim-rise"><i class="block h-full w-full bg-gradient-to-r from-indigo-500 to-purple-500 anim-rise" id="ln2" style="width:0"></i></div>
+      <div class="flex items-center gap-2"><div class="w-9 h-9 rounded-full border border-purple-500/25 bg-white/5 text-[#c4b5fd] font-bold flex items-center justify-center anim-rise" id="st3" style="animation-delay:.1s">3</div><span class="text-[#ffffff80] hidden sm:inline!">Aktivasi</span></div>
     </div>
 
-    <div class="grid">
+    <div class="flex flex-col gap-5">
+
       <!-- CARD 1: AUTO CREATE -->
-      <div class="card">
-        <div class="card-head">
-          <div class="step"><i class="fas fa-envelope-open-text"></i></div>
-          <div class="tt"><h3>1 · Auto Create Email</h3><div class="desc">Buat email temporer + inbox (berlaku 1 tahun)</div></div>
+      <div class="relative bg-white/5 border border-white/10 rounded-2xl p-6 overflow-hidden hover:border-purple-500/35 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)] transition-all anim-rise"
+        style="background-image:linear-gradient(135deg,rgba(168,85,247,.08),transparent 40%,rgba(99,102,241,.06))">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center text-lg bg-gradient-to-br from-indigo-500 to-purple-500 shadow-[0_6px_18px_rgba(139,92,246,.35)]"><i class="fas fa-envelope-open-text text-white"></i></div>
+          <div><h3 class="text-white font-bold">1 · Auto Create Email</h3><div class="text-[#ffffff80] text-xs mt-0.5">Buat email temporer + inbox (berlaku 1 tahun)</div></div>
         </div>
-        <button class="btn" id="autoBtn" type="button"><i class="fas fa-wand-magic-sparkles"></i> Auto Create</button>
-        <div class="output ok" id="autoOutput">
-          <div class="olabel"><i class="fas fa-circle-check"></i> Email siap</div>
-          <pre id="autoPre">—</pre>
-          <div class="mini-actions">
-            <button class="mini mini-ghost" type="button" id="copyAutoEmailBtn"><i class="fas fa-copy"></i> Salin Email</button>
-            <button class="mini mini-open" type="button" id="openInboxBtn"><i class="fas fa-external-link-alt"></i> Buka Inbox Temp Mail</button>
-            <button class="mini mini-ghost" type="button" id="copyAutoBtn"><i class="fas fa-copy"></i> Salin JSON</button>
+        <button class="w-full border-0 rounded-xl py-3.5 text-sm font-bold cursor-pointer flex items-center justify-center gap-2 text-white bg-gradient-to-br from-indigo-500 to-purple-500 shadow-[0_8px_24px_rgba(139,92,246,.3)] hover:brightness-110 hover:-translate-y-px active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none transition-all" id="autoBtn" type="button"><i class="fas fa-wand-magic-sparkles"></i> Auto Create</button>
+        <div class="hidden mt-4 bg-[#0a0a12] border border-purple-500/45 rounded-2xl p-4 anim-rise" id="autoOutput">
+          <div class="text-[11px] font-bold tracking-widest uppercase text-purple-100 mb-2 flex items-center gap-2"><i class="fas fa-circle-check"></i> Email siap</div>
+          <pre id="autoPre" class="text-[#c4b5fd] text-xs whitespace-pre-wrap break-all max-h-48 overflow-auto leading-6 mb-3 font-sans">—</pre>
+          <div class="flex gap-3 flex-wrap">
+            <button class="mini flex-1 min-w-[120px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold cursor-pointer bg-transparent border border-white/15 text-[#e8edf5] hover:bg-white/5 transition-all" type="button" id="copyAutoEmailBtn"><i class="fas fa-copy"></i> Salin Email</button>
+            <button class="mini flex-1 min-w-[120px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold cursor-pointer text-white bg-gradient-to-br from-[#10b981] to-[#059669] hover:brightness-110 shadow-[0_6px_16px_rgba(16,185,129,.3)] transition-all" type="button" id="openInboxBtn"><i class="fas fa-external-link-alt"></i> Buka Inbox</button>
+            <button class="mini flex-1 min-w-[120px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold cursor-pointer bg-transparent border border-white/15 text-[#e8edf5] hover:bg-white/5 transition-all" type="button" id="copyAutoBtn"><i class="fas fa-copy"></i> Salin JSON</button>
           </div>
         </div>
       </div>
 
       <!-- CARD 2: SEND -->
-      <div class="card">
-        <div class="card-head">
-          <div class="step"><i class="fas fa-paper-plane"></i></div>
-          <div class="tt"><h3>2 · Kirim Verifikasi</h3><div class="desc">Kirim link verifikasi ke email tujuan</div></div>
+      <div class="relative bg-white/5 border border-white/10 rounded-2xl p-6 overflow-hidden hover:border-purple-500/35 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)] transition-all anim-rise" style="animation-delay:.05s">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center text-lg bg-gradient-to-br from-indigo-500 to-purple-500 shadow-[0_6px_18px_rgba(139,92,246,.35)]"><i class="fas fa-paper-plane text-white"></i></div>
+          <div><h3 class="text-white font-bold">2 · Kirim Verifikasi</h3><div class="text-[#ffffff80] text-xs mt-0.5">Kirim link verifikasi ke email tujuan</div></div>
         </div>
-        <div class="field">
-          <label for="sendEmail">Email Tujuan</label>
-          <input id="sendEmail" type="email" placeholder="your@email.com" autocomplete="off" spellcheck="false">
+        <div class="mb-3">
+          <label for="sendEmail" class="block text-[11px] font-semibold tracking-wider uppercase text-[#ffffff80] mb-1">Email Tujuan</label>
+          <input id="sendEmail" type="email" placeholder="your@email.com" autocomplete="off" spellcheck="false"
+            class="w-full bg-[#0a0a12] border border-white/10 text-white px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/15 placeholder-white/30 transition-all">
         </div>
-        <button class="btn" id="sendBtn" type="button"><i class="fas fa-paper-plane"></i> Kirim Verifikasi</button>
-        <div class="output ok" id="sendOutput">
-          <div class="olabel" id="sendLabel"><i class="fas fa-circle-check"></i> Hasil</div>
-          <pre id="sendPre">—</pre>
-          <div class="mini-actions">
-            <button class="mini mini-ghost" type="button" id="copySendBtn"><i class="fas fa-copy"></i> Salin JSON</button>
+        <button class="w-full border-0 rounded-xl py-3.5 text-sm font-bold cursor-pointer flex items-center justify-center gap-2 text-white bg-gradient-to-br from-indigo-500 to-purple-500 shadow-[0_8px_24px_rgba(139,92,246,.3)] hover:brightness-110 hover:-translate-y-px active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none transition-all" id="sendBtn" type="button"><i class="fas fa-paper-plane"></i> Kirim Verifikasi</button>
+        <div class="hidden mt-4 bg-[#0a0a12] border border-purple-500/45 rounded-2xl p-4 anim-rise" id="sendOutput">
+          <div class="text-[11px] font-bold tracking-widest uppercase text-purple-100 mb-2 flex items-center gap-2" id="sendLabel"><i class="fas fa-circle-check"></i> Hasil</div>
+          <pre id="sendPre" class="text-[#c4b5fd] text-xs whitespace-pre-wrap break-all max-h-48 overflow-auto leading-6 mb-3 font-sans">—</pre>
+          <div class="flex gap-3 flex-wrap">
+            <button class="mini flex-1 min-w-[120px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold cursor-pointer bg-transparent border border-white/15 text-[#e8edf5] hover:bg-white/5 transition-all" type="button" id="copySendBtn"><i class="fas fa-copy"></i> Salin JSON</button>
           </div>
         </div>
       </div>
 
       <!-- CARD 3: VERIFY -->
-      <div class="card">
-        <div class="card-head">
-          <div class="step"><i class="fas fa-check-double"></i></div>
-          <div class="tt"><h3>3 · Aktivasi Akun</h3><div class="desc">Verifikasi email &amp; link dari inbox</div></div>
+      <div class="relative bg-white/5 border border-white/10 rounded-2xl p-6 overflow-hidden hover:border-purple-500/35 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)] transition-all anim-rise" style="animation-delay:.1s">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center text-lg bg-gradient-to-br from-indigo-500 to-purple-500 shadow-[0_6px_18px_rgba(139,92,246,.35)]"><i class="fas fa-check-double text-white"></i></div>
+          <div><h3 class="text-white font-bold">3 · Aktivasi Akun</h3><div class="text-[#ffffff80] text-xs mt-0.5">Verifikasi email &amp; link dari inbox</div></div>
         </div>
-        <div class="field">
-          <label for="verifyEmail">Email</label>
-          <input id="verifyEmail" type="email" placeholder="Email yang diverifikasi" autocomplete="off" spellcheck="false">
+        <div class="mb-3">
+          <label for="verifyEmail" class="block text-[11px] font-semibold tracking-wider uppercase text-[#ffffff80] mb-1">Email</label>
+          <input id="verifyEmail" type="email" placeholder="Email yang diverifikasi" autocomplete="off" spellcheck="false"
+            class="w-full bg-[#0a0a12] border border-white/10 text-white px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/15 placeholder-white/30 transition-all">
         </div>
-        <div class="field">
-          <label for="verifyLink">Link Verifikasi</label>
-          <input id="verifyLink" type="text" placeholder="Tempel link verifikasi dari inbox" autocomplete="off" spellcheck="false">
+        <div class="mb-3">
+          <label for="verifyLink" class="block text-[11px] font-semibold tracking-wider uppercase text-[#ffffff80] mb-1">Link Verifikasi</label>
+          <input id="verifyLink" type="text" placeholder="Tempel link verifikasi dari inbox" autocomplete="off" spellcheck="false"
+            class="w-full bg-[#0a0a12] border border-white/10 text-white px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/15 placeholder-white/30 transition-all">
         </div>
-        <button class="btn" id="verifyBtn" type="button"><i class="fas fa-check-double"></i> Aktivasi Akun</button>
-        <div class="output ok" id="verifyOutput">
-          <div class="olabel" id="verifyLabel"><i class="fas fa-circle-check"></i> Hasil</div>
-          <pre id="verifyPre">—</pre>
-          <div class="mini-actions">
-            <button class="mini mini-ghost" type="button" id="copyVerifyBtn"><i class="fas fa-copy"></i> Salin JSON</button>
+        <button class="w-full border-0 rounded-xl py-3.5 text-sm font-bold cursor-pointer flex items-center justify-center gap-2 text-white bg-gradient-to-br from-indigo-500 to-purple-500 shadow-[0_8px_24px_rgba(139,92,246,.3)] hover:brightness-110 hover:-translate-y-px active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none transition-all" id="verifyBtn" type="button"><i class="fas fa-check-double"></i> Aktivasi Akun</button>
+        <div class="hidden mt-4 bg-[#0a0a12] border border-purple-500/45 rounded-2xl p-4 anim-rise" id="verifyOutput">
+          <div class="text-[11px] font-bold tracking-widest uppercase text-purple-100 mb-2 flex items-center gap-2" id="verifyLabel"><i class="fas fa-circle-check"></i> Hasil</div>
+          <pre id="verifyPre" class="text-[#c4b5fd] text-xs whitespace-pre-wrap break-all max-h-48 overflow-auto leading-6 mb-3 font-sans">—</pre>
+          <div class="flex gap-3 flex-wrap">
+            <button class="mini flex-1 min-w-[120px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold cursor-pointer bg-transparent border border-white/15 text-[#e8edf5] hover:bg-white/5 transition-all" type="button" id="copyVerifyBtn"><i class="fas fa-copy"></i> Salin JSON</button>
           </div>
+        </div>
+      </div>
+
+      <!-- CARD 4: INBOX REALTIME -->
+      <div class="relative bg-white/5 border border-white/10 rounded-2xl p-6 overflow-hidden hover:border-emerald-500/40 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)] transition-all anim-rise" style="animation-delay:.15s" id="inboxCard">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center text-lg bg-gradient-to-br from-[#10b981] to-[#0d9488] shadow-[0_6px_18px_rgba(16,185,129,.35)]"><i class="fas fa-inbox text-white"></i></div>
+          <div class="flex-1"><h3 class="text-white font-bold flex items-center gap-2">Inbox Realtime <span class="text-[10px] font-semibold tracking-wider uppercase bg-emerald-500/15 border border-emerald-500/40 text-emerald-200 rounded-full px-2 py-0.5"><i class="fas fa-sync-alt fa-fw"></i> 5 dtk</span></h3><div class="text-[#ffffff80] text-xs mt-0.5"><span id="inboxEmail">Belum ada email</span> · <span id="inboxUpd">—</span></div></div>
+          <button class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold cursor-pointer border border-emerald-500/30 bg-emerald-500/15 text-emerald-100 hover:bg-emerald-500/30 transition-all" type="button" id="inboxRefresh"><i class="fas fa-rotate"></i> Refresh</button>
+        </div>
+        <div class="rounded-xl bg-black/20 border border-white/5 p-4" id="inboxList">
+          <div class="text-sm text-[#ffffff73] text-center py-8"><i class="fas fa-envelope-open-text text-2xl block mb-2 opacity-40"></i>Buat email dulu lewat <b class="text-emerald-200">Auto Create</b>, lalu pesan masuk muncul di sini otomatis.</div>
         </div>
       </div>
     </div>
 
-    <div class="hintbox">
-      <b>💡 Panduan:</b> 
-      1) Klik <b>Auto Create</b> → email &amp; inbox dibuat → klik <b>Buka Inbox Temp Mail</b> untuk membuka halaman inbox secara manual. 
-      2) Di kolom 2, email dari langkah 1 otomatis terisi → klik <b>Kirim Verifikasi</b>. 
-      3) Buka inbox, ambil link verifikasi, tempel di kolom 3 → klik <b>Aktivasi Akun</b>. Akun aktif selama 1 tahun.
+    <div class="mt-5 bg-purple-500/10 border border-dashed border-purple-500/40 rounded-2xl px-5 py-4 text-sm text-[#ffffffa6] anim-rise">
+      <b class="text-purple-100">💡 Panduan:</b>
+      1) Klik <b class="text-purple-100">Auto Create</b> → email &amp; inbox dibuat → email otomatis terisi di langkah 2 &amp; inbox mulai memantau. 
+      2) Klik <b class="text-purple-100">Kirim Verifikasi</b>. 
+      3) OTP / link muncul di <b class="text-purple-100">Inbox Realtime</b> (refresh otomatis tiap 5 detik) → salin OTP → klik <b class="text-purple-100">Aktivasi Akun</b>. Akun aktif selama 1 tahun.
     </div>
   </div>
 
-  <footer>&copy; 2026 YanzXD · Alight Motion Tools</footer>
+  <footer class="text-center py-4 text-[#ffffff4d] text-xs">&copy; 2026 YanzXD · Alight Motion Tools</footer>
 
   <script>
   (function(){
@@ -191,14 +147,14 @@
 
     function markStep(n){
       for(let i=1;i<=n;i++){
-        const st=$('st'+i); if(st)st.classList.add('done');
-        const ln=$('ln'+(i-1)); if(ln)ln.classList.add('done');
+        const st=$('st'+(i)); if(st){st.style.background='linear-gradient(135deg,#6366f1,#a855f7)';st.style.borderColor='transparent';}
+        const ln=$('ln'+(i-1)); if(ln)ln.style.width='100%';
       }
     }
 
     function toast(msg,ok){
       let t=$('am-toast');
-      if(!t){t=document.createElement('div');t.id='am-toast';t.classList.add('show');document.body.appendChild(t);}
+      if(!t){t=document.createElement('div');t.id='am-toast';document.body.appendChild(t);}
       t.textContent=msg;
       t.className='show '+(ok?'ok':'err');
       clearTimeout(t._h);
@@ -219,31 +175,109 @@
       return lines.join('\n');
     }
 
+    function setOutput(id,ok,labelHtml,preText){
+      const box=$(id), pre=$(id.replace('Output','Pre'));
+      box.classList.remove('hidden');box.classList.add('block');
+      box.style.borderColor=ok?'rgba(168,85,247,.45)':'rgba(244,63,94,.5)';
+      $(id.replace('Output','Label')).innerHTML=labelHtml;
+      pre.textContent=preText;
+    }
+
+    // ================= INBOX REALTIME =================
+    const INBOX_INTERVAL=5000;
+    let seenIds=new Set();
+    let inboxTimer=null;
+
+    function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+    function fmtTime(iso){
+      try{return new Date(iso).toLocaleString('id-ID');}catch(e){return iso||'—';}
+    }
+
+    function renderInbox(data){
+      const list=$('inboxList');
+      const msgs=(data&&data.messages)||[];
+      $('inboxUpd').textContent='Update: '+new Date().toLocaleTimeString('id-ID')+' · '+msgs.length+' pesan';
+      if(!msgs.length){
+        list.innerHTML='<div class="text-sm text-[#ffffff73] text-center py-6"><i class="fas fa-envelope-open-text text-2xl block mb-2 opacity-40"></i>Belum ada pesan masuk. Cek kembali dalam beberapa detik.</div>';
+        return;
+      }
+      const rows=[];
+      msgs.forEach(m=>{
+        const isNew=!seenIds.has(m.id);
+        if(isNew&&m.id)seenIds.add(m.id);
+        rows.push(
+          '<div class="border border-white/5 bg-white/5 rounded-xl p-3 mb-2 '+(isNew?'ring-1 ring-emerald-500/40':'')+'">'+
+            '<div class="flex flex-wrap gap-2 items-center mb-1.5">'+
+              (m.otp?'<span class="text-lg font-extrabold tracking-widest text-emerald-300 bg-emerald-500/15 border border-emerald-500/40 rounded-lg px-3 py-1 font-mono">'+esc(m.otp)+'</span>':'')+
+              '<button class="ml-auto text-[11px] flex items-center gap-1 px-2 py-1 rounded-lg cursor-pointer border border-emerald-500/30 bg-emerald-500/15 text-emerald-100 hover:bg-emerald-500/30 transition-all" data-copy="'+esc(m.otp||'')+'" type="button"><i class="fas fa-copy"></i> Salin OTP</button>'+
+            '</div>'+
+            '<div class="text-sm text-white font-semibold break-words">'+esc(m.subject||'(tanpa subjek)')+'</div>'+
+            '<div class="text-xs text-[#ffffff66] mt-0.5 break-words">Dari: '+esc(m.from)+'</div>'+
+            (m.snippet?'<div class="text-xs text-[#ffffff8c] mt-1 break-words">'+esc(m.snippet)+'</div>':'')+
+            (m.body?'<div class="text-xs text-[#ffffff8c] mt-1 break-words max-h-20 overflow-auto">'+esc(m.body)+'</div>':'')+
+            '<div class="text-[11px] text-[#ffffff55] mt-1.5"><i class="fas fa-clock mr-1"></i>'+fmtTime(m.received_at)+'</div>'+
+          '</div>'
+        );
+      });
+      list.innerHTML=rows.join('');
+      list.querySelectorAll('[data-copy]').forEach(b=>{
+        b.addEventListener('click',async()=>{
+          const v=b.dataset.copy;
+          if(!v)return toast('Tidak ada OTP di pesan ini','err');
+          try{await navigator.clipboard.writeText(v);toast('OTP disalin: '+v,'ok');}
+          catch(e){toast('Gagal menyalin','err');}
+        });
+      });
+    }
+
+    async function pollInbox(manual){
+      if(!state.email)return;
+      if(!manual&&document.hidden)return;
+      try{
+        const p=new URLSearchParams({email:state.email,apikey:API_KEY});
+        const res=await fetch(API_BASE+'/tools/tempmail/inbox?'+p.toString());
+        const data=await res.json();
+        if(data&&data.status==='success'&&data.data){renderInbox(data.data);}
+      }catch(e){
+        $('inboxUpd').textContent='Gagal memuat inbox';
+      }
+    }
+
+    function startInbox(){
+      stopInbox();
+      seenIds=new Set();
+      pollInbox(true);
+      inboxTimer=setInterval(()=>pollInbox(false),INBOX_INTERVAL);
+    }
+    function stopInbox(){
+      if(inboxTimer){clearInterval(inboxTimer);inboxTimer=null;}
+    }
+    $('inboxRefresh').addEventListener('click',()=>pollInbox(true));
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollInbox(false);});
+
     // ---- CARD 1: AUTO ----
     $('autoBtn').addEventListener('click',async function(){
       const btn=this; btn.disabled=true; const old=btn.innerHTML;
       btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Membuat email...';
       try{
         const data=await api('auto',{});
-        const box=$('autoOutput'), pre=$('autoPre');
         const ok=data&&data.status==='success';
-        box.classList.remove('err','ok'); if(!ok)box.classList.remove('ok');
-        box.classList.add(ok?'ok':'err');
         if(ok){
           state.email=data.data.email;
           state.inboxUrl=data.data.inboxUrl;
-          pre.textContent='📧 Email   : '+data.data.email+'\n🔗 Inbox    : '+data.data.inboxUrl+'\n⏳ Berlaku : '+data.data.expiresAt;
+          setOutput('autoOutput',true,'<i class="fas fa-circle-check"></i> Email siap','📧 Email   : '+data.data.email+'\n🔗 Inbox    : '+data.data.inboxUrl+'\n⏳ Berlaku : '+data.data.expiresAt);
           $('sendEmail').value=data.data.email;
+          $('verifyEmail').value=data.data.email;
           markStep(1);
+          $('inboxEmail').textContent=data.data.email;
+          startInbox();
           toast('Email berhasil dibuat!','ok');
         }else{
-          pre.textContent=pretty(data.error||data);
+          setOutput('autoOutput',false,'<i class="fas fa-triangle-exclamation"></i> Gagal',pretty(data.error||data));
         }
-        box.classList.add('show');
       }catch(e){
-        const box=$('autoOutput');
-        box.classList.remove('ok'); box.classList.add('err','show');
-        $('autoPre').textContent='Error: '+(e.message||'');
+        setOutput('autoOutput',false,'<i class="fas fa-triangle-exclamation"></i> Kesalahan','Error: '+(e.message||''));
         toast('Kesalahan jaringan','err');
       }finally{ btn.disabled=false; btn.innerHTML=old; }
     });
@@ -270,18 +304,12 @@
       btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Mengirim...';
       try{
         const data=await api('send',{email});
-        const box=$('sendOutput'), pre=$('sendPre');
         const ok=data&&data.status==='success';
-        box.classList.remove('err','ok'); box.classList.add(ok?'ok':'err');
-        $('sendLabel').innerHTML='<i class="fas '+(ok?'fa-circle-check':'fa-triangle-exclamation')+'"></i> '+(ok?'Terkirim':'Gagal kirim');
-        pre.textContent=ok?(pretty(data.data||data)):pretty(data.error||data);
+        setOutput('sendOutput',ok,'<i class="fas '+(ok?'fa-circle-check':'fa-triangle-exclamation')+'"></i> '+(ok?'Terkirim':'Gagal kirim'),ok?(pretty(data.data||data)):pretty(data.error||data));
         if(ok) markStep(2);
-        box.classList.add('show');
         toast(ok?'Verifikasi terkirim!':'Gagal mengirim','ok');
       }catch(e){
-        const box=$('sendOutput'); box.classList.remove('ok'); box.classList.add('err','show');
-        $('sendLabel').innerHTML='<i class="fas fa-triangle-exclamation"></i> Kesalahan';
-        $('sendPre').textContent='Error: '+(e.message||'');
+        setOutput('sendOutput',false,'<i class="fas fa-triangle-exclamation"></i> Kesalahan','Error: '+(e.message||''));
         toast('Kesalahan jaringan','err');
       }finally{ btn.disabled=false; btn.innerHTML=old; }
     });
@@ -299,18 +327,12 @@
       btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Mengaktivasi...';
       try{
         const data=await api('verify',{email,link});
-        const box=$('verifyOutput'), pre=$('verifyPre');
         const ok=data&&data.status==='success';
-        box.classList.remove('err','ok'); box.classList.add(ok?'ok':'err');
-        $('verifyLabel').innerHTML='<i class="fas '+(ok?'fa-circle-check':'fa-triangle-exclamation')+'"></i> '+(ok?'Akun Teraktivasi':'Gagal aktivasi');
-        pre.textContent=ok?(pretty(data.data||data)):pretty(data.error||data);
+        setOutput('verifyOutput',ok,'<i class="fas '+(ok?'fa-circle-check':'fa-triangle-exclamation')+'"></i> '+(ok?'Akun Teraktivasi':'Gagal aktivasi'),ok?(pretty(data.data||data)):pretty(data.error||data));
         if(ok) markStep(3);
-        box.classList.add('show');
         toast(ok?'Akun berhasil diaktifkan!':'Gagal aktivasi',ok);
       }catch(e){
-        const box=$('verifyOutput'); box.classList.remove('ok'); box.classList.add('err','show');
-        $('verifyLabel').innerHTML='<i class="fas fa-triangle-exclamation"></i> Kesalahan';
-        $('verifyPre').textContent='Error: '+(e.message||'');
+        setOutput('verifyOutput',false,'<i class="fas fa-triangle-exclamation"></i> Kesalahan','Error: '+(e.message||''));
         toast('Kesalahan jaringan','err');
       }finally{ btn.disabled=false; btn.innerHTML=old; }
     });

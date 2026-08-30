@@ -158,6 +158,8 @@ footer .social-links a:hover{color:var(--accent)}
 .tool-link-card:nth-child(7){animation-delay:.32s}
 .tool-link-card:nth-child(8){animation-delay:.37s}
 .tool-link-card:nth-child(9){animation-delay:.42s}
+.tool-link-card:nth-child(10){animation-delay:.47s}
+.tool-link-card:nth-child(11){animation-delay:.52s}
 @keyframes toolShine{from{transform:translateX(-120%)}to{transform:translateX(120%)}}
 .tool-link-chip{display:flex;align-items:center;justify-content:center;min-width:3.1rem;height:3.1rem;border-radius:12px;font-size:1.5rem;background:color-mix(in srgb,var(--acc,#a855f7) 20%,transparent);border:1px solid color-mix(in srgb,var(--acc,#a855f7) 35%,transparent);transition:transform .3s ease,box-shadow .3s ease,background .3s ease;flex-shrink:0}
 .tool-link-card:hover .tool-link-chip{transform:scale(1.1) rotate(-4deg);background:color-mix(in srgb,var(--acc,#a855f7) 30%,transparent);box-shadow:0 6px 18px color-mix(in srgb,var(--acc,#a855f7) 45%,transparent)}

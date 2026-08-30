@@ -4,67 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Random Picker</title>
-  <link rel="stylesheet" href="../ui/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>">
   <style>
-    .page-wrapper{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
-    .back-link{position:fixed;top:1.5rem;left:1.5rem;color:var(--accent);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .3s;z-index:10}
-    .back-link:hover{transform:translateX(-3px)}
-    .rp-wrapper{width:100%;max-width:500px;animation:scaleIn .5s ease}
-    .rp-header{text-align:center;margin-bottom:2rem}
-    .rp-header h1{font-size:2rem;color:var(--accent)}
-    .rp-header p{color:var(--text3);font-size:.9rem}
-    .rp-body{background:var(--bg2);border-radius:16px;padding:2rem;border:1px solid rgba(168,85,247,.1);box-shadow:var(--shadow)}
-    .rp-input-area{margin-bottom:1.5rem}
-    .rp-input{width:100%;padding:.8rem;border-radius:10px;border:2px solid rgba(168,85,247,.2);background:var(--bg);color:var(--text);font-size:.95rem;transition:border-color .3s}
-    .rp-input:focus{outline:none;border-color:var(--accent)}
-    .rp-hint{font-size:.8rem;color:var(--text3);margin-top:.3rem}
-    .rp-items{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0;min-height:40px}
-    .rp-item{padding:.4rem .8rem;background:var(--bg3);border-radius:8px;font-size:.85rem;color:var(--text);display:flex;align-items:center;gap:.4rem;animation:fadeIn .3s ease}
-    .rp-item .rp-remove{cursor:pointer;color:#ff6b6b;font-size:.7rem;opacity:.6;transition:opacity .3s}
-    .rp-item .rp-remove:hover{opacity:1}
-    .rp-result-area{text-align:center;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:1rem 0}
-    .rp-result-text{font-size:2rem;font-weight:700;color:var(--accent);transition:all .1s}
-    .rp-result-text.spinning{animation:spin .1s linear infinite;color:var(--text3)}
-    @keyframes spin{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
-    .rp-btns{display:flex;gap:.8rem;justify-content:center}
-    .rp-btns button{min-width:140px}
-    .rp-history{margin-top:1.5rem}
-    .rp-history h3{color:var(--accent);font-size:.9rem;margin-bottom:.5rem}
-    .rp-history-list{display:flex;flex-wrap:wrap;gap:.3rem}
-    .rp-hist-item{padding:.3rem .6rem;background:var(--bg);border-radius:6px;font-size:.8rem;color:var(--text3)}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter','Segoe UI',sans-serif}
+    .grad-text{background:linear-gradient(120deg,#c4b5fd,#a855f7 45%,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
     @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
     @keyframes fadeIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+    .anim-in{animation:scaleIn .5s ease}
+    .rp-item{display:flex;align-items:center;gap:.4rem;padding:.4rem .8rem;background:#1f1f2e;border-radius:8px;font-size:.85rem;color:#e8edf5;animation:fadeIn .3s ease}
+    .rp-remove{cursor:pointer;color:#ff6b6b;font-size:.7rem;opacity:.6;transition:opacity .3s}
+    .rp-remove:hover{opacity:1}
+    .rp-hist-item{padding:.3rem .6rem;background:#0a0a12;border-radius:6px;font-size:.8rem;color:#7a7899}
+    .spinning{animation:rpSpin .1s linear infinite;color:#7a7899}
+    @keyframes rpSpin{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
   </style>
 </head>
-<body>
-  <a href="../index.html" class="back-link">← Kembali ke Portofolio</a>
-  <div class="page-wrapper">
-    <div class="rp-wrapper">
-      <div class="rp-header">
-        <h1>Random Picker</h1>
-        <p>Pilih acak dari daftar pilihanmu!</p>
+<body class="min-h-screen bg-[#0a0a12] text-[#e8edf5] flex flex-col items-center justify-center px-6 py-8"
+  style="background-image:radial-gradient(1200px 500px at 50% -100px,rgba(168,85,247,.12),transparent 60%),radial-gradient(900px 400px at 100% 100%,rgba(192,132,252,.08),transparent 55%)">
+
+  <a href="../index.html" class="fixed top-6 left-6 text-[#c4b5fd] bg-white/5 hover:bg-purple-500/15 hover:text-white rounded-xl px-3 py-2 text-sm inline-flex items-center gap-2 transition-transform hover:-translate-x-0.5 z-10"><i class="fas fa-arrow-left"></i> Kembali ke Portofolio</a>
+
+  <div class="w-full max-w-[500px] anim-in">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-extrabold grad-text">Random Picker</h1>
+      <p class="text-[#ffffff66] text-sm mt-1">Pilih acak dari daftar pilihanmu!</p>
+    </div>
+    <div class="bg-[#14141f] rounded-2xl p-8 border border-purple-500/10 shadow-[0_4px_20px_rgba(0,0,0,.3)]">
+      <div class="mb-6">
+        <input type="text" class="rp-input w-full px-4 py-3 rounded-xl border-2 border-purple-500/20 bg-[#0a0a12] text-[#e8edf5] text-sm focus:outline-none focus:border-purple-500 transition-colors" id="rp-input" placeholder="Ketik pilihan, lalu Enter atau koma...">
+        <p class="text-xs text-[#ffffff66] mt-1">Pisahkan dengan koma. Contoh: Merah, Biru, Hijau, Kuning</p>
       </div>
-      <div class="rp-body">
-        <div class="rp-input-area">
-          <input type="text" class="rp-input" id="rp-input" placeholder="Ketik pilihan, lalu Enter atau koma...">
-          <p class="rp-hint">Pisahkan dengan koma. Contoh: Merah, Biru, Hijau, Kuning</p>
-        </div>
-        <div class="rp-items" id="rp-items"></div>
-        <div class="rp-result-area">
-          <div class="rp-result-text" id="rp-result">?</div>
-        </div>
-        <div class="rp-btns">
-          <button id="rp-pick">🎲 Pilih Acak!</button>
-          <button id="rp-clear" class="btn-secondary">Hapus Semua</button>
-        </div>
-        <div class="rp-history" id="rp-history" style="display:none">
-          <h3>Riwayat Pilihan</h3>
-          <div class="rp-history-list" id="rp-history-list"></div>
-        </div>
+      <div class="flex flex-wrap gap-2 my-4 min-h-[40px]" id="rp-items"></div>
+      <div class="text-center min-h-[100px] flex flex-col items-center justify-center my-4">
+        <div class="text-4xl font-bold text-purple-500 transition-all" id="rp-result">?</div>
+      </div>
+      <div class="flex gap-4 justify-center">
+        <button id="rp-pick" class="min-w-[140px] rounded-lg px-4 py-2.5 font-semibold cursor-pointer bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-[0_4px_15px_rgba(139,92,246,.3)] hover:brightness-110 hover:-translate-y-0.5 transition-all">🎲 Pilih Acak!</button>
+        <button id="rp-clear" class="min-w-[140px] rounded-lg px-4 py-2.5 font-semibold cursor-pointer bg-[#1f1f2e] text-[#e8edf5] border border-purple-500/20 hover:bg-[#14141f] hover:text-purple-400 transition-all">Hapus Semua</button>
+      </div>
+      <div class="mt-6" id="rp-history" style="display:none">
+        <h3 class="text-purple-500 text-sm mb-2">Riwayat Pilihan</h3>
+        <div class="flex flex-wrap gap-1" id="rp-history-list"></div>
       </div>
     </div>
   </div>
+
   <script>
   (function(){
     let items=[],history=[];

@@ -277,18 +277,6 @@ async function handleRequest(req, res) {
   }
 
   // ----------------------------------------
-  // API: GET VISITORS
-  // ----------------------------------------
-  if (pathname === '/api/visitors' && req.method === 'GET') {
-    const dbPath = path.join(STORAGE_ROOT, 'data', 'database.json');
-    let db = { visitors: [] };
-    try { db = JSON.parse(fs.readFileSync(dbPath, 'utf8')); } catch (e) {}
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(db));
-    return;
-  }
-
-  // ----------------------------------------
   // API: SEND TEKS KE TELEGRAM
   // ----------------------------------------
   if (pathname === '/api/send-telegram' && req.method === 'POST') {

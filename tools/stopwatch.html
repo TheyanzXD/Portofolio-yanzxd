@@ -4,65 +4,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stopwatch</title>
-  <link rel="stylesheet" href="../ui/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏱</text></svg>">
   <style>
-    .page-wrapper{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
-    .back-link{position:fixed;top:1.5rem;left:1.5rem;color:var(--accent);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .3s;z-index:10}
-    .back-link:hover{transform:translateX(-3px)}
-    .sw-wrapper{width:100%;max-width:440px;animation:scaleIn .5s ease}
-    .sw-header{text-align:center;margin-bottom:2rem}
-    .sw-header h1{font-size:2rem;color:var(--accent)}
-    .sw-header p{color:var(--text3);font-size:.9rem}
-    .sw-body{background:var(--bg2);border-radius:16px;padding:2.5rem;border:1px solid rgba(168,85,247,.1);box-shadow:var(--shadow);text-align:center}
-    .sw-display{position:relative;width:220px;height:220px;margin:0 auto 2rem}
-    .sw-ring{position:absolute;inset:0;border-radius:50%;border:3px solid var(--bg);box-shadow:0 0 30px rgba(168,85,247,.05)}
-    .sw-ring-accent{position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:var(--accent);transition:transform .1s linear}
-    .sw-time{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-    .sw-time .main{font-size:3rem;font-weight:700;font-family:monospace;color:var(--accent);letter-spacing:2px}
-    .sw-time .ms{font-size:1.2rem;color:var(--text3);font-family:monospace}
-    .sw-btns{display:flex;gap:.8rem;justify-content:center;margin-bottom:1.5rem}
-    .sw-btns button{min-width:90px}
-    .sw-btns .btn-start{background:var(--accent);color:var(--bg)}
-    .sw-btns .btn-lap{background:var(--bg3);color:var(--accent);border:1px solid rgba(168,85,247,.2)}
-    .sw-laps{max-height:200px;overflow-y:auto}
-    .sw-lap{display:flex;justify-content:space-between;padding:.5rem .8rem;border-bottom:1px solid rgba(168,85,247,.05);font-size:.85rem;font-family:monospace;color:var(--text3)}
-    .sw-lap .lap-num{color:var(--accent);font-weight:600}
-    .sw-lap .lap-time{color:var(--text)}
-    .sw-lap .lap-diff{color:var(--text3);font-size:.75rem}
-    .sw-laps-header{display:flex;justify-content:space-between;padding:.5rem .8rem;font-size:.75rem;color:var(--text3);border-bottom:1px solid rgba(168,85,247,.1);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter','Segoe UI',sans-serif}
+    .grad-text{background:linear-gradient(120deg,#c4b5fd,#a855f7 45%,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
     @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+    .anim-in{animation:scaleIn .5s ease}
+    .btn-start{background:#a855f7;color:#0a0a12;border:none;border-radius:10px;padding:.7rem 1rem;min-width:90px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .3s}
+    .btn-start:hover{background:#6366f1;transform:translateY(-1px)}
+    .btn-secondary{background:#1f1f2e;color:#e8edf5;border:1px solid rgba(168,85,247,.2);border-radius:10px;padding:.7rem 1rem;min-width:90px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .3s}
+    .btn-secondary:hover{background:#14141f;color:#a855f7}
+    .btn-secondary:disabled{opacity:.5;cursor:not-allowed}
+    .btn-lap{background:#1f1f2e;color:#a855f7;border:1px solid rgba(168,85,247,.2);border-radius:10px;padding:.7rem 1rem;min-width:90px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .3s}
+    .btn-lap:hover{background:#14141f}
+    .btn-lap:disabled{opacity:.5;cursor:not-allowed}
+    .sw-lap{display:flex;justify-content:space-between;padding:.5rem .8rem;border-bottom:1px solid rgba(168,85,247,.05);font-size:.85rem;font-family:monospace;color:#7a7899}
+    .sw-lap .lap-num{color:#a855f7;font-weight:600}
+    .sw-lap .lap-time{color:#e8edf5}
+    .sw-lap .lap-diff{color:#7a7899;font-size:.75rem}
   </style>
 </head>
-<body>
-  <a href="../index.html" class="back-link">← Kembali ke Portofolio</a>
-  <div class="page-wrapper">
-    <div class="sw-wrapper">
-      <div class="sw-header">
-        <h1>Stopwatch</h1>
-        <p>Timer presisi dengan pencatatan putaran</p>
+<body class="min-h-screen bg-[#0a0a12] text-[#e8edf5] flex flex-col items-center justify-center px-6 py-8"
+  style="background-image:radial-gradient(1200px 500px at 50% -100px,rgba(168,85,247,.12),transparent 60%),radial-gradient(900px 400px at 100% 100%,rgba(16,185,129,.07),transparent 55%)">
+
+  <a href="../index.html" class="fixed top-6 left-6 text-[#c4b5fd] bg-white/5 hover:bg-purple-500/15 hover:text-white rounded-xl px-3 py-2 text-sm inline-flex items-center gap-2 transition-transform hover:-translate-x-0.5 z-10"><i class="fas fa-arrow-left"></i> Kembali ke Portofolio</a>
+
+  <div class="w-full max-w-[440px] anim-in">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-extrabold grad-text">Stopwatch</h1>
+      <p class="text-[#ffffff66] text-sm mt-1">Timer presisi dengan pencatatan putaran</p>
+    </div>
+    <div class="bg-[#14141f] rounded-2xl p-10 border border-purple-500/10 shadow-[0_4px_20px_rgba(0,0,0,.3)] text-center">
+      <div class="relative w-[220px] h-[220px] mx-auto mb-8">
+        <div class="absolute inset-0 rounded-full border-[3px] border-[#0a0a12] shadow-[0_0_30px_rgba(168,85,247,.05)]"></div>
+        <div class="absolute inset-0 rounded-full border-[3px] border-transparent border-t-purple-500 transition-transform duration-100" id="sw-ring"></div>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <div class="text-5xl font-bold font-mono text-purple-500 tracking-[2px]" id="sw-main">00:00</div>
+          <div class="text-lg text-[#ffffff66] font-mono" id="sw-ms">.0</div>
+        </div>
       </div>
-      <div class="sw-body">
-        <div class="sw-display">
-          <div class="sw-ring"></div>
-          <div class="sw-ring-accent" id="sw-ring"></div>
-          <div class="sw-time">
-            <div class="main" id="sw-main">00:00</div>
-            <div class="ms" id="sw-ms">.0</div>
-          </div>
-        </div>
-        <div class="sw-btns">
-          <button id="sw-start" class="btn-start">Mulai</button>
-          <button id="sw-lap" class="btn-lap" disabled>Putaran</button>
-          <button id="sw-reset" class="btn-secondary" disabled>Reset</button>
-        </div>
-        <div class="sw-laps-header" id="laps-header" style="display:none">
-          <span>Putaran</span><span>Waktu</span><span>Selisih</span>
-        </div>
-        <div class="sw-laps" id="sw-laps"></div>
+      <div class="flex gap-4 justify-center mb-6">
+        <button id="sw-start" class="btn-start">Mulai</button>
+        <button id="sw-lap" class="btn-lap" disabled>Putaran</button>
+        <button id="sw-reset" class="btn-secondary" disabled>Reset</button>
       </div>
+      <div class="flex justify-between px-3 py-2 text-xs text-[#ffffff66] border-b border-purple-500/10 font-semibold uppercase tracking-wider" id="laps-header" style="display:none"><span>Putaran</span><span>Waktu</span><span>Selisih</span></div>
+      <div class="max-h-[200px] overflow-y-auto" id="sw-laps"></div>
     </div>
   </div>
+
   <script>
   (function(){
     let running=false,timer=null,elapsed=0,lastLap=0,laps=[],rotation=0;

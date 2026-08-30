@@ -4,60 +4,53 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quotes Motivasi</title>
-  <link rel="stylesheet" href="../ui/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
   <style>
-    .page-wrapper{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
-    .back-link{position:fixed;top:1.5rem;left:1.5rem;color:var(--accent);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .3s;z-index:10}
-    .back-link:hover{transform:translateX(-3px)}
-    .quote-wrapper{width:100%;max-width:600px;animation:scaleIn .5s ease}
-    .quote-header{text-align:center;margin-bottom:2rem}
-    .quote-header h1{font-size:2rem;color:var(--accent)}
-    .quote-header p{color:var(--text3);font-size:.9rem}
-    .quote-card{background:var(--bg2);border-radius:16px;padding:3rem 2rem;border:1px solid rgba(168,85,247,.1);box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;transition:all .5s ease}
-    .quote-card::before{content:'"';position:absolute;top:-20px;left:20px;font-size:10rem;color:rgba(168,85,247,.05);font-family:serif;line-height:1}
-    .quote-card .quote-icon{font-size:2.5rem;margin-bottom:1rem}
-    .quote-card .quote-text{font-size:1.2rem;line-height:1.8;color:var(--text);font-style:italic;position:relative;z-index:1;min-height:80px}
-    .quote-card .quote-author{margin-top:1.5rem;font-size:.95rem;color:var(--accent);font-weight:600}
-    .quote-card .quote-category{display:inline-block;margin-top:.5rem;padding:.3rem .8rem;background:rgba(168,85,247,.1);border-radius:12px;font-size:.75rem;color:var(--accent)}
-    .quote-btns{display:flex;gap:.8rem;justify-content:center;margin-top:2rem;flex-wrap:wrap}
-    .quote-btns button{min-width:140px}
-    .quote-counter{text-align:center;margin-top:1rem;font-size:.8rem;color:var(--text3)}
-    .quote-fav{margin-top:1.5rem;text-align:left}
-    .quote-fav h3{color:var(--accent);font-size:1rem;margin-bottom:.5rem}
-    .fav-quote{background:var(--bg);border-radius:8px;padding:.8rem;margin-bottom:.5rem;font-size:.85rem;color:var(--text2);border-left:3px solid var(--accent);cursor:pointer;transition:all .3s}
-    .fav-quote:hover{background:rgba(168,85,247,.05)}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter','Segoe UI',sans-serif}
+    .grad-text{background:linear-gradient(120deg,#c4b5fd,#a855f7 45%,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
     @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    .quote-card .quote-text{animation:fadeIn .5s ease}
+    .anim-in{animation:scaleIn .5s ease}
+    .quote-text-anim{animation:fadeIn .5s ease}
+    .fav-quote{background:#0a0a12;border-radius:8px;padding:.8rem;margin-bottom:.5rem;font-size:.85rem;color:#a9a6cf;border-left:3px solid #a855f7;cursor:pointer;transition:all .3s}
+    .fav-quote:hover{background:rgba(168,85,247,.05)}
   </style>
 </head>
-<body>
-  <a href="../index.html" class="back-link">← Kembali ke Portofolio</a>
-  <div class="page-wrapper">
-    <div class="quote-wrapper">
-      <div class="quote-header">
-        <h1>Quotes Motivasi</h1>
-        <p>Kata-kata bijak untuk hari ini</p>
-      </div>
-      <div class="quote-card" id="quote-card">
-        <div class="quote-icon">💡</div>
-        <div class="quote-text" id="quote-text">"Jadilah perubahan yang ingin Anda lihat di dunia."</div>
-        <div class="quote-author" id="quote-author">— Mahatma Gandhi</div>
-        <div class="quote-category" id="quote-cat">Inspirasi</div>
-      </div>
-      <div class="quote-btns">
-        <button id="next-quote">Quote Baru</button>
-        <button id="fav-quote" class="btn-secondary">❤️ Favorit</button>
-        <button id="share-quote" class="btn-secondary">📋 Salin</button>
-      </div>
-      <div class="quote-counter" id="quote-counter"></div>
-      <div class="quote-fav" id="fav-section" style="display:none">
-        <h3>❤️ Quote Favorit</h3>
-        <div id="fav-list"></div>
-      </div>
+<body class="min-h-screen bg-[#0a0a12] text-[#e8edf5] flex flex-col items-center justify-center px-6 py-8"
+  style="background-image:radial-gradient(1200px 500px at 50% -100px,rgba(168,85,247,.12),transparent 60%),radial-gradient(900px 400px at 100% 100%,rgba(250,204,21,.06),transparent 55%)">
+
+  <a href="../index.html" class="fixed top-6 left-6 text-[#c4b5fd] bg-white/5 hover:bg-purple-500/15 hover:text-white rounded-xl px-3 py-2 text-sm inline-flex items-center gap-2 transition-transform hover:-translate-x-0.5 z-10"><i class="fas fa-arrow-left"></i> Kembali ke Portofolio</a>
+
+  <div class="w-full max-w-[600px] anim-in">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-extrabold grad-text">Quotes Motivasi</h1>
+      <p class="text-[#ffffff66] text-sm mt-1">Kata-kata bijak untuk hari ini</p>
+    </div>
+    <div class="bg-[#14141f] rounded-2xl px-8 py-10 border border-purple-500/10 shadow-[0_4px_20px_rgba(0,0,0,.3)] text-center relative overflow-hidden transition-all duration-500" id="quote-card">
+      <div class="absolute -top-5 left-5 text-[10rem] text-purple-500/5 font-serif leading-none select-none" aria-hidden="true">"</div>
+      <div class="relative text-2xl mb-2 text-center">💡</div>
+      <div class="relative text-lg leading-relaxed text-[#e8edf5] italic min-h-[80px] quote-text-anim" id="quote-text">"Jadilah perubahan yang ingin Anda lihat di dunia."</div>
+      <div class="relative mt-6 text-sm text-purple-500 font-semibold" id="quote-author">— Mahatma Gandhi</div>
+      <div class="relative inline-block mt-2 px-3 py-1 bg-purple-500/10 rounded-xl text-xs text-purple-500" id="quote-cat">Inspirasi</div>
+    </div>
+    <div class="flex gap-4 justify-center mt-8 flex-wrap">
+      <button id="next-quote" class="min-w-[140px] rounded-lg px-4 py-2.5 font-semibold cursor-pointer bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-[0_4px_15px_rgba(139,92,246,.3)] hover:brightness-110 hover:-translate-y-0.5 transition-all">Quote Baru</button>
+      <button id="fav-quote" class="min-w-[140px] rounded-lg px-4 py-2.5 font-semibold cursor-pointer bg-[#1f1f2e] text-[#e8edf5] border border-purple-500/20 hover:bg-[#14141f] hover:text-purple-400 transition-all">❤️ Favorit</button>
+      <button id="share-quote" class="min-w-[140px] rounded-lg px-4 py-2.5 font-semibold cursor-pointer bg-[#1f1f2e] text-[#e8edf5] border border-purple-500/20 hover:bg-[#14141f] hover:text-purple-400 transition-all">📋 Salin</button>
+    </div>
+    <div class="text-center mt-4 text-xs text-[#ffffff66]" id="quote-counter"></div>
+    <div class="mt-6 text-left" id="fav-section" style="display:none">
+      <h3 class="text-purple-500 text-base mb-2">❤️ Quote Favorit</h3>
+      <div id="fav-list"></div>
     </div>
   </div>
+
   <script>
   (function(){
     const quotes=[
