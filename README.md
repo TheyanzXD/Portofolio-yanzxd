@@ -36,9 +36,9 @@
 |----------|-------|
 | 🎧 **Music Player** | Streaming Spotify: cari lagu, putar/pause, progress bar, download otomatis, shortcut keyboard (Spasi, Ctrl+K, Esc) |
 | 🎬 **Alight Motion** | Auto create email + inbox, kirim verifikasi, aktivasi akun (3 langkah) |
-| 📊 **Tracking** | IP logging, visitor dashboard (admin panel /yanz/pengunjung.html) |
+| 📊 **Tracking** | IP logging, visitor dashboard (admin panel /tools/pengunjung.html) |
 | 📸 **Kamera** | Selfie langsung dari browser → dikirim ke Telegram Bot |
-| 🛠 **Tools** | Kalkulator, stopwatch, konversi suhu, random picker, tebak angka, quotes |
+| 🛠 **Tools** | Kalkulator, stopwatch, konversi suhu, random picker, tebak angka, quotes, bypass link shortener |
 | 🎨 **Desain** | Tema gelap ungu neon (Inter, Font Awesome 6), responsif mobile 320px+ |
 
 ---
@@ -70,8 +70,9 @@ Integrasi → Telegram Bot API · Spotify API · API HaidarXD (ai.haidarxd.my.id
 ```text
 .
 ├── index.html            # Halaman utama (Music Player + tools grid)
-├── yanz/                 # Semua halaman tools
+├── tools/                # Semua halaman tools
 │   ├── alight.html       # Alight Motion Tools (auto/send/verify)
+│   ├── bypaslink.html    # Bypass / expand link shortener
 │   ├── kalkulator.html   # Kalkulator
 │   ├── konversi-suhu.html# Konversi suhu
 │   ├── pengunjung.html   # Admin panel (visitor log)
@@ -112,7 +113,7 @@ Download → GET /api/v1/downloader/spotify?url={url}&index=1&apikey={key}
 
 ## 🎬 Alight Motion Tools
 
-Akses di **/yanz/alight.html**. Tiga langkah aktivasi:
+Akses di **/tools/alight.html**. Tiga langkah aktivasi:
 
 1. **Auto Create** → dapat email temporer + inbox URL (berlaku 1 tahun)
 2. **Kirim Verifikasi** → kirim link ke email
@@ -133,7 +134,7 @@ Verify → GET /api/v1/alight-motion/verify?email={email}&link={link}
 
 ## 🔐 Admin Panel
 
-Akses: **/yanz/pengunjung.html**
+Akses: **/tools/pengunjung.html**
 - Login (password di client `devcode`)
 - Statistik pengunjung (total, hari ini, lagu, tools)
 - Tabel visitor + search + export CSV

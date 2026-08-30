@@ -142,13 +142,30 @@ footer .social-links a:hover{color:var(--accent)}
 }
 
 /* TOOL LINK CARDS */
-.tool-link-card{display:flex;align-items:center;gap:1rem;background:var(--bg2);border-radius:var(--radius);padding:1rem 1.2rem;border:1px solid rgba(168,85,247,.05);text-decoration:none;color:var(--text);transition:all .3s}
-.tool-link-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 25px rgba(168,85,247,.08)}
-.tool-link-icon{font-size:2rem;min-width:3rem;text-align:center}
-.tool-link-info{flex:1}
-.tool-link-name{font-weight:600;color:var(--text);font-size:1rem;margin-bottom:.15rem}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.tool-link-card{position:relative;display:flex;align-items:center;gap:1rem;background:var(--bg2);border-radius:14px;padding:1rem 1.2rem;border:1px solid rgba(168,85,247,.08);text-decoration:none;color:var(--text);transition:border-color .35s ease,transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s ease;overflow:hidden;animation:toolIn .5s ease both}
+.tool-link-card::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.12) 50%,transparent 70%);transform:translateX(-120%);pointer-events:none}
+.tool-link-card:hover{border-color:rgba(168,85,247,.45);transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,.35),0 0 0 1px rgba(168,85,247,.15)}
+.tool-link-card:hover::after{animation:toolShine .9s ease}
+.tool-link-card:active{transform:translateY(-1px) scale(.99)}
+@keyframes toolIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.tool-link-card:nth-child(1){animation-delay:.02s}
+.tool-link-card:nth-child(2){animation-delay:.07s}
+.tool-link-card:nth-child(3){animation-delay:.12s}
+.tool-link-card:nth-child(4){animation-delay:.17s}
+.tool-link-card:nth-child(5){animation-delay:.22s}
+.tool-link-card:nth-child(6){animation-delay:.27s}
+.tool-link-card:nth-child(7){animation-delay:.32s}
+.tool-link-card:nth-child(8){animation-delay:.37s}
+.tool-link-card:nth-child(9){animation-delay:.42s}
+@keyframes toolShine{from{transform:translateX(-120%)}to{transform:translateX(120%)}}
+.tool-link-chip{display:flex;align-items:center;justify-content:center;min-width:3.1rem;height:3.1rem;border-radius:12px;font-size:1.5rem;background:color-mix(in srgb,var(--acc,#a855f7) 20%,transparent);border:1px solid color-mix(in srgb,var(--acc,#a855f7) 35%,transparent);transition:transform .3s ease,box-shadow .3s ease,background .3s ease;flex-shrink:0}
+.tool-link-card:hover .tool-link-chip{transform:scale(1.1) rotate(-4deg);background:color-mix(in srgb,var(--acc,#a855f7) 30%,transparent);box-shadow:0 6px 18px color-mix(in srgb,var(--acc,#a855f7) 45%,transparent)}
+.tool-link-info{flex:1;min-width:0}
+.tool-link-name{font-weight:600;color:var(--text);font-size:1rem;margin-bottom:.15rem;transition:color .3s}
+.tool-link-card:hover .tool-link-name{color:#fff}
 .tool-link-desc{font-size:.8rem;color:var(--text3)}
-.tool-link-arrow{color:var(--accent);font-size:1.2rem;opacity:.4;transition:all .3s}
+.tool-link-arrow{color:var(--accent);font-size:.95rem;opacity:.35;transform:translateX(-4px);transition:opacity .3s ease,transform .3s cubic-bezier(.22,.61,.36,1);flex-shrink:0}
 .tool-link-card:hover .tool-link-arrow{opacity:1;transform:translateX(4px)}
 
 /* NAME MODAL */
