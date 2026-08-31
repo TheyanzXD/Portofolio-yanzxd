@@ -3,7 +3,7 @@
 # Secrets: npx wrangler secret put TELEGRAM_BOT_TOKEN --config workers/api/wrangler.toml
 
 name = "portofolio-api"
-main = "./workers/api/index.js"
+main = "./index.js"
 compatibility_date = "2025-01-01"
 
 # KV Namespace for visitor DB and selfie metadata
