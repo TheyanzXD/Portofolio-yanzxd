@@ -1,0 +1,9 @@
+# Cloudflare Pages — serves all static files (index.html, tools/, ui/)
+# Deploy: npx wrangler pages deploy public/
+
+name = "portofolio-pages"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "./public"
+
+# Route: custom domain via Cloudflare dashboard
+# Or use: npx wrangler pages deploy public/ --project-name=portofolio

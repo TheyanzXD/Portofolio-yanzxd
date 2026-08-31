@@ -1,0 +1,44 @@
+[
+  {
+    "title": "Bohemian Rhapsody",
+    "artist": "Queen",
+    "genre": "Rock",
+    "spotifyId": "4u7EnebtmKWzUH433cf5Qv",
+    "link": "https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv"
+  },
+  {
+    "title": "Blinding Lights",
+    "artist": "The Weeknd",
+    "genre": "Pop",
+    "spotifyId": "0VjIjW4GlUZAMYd2vXMi3b",
+    "link": "https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b"
+  },
+  {
+    "title": "Shape of You",
+    "artist": "Ed Sheeran",
+    "genre": "Pop",
+    "spotifyId": "7qiZfU4dY1lWllzX7mPBI3",
+    "link": "https://open.spotify.com/track/7qiZfU4dY1lWllzX7mPBI3"
+  },
+  {
+    "title": "Nanti Kita Seperti Ini",
+    "artist": "Batas Senja",
+    "genre": "Indie",
+    "spotifyId": "6PQ88X9TkUIAUIZJHW2upE",
+    "link": "https://open.spotify.com/track/6PQ88X9TkUIAUIZJHW2upE"
+  },
+  {
+    "title": "Lantas",
+    "artist": "Juwita Bahar",
+    "genre": "Pop",
+    "spotifyId": "2A0bMH1y2FyT1DKbaVXXgD",
+    "link": "https://open.spotify.com/track/2A0bMH1y2FyT1DKbaVXXgD"
+  },
+  {
+    "title": "Until I Found You",
+    "artist": "Stephen Sanchez",
+    "genre": "Pop",
+    "spotifyId": "1lCNyXbTi19g2aCZ2aGkRS",
+    "link": "https://open.spotify.com/track/1lCNyXbTi19g2aCZ2aGkRS"
+  }
+]

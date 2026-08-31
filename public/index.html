@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portofolio - YanzXD</title>
+  <link rel="stylesheet" href="ui/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="container">
+    <a href="#" class="logo">&lt;Yandez/&gt;</a>
+    <nav>
+      <a href="#about">Tentang</a>
+      <a href="#skills">Skills</a>
+      <a href="#playlist">Lagu Favorit</a>
+      <a href="#camera">Selfie</a>
+      <a href="#tools">Tools</a>
+    </nav>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <h1>Halo, YanzXD</h1>
+    <p class="subtitle">Full-Stack Developer | UI/UX Enthusiast | Creative Coder</p>
+    <div class="status-badge">
+      <span class="status-dot"></span>
+      <span>Website Status: <strong>ONLINE</strong></span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <h2><span class="icon">👋</span> Tentang Saya</h2>
+    <p>Saya adalah seorang web developer yang passionate dalam menciptakan pengalaman digital yang menarik dan fungsional. Berpengalaman dalam pengembangan web modern, UI/UX design, dan berbagai teknologi terkini.</p>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <h2><span class="icon">⚡</span> Keahlian</h2>
+    <div class="skills-grid">
+      <div class="skill-tag"><div class="skill-icon">🌐</div><div class="skill-name">HTML5</div></div>
+      <div class="skill-tag"><div class="skill-icon">🎨</div><div class="skill-name">CSS3</div></div>
+      <div class="skill-tag"><div class="skill-icon">⚡</div><div class="skill-name">JavaScript</div></div>
+      <div class="skill-tag"><div class="skill-icon">⚛️</div><div class="skill-name">React</div></div>
+      <div class="skill-tag"><div class="skill-icon">🟢</div><div class="skill-name">Node.js</div></div>
+      <div class="skill-tag"><div class="skill-icon">🐍</div><div class="skill-name">Python</div></div>
+      <div class="skill-tag"><div class="skill-icon">🗄️</div><div class="skill-name">Database</div></div>
+      <div class="skill-tag"><div class="skill-icon">📱</div><div class="skill-name">UI/UX Design</div></div>
+      <div class="skill-tag"><div class="skill-icon">🔧</div><div class="skill-name">Git</div></div>
+      <div class="skill-tag"><div class="skill-icon">☁️</div><div class="skill-name">Cloud</div></div>
+    </div>
+  </section>
+
+  <!-- PLAYLIST -->
+  <section id="playlist" class="playlist-section">
+    <div class="playlist-header">
+      <h2 style="border:none;margin:0"><span class="icon">🎵</span> Lagu Favorit</h2>
+    </div>
+    <span class="playlist-count" id="playlist-count"></span>
+    <div class="playlist-grid" id="playlist-container"></div>
+  </section>
+
+  <!-- MUSIC PLAYER -->
+  <section id="music-player" class="music-section">
+    <h2><span class="icon">🎧</span> Music Player</h2>
+    <div class="player-wrap">
+      <div class="player-art" id="player-art">
+        <img id="player-cover" alt="Album art" loading="lazy">
+        <div class="player-art-overlay"></div>
+      </div>
+      <div class="player-info">
+        <div class="player-title" id="player-title">Secukupnya</div>
+        <div class="player-artist" id="player-artist">Hindia</div>
+      </div>
+      <div class="player-progress">
+        <span class="player-time" id="player-current">0:00</span>
+        <div class="progress-bar" id="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+          <div class="progress-knob" id="progress-knob"></div>
+        </div>
+        <span class="player-time" id="player-duration">0:00</span>
+      </div>
+      <div class="player-controls">
+        <button id="play-btn" class="player-btn player-btn-play" aria-label="Play/Pause">
+          <i class="fas fa-play"></i>
+        </button>
+      </div>
+      <div class="player-search">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search-input" placeholder="Cari lagu di Spotify..." autocomplete="off">
+          <button id="search-btn" class="search-go" aria-label="Cari"><i class="fas fa-magnifying-glass"></i></button>
+        </div>
+        <div class="player-results" id="player-results"></div>
+      </div>
+      <audio id="player-audio"></audio>
+    </div>
+  </section>
+
+  <!-- CAMERA / VISITOR SELFIE -->
+  <section id="camera">
+    <h2><span class="icon">📸</span> Ambil Selfie</h2>
+    <div class="camera-section">
+      <div class="camera-area">
+        <div id="camera-viewfinder">
+          <video id="video" autoplay playsinline></video>
+          <canvas id="canvas"></canvas>
+        </div>
+        <div id="preview-container">
+          <img id="photo-preview" alt="Preview Selfie">
+        </div>
+        <div class="camera-buttons">
+          <button id="start-camera" class="cam-btn-main">
+            <span class="cam-btn-icon">📷</span> Aktifkan Kamera
+          </button>
+          <button id="capture-photo" class="cam-btn-main cam-btn-capture" style="display:none">
+            <span class="cam-btn-icon">📸</span> Ambil Foto
+          </button>
+          <button id="retake-photo" class="btn-secondary" style="display:none">
+            <span class="cam-btn-icon">🔄</span> Ulangi
+          </button>
+          <button id="send-photo" class="cam-btn-send" style="display:none">
+            <span class="cam-btn-icon">✅</span> Kirim
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NAME INPUT MODAL -->
+  <div id="name-modal" class="modal">
+    <div class="modal-content name-modal-box">
+      <span class="close" id="close-name-modal">&times;</span>
+      <div class="name-modal-icon">👋</div>
+      <h2>Siapa Nama Anda?</h2>
+      <p style="font-size:.9rem">Sebelum foto dikirim, perkenalkan diri Anda!</p>
+      <input type="text" id="visitor-name-input" placeholder="Ketik nama Anda..." maxlength="50" autocomplete="off">
+      <button id="submit-name-btn" class="cam-btn-send" style="width:100%;margin-top:.5rem">
+        <span class="cam-btn-icon">📸</span> Kirim Foto & Nama
+      </button>
+      <div id="sending-status" style="display:none;margin-top:.8rem;font-size:.85rem;color:var(--accent)">
+        <span class="spinner"></span> Mengirim ke Telegram...
+      </div>
+    </div>
+  </div>
+
+  <!-- THANK YOU MODAL (updated) -->
+  <div id="thankyou-modal" class="modal">
+    <div class="modal-content">
+      <div class="name-modal-icon">🎉</div>
+      <h2>Terima Kasih!</h2>
+      <p>Foto Anda berhasil dikirim ke Telegram. Terima kasih telah mengunjungi website ini!</p>
+      <button onclick="document.getElementById('thankyou-modal').style.display='none'" style="margin-top:1rem">Tutup</button>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <section id="tools">
+    <h2><span class="icon">🛠</span> Tools & Game Interaktif</h2>
+    <p style="color:var(--text3);margin-bottom:1.5rem;font-size:.9rem">Klik untuk membuka tools secara terpisah</p>
+    <div class="tools-grid">
+      <a href="#music-player" class="tool-link-card" style="--acc:#1db954">
+        <span class="tool-link-chip">🎵</span>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Music Player</div>
+          <div class="tool-link-desc">Cari lagu dan putar tanpa Spotify</div>
+        </div>
+        <span class="tool-link-arrow"><i class="fas fa-arrow-right"></i></span>
+      </a>
+      <a href="tools/bypaslink.html" class="tool-link-card" style="--acc:#a855f7">
+        <span class="tool-link-chip">🔗</span>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Bypass Link</div>
+          <div class="tool-link-desc">Expand/mbypass shortener: Linkvertise, Adf.ly, dll</div>
+        </div>
+        <span class="tool-link-arrow"><i class="fas fa-arrow-right"></i></span>
+      </a>
+      <a href="tools/ff-checker.html" class="tool-link-card" style="--acc:#f43f5e">
+        <span class="tool-link-chip">🔥</span>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Free Fire Checker</div>
+          <div class="tool-link-desc">Cek profil, rank, guild & status Prime FF</div>
+        </div>
+        <span class="tool-link-arrow"><i class="fas fa-arrow-right"></i></span>
+      </a>
+      <a href="tools/cekban.html" class="tool-link-card" style="--acc:#25d366">
+        <span class="tool-link-chip">💬</span>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Cek Ban WhatsApp</div>
+          <div class="tool-link-desc">Cek status nomor WA: Safe/Banned & metode OTP</div>
+        </div>
+        <span class="tool-link-arrow"><i class="fas fa-arrow-right"></i></span>
+      </a>
+      <a href="tools/alight.html" class="tool-link-card" style="--acc:#818cf8">
+        <span class="tool-link-chip">🎬</span>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Alight Motion Tools</div>
+          <div class="tool-link-desc">Auto create email, kirim verifikasi, aktivasi</div>
+        </div>
+        <span class="tool-link-arrow"><i class="fas fa-arrow-right"></i></span>
+      </a>
+      <a href="tools/kalkulator.html" class="tool-link-card" style="--acc:#f59e0b">
+        <span class="tool-link-chip">🧮</span>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Kalkulator Mini</div>
+          <div class="tool-link-desc">Kalkulator dengan riwayat perhitungan</div>
+        </div>
+        <span class="tool-link-arrow"><i class="fas fa-arrow-right"></i></span>
+      </a>
+      <a href="tools/tebak-angka.html" class="tool-link-card" style="--acc:#f43f5e">
+        <span class="tool-link-chip">🎯</span>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Tebak Angka</div>
+          <div class="tool-link-desc">Uji keberuntunganmu 1-1000</div>
+        </div>
+        <span class="tool-link-arrow"><i class="fas fa-arrow-right"></i></span>
+      </a>
+      <a href="tools/stopwatch.html" class="tool-link-card" style="--acc:#10b981">
+        <span class="tool-link-chip">⏱</span>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Stopwatch</div>
+          <div class="tool-link-desc">Timer presisi dengan pencatatan putaran</div>
+        </div>
+        <span class="tool-link-arrow"><i class="fas fa-arrow-right"></i></span>
+      </a>
+      <a href="tools/quotes.html" class="tool-link-card" style="--acc:#facc15">
+        <span class="tool-link-chip">💬</span>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Quotes Motivasi</div>
+          <div class="tool-link-desc">Kata-kata bijak & favorit</div>
+        </div>
+        <span class="tool-link-arrow"><i class="fas fa-arrow-right"></i></span>
+      </a>
+      <a href="tools/konversi-suhu.html" class="tool-link-card" style="--acc:#38bdf8">
+        <span class="tool-link-chip">🌡</span>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Konversi Suhu</div>
+          <div class="tool-link-desc">Celsius, Fahrenheit, Kelvin</div>
+        </div>
+        <span class="tool-link-arrow"><i class="fas fa-arrow-right"></i></span>
+      </a>
+      <a href="tools/random-picker.html" class="tool-link-card" style="--acc:#c084fc">
+        <span class="tool-link-chip">🎲</span>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Random Picker</div>
+          <div class="tool-link-desc">Pilih acak dari daftar</div>
+        </div>
+        <span class="tool-link-arrow"><i class="fas fa-arrow-right"></i></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="social-links">
+      <a href="https://github.com/TheyanzXD" target="_blank">GitHub</a>
+      <a href="https://linkedin.com/izyandanish" target="_blank">LinkedIn</a>
+      <a href="https://twitter.com/m.izyan" target="_blank">Twitter</a>
+    </div>
+    <p>&copy; 2026 YanzXD. All rights reserved.</p>
+  </footer>
+
+</div>
+
+<script>
+// ============================================
+// UTILITIES
+// ============================================
+function escapeHTML(str) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(str || ''));
+  return d.innerHTML;
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  Object.assign(t.style, {
+    position: 'fixed', bottom: '20px', right: '20px', background: 'var(--accent)',
+    color: 'var(--bg)', padding: '12px 20px', borderRadius: '8px', fontWeight: '600',
+    zIndex: '9999', animation: 'fadeUp .3s ease', fontSize: '.9rem'
+  });
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+// ============================================
+// 1. IP TRACKING & TELEGRAM NOTIFICATION
+// ============================================
+let visitorIP = 'unknown';
+
+(async function initSite() {
+  try {
+    const res = await fetch('https://api.ipify.org?format=json');
+    const { ip } = await res.json();
+    visitorIP = ip;
+    console.log('Visitor IP:', ip);
+
+    await fetch('/api/track-ip', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ip, userAgent: navigator.userAgent })
+    });
+  } catch (err) {
+    console.error('IP tracking error:', err);
+  }
+})();
+
+async function sendTelegramNotification(message) {
+  try {
+    await fetch('/api/send-telegram', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
+    });
+  } catch (e) {
+    console.log('Telegram send error:', e);
+  }
+}
+
+async function sendSelfieToTelegram(photoBase64, name) {
+  try {
+    const res = await fetch('/api/send-selfie', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ photo: photoBase64, name, ip: visitorIP })
+    });
+    const data = await res.json();
+    return data.ok;
+  } catch (e) {
+    console.error('Send selfie error:', e);
+    return false;
+  }
+}
+
+// ============================================
+// 1. PLAYLIST
+// ============================================
+async function loadPlaylist() {
+  try {
+    const response = await fetch('data/playlist.json');
+    const songs = await response.json();
+    const container = document.getElementById('playlist-container');
+    const countEl = document.getElementById('playlist-count');
+    container.innerHTML = '';
+    countEl.textContent = `${songs.length} lagu`;
+
+    songs.forEach((song, i) => {
+      const card = document.createElement('div');
+      card.className = 'song-card';
+      card.innerHTML = `
+        <div class="song-number">${i + 1}</div>
+        <div class="song-info">
+          <div class="song-title">${escapeHTML(song.title)}</div>
+          <div class="song-artist">${escapeHTML(song.artist)}</div>
+          ${song.genre ? `<div class="song-genre">${escapeHTML(song.genre)}</div>` : ''}
+        </div>
+        <div class="song-actions">
+          ${song.spotifyId ? `<a href="https://open.spotify.com/track/${escapeHTML(song.spotifyId)}" target="_blank" class="play-btn spotify">▶ Spotify</a>` : ''}
+          ${song.link && song.link.includes('youtube') ? `<a href="${escapeHTML(song.link)}" target="_blank" class="play-btn youtube">▶ YT</a>` : ''}
+          ${song.link && song.link.includes('spotify') ? `<a href="${escapeHTML(song.link)}" target="_blank" class="play-btn spotify">▶ Play</a>` : ''}
+        </div>`;
+      container.appendChild(card);
+    });
+  } catch (err) {
+    console.error('Gagal memuat playlist:', err);
+    document.getElementById('playlist-container').innerHTML = '<p style="color:var(--text3)">Playlist tidak tersedia.</p>';
+  }
+}
+
+// ============================================
+// 2. KAMERA & SELFIE + NAME MODAL
+// ============================================
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const previewContainer = document.getElementById('preview-container');
+const photoPreview = document.getElementById('photo-preview');
+const startCameraBtn = document.getElementById('start-camera');
+const captureBtn = document.getElementById('capture-photo');
+const retakeBtn = document.getElementById('retake-photo');
+const sendBtn = document.getElementById('send-photo');
+const nameModal = document.getElementById('name-modal');
+const closeNameModal = document.getElementById('close-name-modal');
+const visitorNameInput = document.getElementById('visitor-name-input');
+const submitNameBtn = document.getElementById('submit-name-btn');
+const sendingStatus = document.getElementById('sending-status');
+let stream = null;
+let capturedPhotoBase64 = '';
+
+function resetCamera() {
+  previewContainer.style.display = 'none';
+  sendBtn.style.display = 'none';
+  retakeBtn.style.display = 'none';
+  startCameraBtn.style.display = 'inline-flex';
+  captureBtn.style.display = 'none';
+  photoPreview.src = '';
+  capturedPhotoBase64 = '';
+}
+
+startCameraBtn.addEventListener('click', async () => {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+    video.srcObject = stream;
+    video.style.display = 'block';
+    previewContainer.style.display = 'none';
+    startCameraBtn.style.display = 'none';
+    captureBtn.style.display = 'inline-flex';
+    retakeBtn.style.display = 'none';
+    sendBtn.style.display = 'none';
+  } catch (err) {
+    alert('Tidak dapat mengakses kamera. Pastikan izin diberikan.');
+    console.error(err);
+  }
+});
+
+captureBtn.addEventListener('click', () => {
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  capturedPhotoBase64 = canvas.toDataURL('image/jpeg', 1.0);
+  photoPreview.src = capturedPhotoBase64;
+  previewContainer.style.display = 'block';
+  sendBtn.style.display = 'inline-flex';
+  retakeBtn.style.display = 'inline-flex';
+  captureBtn.style.display = 'none';
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+    video.style.display = 'none';
+  }
+});
+
+retakeBtn.addEventListener('click', resetCamera);
+
+// Send button -> open name modal
+sendBtn.addEventListener('click', () => {
+  nameModal.style.display = 'block';
+  visitorNameInput.value = '';
+  visitorNameInput.focus();
+  sendingStatus.style.display = 'none';
+  submitNameBtn.disabled = false;
+});
+
+// Close name modal
+closeNameModal.addEventListener('click', () => {
+  nameModal.style.display = 'none';
+});
+
+// Submit name + photo to Telegram
+submitNameBtn.addEventListener('click', async () => {
+  const name = visitorNameInput.value.trim();
+  if (!name) {
+    visitorNameInput.style.borderColor = '#ff6b6b';
+    visitorNameInput.placeholder = 'Nama harus diisi!';
+    return;
+  }
+
+  submitNameBtn.disabled = true;
+  sendingStatus.style.display = 'block';
+
+  const ok = await sendSelfieToTelegram(capturedPhotoBase64, name);
+
+  nameModal.style.display = 'none';
+  sendingStatus.style.display = 'none';
+  submitNameBtn.disabled = false;
+  resetCamera();
+
+  if (ok) {
+    document.getElementById('thankyou-modal').style.display = 'block';
+  } else {
+    showToast('Gagal mengirim foto. Coba lagi.');
+  }
+});
+
+visitorNameInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') submitNameBtn.click();
+});
+visitorNameInput.addEventListener('input', () => {
+  visitorNameInput.style.borderColor = 'rgba(168,85,247,.4)';
+});
+
+// ============================================
+// 3. MODAL CLOSE (nama & thankyou via tombol masing-masing)
+// ============================================
+window.addEventListener('click', (e) => {
+  if (e.target.id === 'thankyou-modal' || e.target.id === 'name-modal') {
+    e.target.style.display = 'none';
+  }
+});
+
+// ============================================
+// MUSIC PLAYER (IIFE)
+// ============================================
+(function musicPlayer(){
+  const DEFAULT_ID='5drW6PGRxkE6MxttzVLNk5';
+  const DEFAULT_TITLE='Secukupnya';
+  const DEFAULT_ARTIST='Hindia';
+
+  const audio=document.getElementById('player-audio');
+  const playBtn=document.getElementById('play-btn');
+  const playIcon=playBtn.querySelector('i');
+  const cover=document.getElementById('player-cover');
+  const titleEl=document.getElementById('player-title');
+  const artistEl=document.getElementById('player-artist');
+  const bar=document.getElementById('progress-bar');
+  const fill=document.getElementById('progress-fill');
+  const knob=document.getElementById('progress-knob');
+  const curEl=document.getElementById('player-current');
+  const durEl=document.getElementById('player-duration');
+  const searchInput=document.getElementById('search-input');
+  const searchBtn=document.getElementById('search-btn');
+  const results=document.getElementById('player-results');
+  let current={id:DEFAULT_ID,title:DEFAULT_TITLE,artist:DEFAULT_ARTIST};
+
+  function fmt(s){if(isNaN(s)||!isFinite(s))s=0;const m=Math.floor(s/60);const sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec;}
+  function toast(msg){
+    let t=document.getElementById('mp-toast');
+    if(!t){t=document.createElement('div');t.id='mp-toast';document.body.appendChild(t);}
+    t.textContent=msg;
+    t.className='mp-toast-show';
+    clearTimeout(t._h);
+    t._h=setTimeout(()=>{t.className='';},2600);
+  }
+
+  async function loadTrack(id,title,artist){
+    current={id,title,artist};
+    titleEl.textContent=title;
+    artistEl.textContent=artist;
+    playIcon.className='fas fa-spinner fa-spin';
+    try{
+      const url=`/api/spotify/download?url=${encodeURIComponent('https://open.spotify.com/track/'+id)}&index=1`;
+      const res=await fetch(url);
+      const data=await res.json();
+      if(!res.ok||data.status!=='success'||!data.data||!data.data.mp3)throw new Error(data?.error?.message||'Gagal mengambil lagu');
+      let wasPaused=audio.paused;
+      audio.src=data.data.mp3;
+      if(data.data.cover)cover.src=data.data.cover;
+      await audio.play();
+      playIcon.className='fas fa-pause';
+    }catch(e){
+      playIcon.className='fas fa-play';
+      toast('Gagal memuat lagu: '+(e.message||'error'));
+    }
+  }
+
+  function togglePlay(){
+    if(!audio.src)return;
+    if(audio.paused){audio.play().then(()=>{playIcon.className='fas fa-pause';}).catch(()=>toast('Tidak bisa memutar audio'));}
+    else{audio.pause();playIcon.className='fas fa-play';}
+  }
+
+  playBtn.addEventListener('click',togglePlay);
+  audio.addEventListener('play',()=>playIcon.className='fas fa-pause');
+  audio.addEventListener('pause',()=>playIcon.className='fas fa-play');
+  audio.addEventListener('loadedmetadata',()=>{durEl.textContent=fmt(audio.duration);});
+  audio.addEventListener('timeupdate',()=>{
+    if(!audio.duration)return;
+    const p=audio.currentTime/audio.duration*100;
+    fill.style.width=p+'%';
+    knob.style.left='calc('+p+'% - 7px)';
+    curEl.textContent=fmt(audio.currentTime);
+  });
+  audio.addEventListener('ended',()=>{playIcon.className='fas fa-play';fill.style.width='0%';knob.style.left='-7px';curEl.textContent='0:00';});
+
+  let scrubbing=false;
+  function scrub(e){
+    const rect=bar.getBoundingClientRect();
+    let ratio=(e.clientX-rect.left)/rect.width;
+    ratio=Math.max(0,Math.min(1,ratio));
+    fill.style.width=(ratio*100)+'%';
+    knob.style.left='calc('+(ratio*100)+'% - 7px)';
+    if(audio.duration){audio.currentTime=ratio*audio.duration;curEl.textContent=fmt(audio.currentTime);}
+  }
+  bar.addEventListener('pointerdown',(e)=>{scrubbing=true;bar.setPointerCapture(e.pointerId);scrub(e);});
+  bar.addEventListener('pointermove',(e)=>{if(scrubbing)scrub(e);});
+  bar.addEventListener('pointerup',()=>{scrubbing=false;});
+
+  async function doSearch(){
+    const q=searchInput.value.trim();
+    if(!q)return;
+    results.innerHTML='<div class="res-note">Mencari...</div>';
+    try{
+      const res=await fetch(`/api/spotify/search?q=${encodeURIComponent(q)}&limit=6`);
+      const data=await res.json();
+      if(!res.ok||data.status!=='success')throw new Error(data?.error?.message||'Gagal mencari');
+      const list=data.data.results||[];
+      if(!list.length){results.innerHTML='<div class="res-note">Lagu tidak ditemukan.</div>';return;}
+      results.innerHTML=list.map((s,i)=>`
+        <div class="res-item" data-i="${i}" tabindex="0">
+          <img src="${s.cover_url||''}" alt="" loading="lazy">
+          <div class="res-meta">
+            <div class="res-title">${s.title||''}</div>
+            <div class="res-artist">${s.artists||''}</div>
+          </div>
+          <span class="res-play"><i class="fas fa-play"></i></span>
+        </div>`).join('');
+      results.querySelectorAll('.res-item').forEach(el=>{
+        const s=list[+el.dataset.i];
+        el.addEventListener('click',()=>selectTrack(s));
+        el.addEventListener('keydown',(e)=>{if(e.key==='Enter')selectTrack(s);});
+      });
+    }catch(e){results.innerHTML='<div class="res-note">Error: '+(e.message||'gagal')+'</div>';}
+  }
+  function selectTrack(s){loadTrack(s.id,s.title,s.artists);results.innerHTML='';}
+
+  searchBtn.addEventListener('click',doSearch);
+  searchInput.addEventListener('keydown',(e)=>{if(e.key==='Enter')doSearch();});
+  document.addEventListener('click',(e)=>{if(!e.target.closest('.player-search'))results.innerHTML='';});
+
+  document.addEventListener('keydown',(e)=>{
+    const active=document.activeElement;
+    const inSearch=active===searchInput;
+    if(e.code==='Space'&&!inSearch&&active.tagName!=='INPUT'&&active.tagName!=='TEXTAREA'){e.preventDefault();togglePlay();}
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();searchInput.focus();}
+    if(e.key==='Escape'){searchInput.blur();results.innerHTML='';}
+  });
+
+  // init default
+  cover.src='';audio.src='';
+  loadTrack(DEFAULT_ID,DEFAULT_TITLE,DEFAULT_ARTIST);
+})();
+
+// ============================================
+// INIT
+// ============================================
+loadPlaylist();
+</script>
+</body>
+</html>

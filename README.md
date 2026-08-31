@@ -21,7 +21,7 @@
   </a>
   <img alt="License" src="https://img.shields.io/badge/License-MIT-a855f7.svg?style=for-the-badge" />
   <img alt="Theme" src="https://img.shields.io/badge/Theme-Neon_Purple-6366f1.svg?style=for-the-badge" />
-  <img alt="Last commit" src="https://img.shields.io/github/last-commit/TheyanzXD/Portofolio-yanzxd?style=for-the-badge" />
+  <img alt="Last commit" src="https://img.shields.io/github/last-commit/TheyanzXD/portofolio?style=for-the-badge" />
 </p>
 
 <p align="center">
@@ -81,15 +81,25 @@ Integrasi → Telegram Bot API · Spotify API · API HaidarXD (ai.haidarxd.my.id
 │   ├── random-picker.html# Random picker
 │   ├── stopwatch.html    # Stopwatch
 │   └── tebak-angka.html  # Game tebak angka
-├── api/                  # Backend serverless (Telegram / IP tracking)
+├── api/                  # Backend (Node.js — Vercel)
 │   ├── index.js          # Vercel entry point
-│   └── server.js         # API handlers (track-ip, send-selfie, send-telegram)
+│   └── server.js         # API handlers
+├── workers/              # Cloudflare Workers API
+│   └── api/
+│       ├── index.js     # Workers fetch handler
+│       └── wrangler.toml
+├── public/              # Static files (Cloudflare Pages)
+│   ├── index.html
+│   ├── tools/
+│   ├── ui/
+│   └── data/
 ├── data/
 │   └── playlist.json     # Daftar lagu favorit
 ├── ui/
-│   └── style.css         # Global styles (tema ungu neon)
+│   └── style.css         # Global styles
+├── wrangler.toml         # Cloudflare Pages config
 ├── vercel.json           # Vercel config
-└── LICENSE
+└── package.json
 ```
 
 ---
@@ -157,31 +167,56 @@ CekBan → GET /api/tools/cekban?number={number}
 
 ---
 
-## ☁️ Deploy (Vercel)
+## ☁️ Deploy (Cloudflare Workers + Pages)
 
-Repo ini auto-deploy via GitHub → Vercel.
+Dua target deploy: **Pages** (static) + **Workers** (API).
+
+### 1. Setup KV Namespace
 
 ```bash
-git clone https://github.com/TheyanzXD/Portofolio-yanzxd.git
-cd Portofolio-yanzxd
+npm install
+npx wrangler kv:namespace create PAGE_PORTFOLIO --config workers/api/wrangler.toml
 ```
 
-Masukkan env vars di **Vercel → Settings → Environment Variables**:
+Salin output `id`, masukkan ke `workers/api/wrangler.toml` di baris `id = "YOUR_KV_NAMESPACE_ID"`.
 
-```env
-TELEGRAM_BOT_TOKEN=your_bot_token_here
-TELEGRAM_CHAT_ID=your_chat_id_here
+### 2. Set Secrets
+
+```bash
+npx wrangler secret put TELEGRAM_BOT_TOKEN --config workers/api/wrangler.toml
+npx wrangler secret put TELEGRAM_CHAT_ID --config workers/api/wrangler.toml
 ```
 
-> **Cara dapat token:** buka [@BotFather](https://t.me/BotFather) → `/newbot` → copy token.
-> Tanpa env ini, fitur Telegram otomatis dilewati (tidak error).
+### 3. Deploy
+
+```bash
+# Deploy API Worker
+npm run cf:api:deploy
+
+# Deploy Pages (static files)
+npm run cf:pages:deploy
+```
+
+Atau satu command:
+```bash
+npm run cf:deploy
+```
+
+### 4. Custom Domain (opsional)
+
+- **Pages**: dashboard → Workers & Pages → portfolio → Custom Domains
+- **Worker**: dashboard → Workers & Pages → portfolio-api → Triggers → Custom Domains
+- Arahkan keduanya ke domain yang sama, Worker menangani `/api/*`
+
+Tanpa secrets Telegram, fitur tersebut otomatis dilewati (logged ke console).
 
 ---
 
 ## ⚠️ Known Issues
 
-- Data visitor ephemeral di Vercel (disimpan ke `/tmp`)
+- Data visitor persisted via Workers KV (durable, tidak ephemeral seperti Vercel `/tmp`)
 - Tidak ada rate limiting API eksternal
+- Selfie disimpan sebagai base64 di KV (batas ukuran payload)
 
 ---
 

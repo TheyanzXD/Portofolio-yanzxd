@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konversi Suhu</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌡</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter','Segoe UI',sans-serif}
+    .grad-text{background:linear-gradient(120deg,#c4b5fd,#a855f7 45%,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+    .anim-in{animation:scaleIn .5s ease}
+    .thermo-fill{transition:height .5s ease}
+  </style>
+</head>
+<body class="min-h-screen bg-[#0a0a12] text-[#e8edf5] flex flex-col items-center justify-center px-6 py-8"
+  style="background-image:radial-gradient(1200px 500px at 50% -100px,rgba(168,85,247,.12),transparent 60%),radial-gradient(900px 400px at 100% 100%,rgba(56,189,248,.08),transparent 55%)">
+
+  <a href="../index.html" class="fixed top-6 left-6 text-[#c4b5fd] bg-white/5 hover:bg-purple-500/15 hover:text-white rounded-xl px-3 py-2 text-sm inline-flex items-center gap-2 transition-transform hover:-translate-x-0.5 z-10"><i class="fas fa-arrow-left"></i> Kembali ke Portofolio</a>
+
+  <div class="w-full max-w-[500px] anim-in">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-extrabold grad-text">Konversi Suhu</h1>
+      <p class="text-[#ffffff66] text-sm mt-1">Konversi antara Celsius, Fahrenheit, dan Kelvin</p>
+    </div>
+    <div class="bg-[#14141f] rounded-2xl p-8 border border-purple-500/10 shadow-[0_4px_20px_rgba(0,0,0,.3)]">
+      <div class="text-center my-6">
+        <div class="relative w-10 h-[180px] bg-[#0a0a12] rounded-[20px] mx-auto border-2 border-[#1f1f2e] overflow-hidden">
+          <div class="thermo-fill absolute bottom-0 left-0 right-0 bg-gradient-to-t from-purple-500 to-[#ff6b6b]" id="thermo-fill" style="height:30%"></div>
+        </div>
+        <div class="w-[50px] h-[50px] bg-[#1f1f2e] rounded-full mx-auto border-2 border-purple-500 flex items-center justify-center text-xs font-bold font-mono text-purple-500" id="thermo-bulb">--°</div>
+      </div>
+      <div class="mt-6">
+        <div class="flex items-center gap-3 mb-4 flex-wrap justify-center">
+          <input type="number" id="temp-input" placeholder="0" value="0"
+            class="flex-1 min-w-[150px] px-4 py-3 text-xl text-center rounded-xl border-2 border-purple-500/20 bg-[#0a0a12] text-purple-500 font-mono font-semibold focus:outline-none focus:border-purple-500 transition-colors">
+          <select id="temp-from" class="px-4 py-3 rounded-xl border-2 border-purple-500/20 bg-[#14141f] text-[#e8edf5] text-sm cursor-pointer min-w-[120px] focus:outline-none focus:border-purple-500 transition-colors">
+            <option value="C">Celsius °C</option>
+            <option value="F">Fahrenheit °F</option>
+            <option value="K">Kelvin K</option>
+          </select>
+        </div>
+        <div class="text-center text-xl text-purple-500 mb-4">⇅</div>
+        <div class="flex items-center gap-3 mb-4 flex-wrap justify-center">
+          <input type="number" id="temp-output" readonly placeholder="0"
+            class="flex-1 min-w-[150px] px-4 py-3 text-xl text-center rounded-xl border-2 border-purple-500/20 bg-[#0a0a12] text-purple-500 font-mono font-semibold focus:outline-none">
+          <select id="temp-to" class="px-4 py-3 rounded-xl border-2 border-purple-500/20 bg-[#14141f] text-[#e8edf5] text-sm cursor-pointer min-w-[120px] focus:outline-none focus:border-purple-500 transition-colors">
+            <option value="F">Fahrenheit °F</option>
+            <option value="C">Celsius °C</option>
+            <option value="K">Kelvin K</option>
+          </select>
+        </div>
+      </div>
+      <div class="text-center my-6 py-6 bg-[#0a0a12] rounded-xl border border-purple-500/10">
+        <div class="text-3xl font-bold text-purple-500 font-mono" id="result-val">0 °C = 32 °F</div>
+        <div class="text-sm text-[#ffffff66] mt-1">Hasil konversi</div>
+      </div>
+      <div class="mt-6">
+        <h3 class="text-purple-500 text-sm mb-2">rumus Konversi</h3>
+        <div class="grid gap-2" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+          <div class="bg-[#0a0a12] rounded-lg px-3 py-2 text-xs text-[#ffffff66] font-mono border border-purple-500/5">C → F: (C × 9/5) + 32</div>
+          <div class="bg-[#0a0a12] rounded-lg px-3 py-2 text-xs text-[#ffffff66] font-mono border border-purple-500/5">C → K: C + 273.15</div>
+          <div class="bg-[#0a0a12] rounded-lg px-3 py-2 text-xs text-[#ffffff66] font-mono border border-purple-500/5">F → C: (F − 32) × 5/9</div>
+          <div class="bg-[#0a0a12] rounded-lg px-3 py-2 text-xs text-[#ffffff66] font-mono border border-purple-500/5">F → K: (F − 32) × 5/9 + 273.15</div>
+          <div class="bg-[#0a0a12] rounded-lg px-3 py-2 text-xs text-[#ffffff66] font-mono border border-purple-500/5">K → C: K − 273.15</div>
+          <div class="bg-[#0a0a12] rounded-lg px-3 py-2 text-xs text-[#ffffff66] font-mono border border-purple-500/5">K → F: (K − 273.15) × 9/5 + 32</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const input=document.getElementById('temp-input');
+    const output=document.getElementById('temp-output');
+    const from=document.getElementById('temp-from');
+    const to=document.getElementById('temp-to');
+    const resultVal=document.getElementById('result-val');
+    const thermoFill=document.getElementById('thermo-fill');
+    const thermoBulb=document.getElementById('thermo-bulb');
+
+    function convert(){
+      const v=parseFloat(input.value);
+      if(isNaN(v)){output.value='';resultVal.textContent='Masukkan angka';return;}
+      let r;
+      const key=from.value+to.value;
+      if(from.value===to.value)r=v;
+      else if(key==='CF')r=(v*9/5)+32;
+      else if(key==='CK')r=v+273.15;
+      else if(key==='FC')r=(v-32)*5/9;
+      else if(key==='FK')r=(v-32)*5/9+273.15;
+      else if(key==='KC')r=v-273.15;
+      else if(key==='KF')r=(v-273.15)*9/5+32;
+      output.value=r.toFixed(2);
+      resultVal.textContent=v+' '+from.value+' = '+r.toFixed(2)+' '+to.value;
+
+      let celsius;
+      if(from.value==='C')celsius=v;
+      else if(from.value==='F')celsius=(v-32)*5/9;
+      else celsius=v-273.15;
+      const pct=Math.min(100,Math.max(5,((celsius+40)/140)*100));
+      thermoFill.style.height=pct+'%';
+      thermoBulb.textContent=celsius.toFixed(0)+'°C';
+    }
+
+    input.addEventListener('input',convert);
+    from.addEventListener('change',convert);
+    to.addEventListener('change',convert);
+    convert();
+  })();
+  </script>
+</body>
+</html>

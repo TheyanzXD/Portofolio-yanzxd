@@ -1,0 +1,20 @@
+# Cloudflare Workers API — handles all /api/* routes
+# Deploy: npx wrangler deploy --config workers/api/wrangler.toml
+# Secrets: npx wrangler secret put TELEGRAM_BOT_TOKEN --config workers/api/wrangler.toml
+
+name = "portofolio-api"
+main = "./workers/api/index.js"
+compatibility_date = "2025-01-01"
+
+# KV Namespace for visitor DB and selfie metadata
+[[kv_namespaces]]
+binding = "KV"
+id = "YOUR_KV_NAMESPACE_ID"  # Run: npx wrangler kv:namespace create PAGE_PORTFOLIO
+
+[vars]
+HAIDAR_API_KEY = "haidarapis-43ee0ef3199221b320f01c50"
+HAIDAR_BASE = "https://api.haidarxd.my.id/api/v1"
+TEMPM_BASE = "https://tempmailhaidar.vercel.app/api"
+
+# Production route — set custom domain in Cloudflare dashboard
+# Or use: npx wrangler deploy --routes

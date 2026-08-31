@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quotes Motivasi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter','Segoe UI',sans-serif}
+    .grad-text{background:linear-gradient(120deg,#c4b5fd,#a855f7 45%,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .anim-in{animation:scaleIn .5s ease}
+    .quote-text-anim{animation:fadeIn .5s ease}
+    .fav-quote{background:#0a0a12;border-radius:8px;padding:.8rem;margin-bottom:.5rem;font-size:.85rem;color:#a9a6cf;border-left:3px solid #a855f7;cursor:pointer;transition:all .3s}
+    .fav-quote:hover{background:rgba(168,85,247,.05)}
+  </style>
+</head>
+<body class="min-h-screen bg-[#0a0a12] text-[#e8edf5] flex flex-col items-center justify-center px-6 py-8"
+  style="background-image:radial-gradient(1200px 500px at 50% -100px,rgba(168,85,247,.12),transparent 60%),radial-gradient(900px 400px at 100% 100%,rgba(250,204,21,.06),transparent 55%)">
+
+  <a href="../index.html" class="fixed top-6 left-6 text-[#c4b5fd] bg-white/5 hover:bg-purple-500/15 hover:text-white rounded-xl px-3 py-2 text-sm inline-flex items-center gap-2 transition-transform hover:-translate-x-0.5 z-10"><i class="fas fa-arrow-left"></i> Kembali ke Portofolio</a>
+
+  <div class="w-full max-w-[600px] anim-in">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-extrabold grad-text">Quotes Motivasi</h1>
+      <p class="text-[#ffffff66] text-sm mt-1">Kata-kata bijak untuk hari ini</p>
+    </div>
+    <div class="bg-[#14141f] rounded-2xl px-8 py-10 border border-purple-500/10 shadow-[0_4px_20px_rgba(0,0,0,.3)] text-center relative overflow-hidden transition-all duration-500" id="quote-card">
+      <div class="absolute -top-5 left-5 text-[10rem] text-purple-500/5 font-serif leading-none select-none" aria-hidden="true">"</div>
+      <div class="relative text-2xl mb-2 text-center">💡</div>
+      <div class="relative text-lg leading-relaxed text-[#e8edf5] italic min-h-[80px] quote-text-anim" id="quote-text">"Jadilah perubahan yang ingin Anda lihat di dunia."</div>
+      <div class="relative mt-6 text-sm text-purple-500 font-semibold" id="quote-author">— Mahatma Gandhi</div>
+      <div class="relative inline-block mt-2 px-3 py-1 bg-purple-500/10 rounded-xl text-xs text-purple-500" id="quote-cat">Inspirasi</div>
+    </div>
+    <div class="flex gap-4 justify-center mt-8 flex-wrap">
+      <button id="next-quote" class="min-w-[140px] rounded-lg px-4 py-2.5 font-semibold cursor-pointer bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-[0_4px_15px_rgba(139,92,246,.3)] hover:brightness-110 hover:-translate-y-0.5 transition-all">Quote Baru</button>
+      <button id="fav-quote" class="min-w-[140px] rounded-lg px-4 py-2.5 font-semibold cursor-pointer bg-[#1f1f2e] text-[#e8edf5] border border-purple-500/20 hover:bg-[#14141f] hover:text-purple-400 transition-all">❤️ Favorit</button>
+      <button id="share-quote" class="min-w-[140px] rounded-lg px-4 py-2.5 font-semibold cursor-pointer bg-[#1f1f2e] text-[#e8edf5] border border-purple-500/20 hover:bg-[#14141f] hover:text-purple-400 transition-all">📋 Salin</button>
+    </div>
+    <div class="text-center mt-4 text-xs text-[#ffffff66]" id="quote-counter"></div>
+    <div class="mt-6 text-left" id="fav-section" style="display:none">
+      <h3 class="text-purple-500 text-base mb-2">❤️ Quote Favorit</h3>
+      <div id="fav-list"></div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const quotes=[
+      {text:"Jadilah perubahan yang ingin Anda lihat di dunia.",author:"Mahatma Gandhi",cat:"Inspirasi"},
+      {text:"Hiduplah seolah-olah Anda akan mati besok. Belajarlah seolah-olah Anda akan hidup selamanya.",author:"Mahatma Gandhi",cat:"Kehidupan"},
+      {text:"Kesuksesan adalah kemampuan untuk beranjak dari kegagalan tanpa kehilangan antusiasme.",author:"Winston Churchill",cat:"Kesuksesan"},
+      {text:"Cara terbaik untuk memprediksi masa depan adalah dengan menciptakannya.",author:"Peter Drucker",cat:"Masa Depan"},
+      {text:"Jangan takut gagal. Kegagalan adalah batu loncatan menuju kesuksesan.",author:"Anonim",cat:"Motivasi"},
+      {text:"Kerja keras mengalahkan bakat ketika bakat tidak bekerja keras.",author:"Tim Notke",cat:"Kerja Keras"},
+      {text:"Satu-satunya cara untuk melakukan pekerjaan yang hebat adalah mencintai apa yang Anda lakukan.",author:"Steve Jobs",cat:"Passion"},
+      {text:"Masa depan milik mereka yang percaya pada keindahan impian mereka.",author:"Eleanor Roosevelt",cat:"Impian"},
+      {text:"Kita adalah apa yang kita kerjakan berulang kali. Maka, keunggulan bukanlah tindakan, melainkan kebiasaan.",author:"Aristoteles",cat:"Kebiasaan"},
+      {text:"Belajarlah tanpa lelah, tanamkan tanpa bosan.",author:"Socrates",cat:"Belajar"},
+      {text:"Tindakan kecil dalam satu arah mengubah segalanya.",author:"Anonim",cat:"Aksi"},
+      {text:"Semua impian menjadi kenyataan jika kita memiliki keberanian untuk mengejar mereka.",author:"Walt Disney",cat:"Keberanian"},
+      {text:"Jangan hitung hari-harimu, buatlah harimu berkesan.",author:"Anonim",cat:"Inspirasi"},
+      {text:"Hidup terlalu singkat untuk dihabiskan dengan orang yang salah.",author:"Anonim",cat:"Kehidupan"},
+      {text:"Kebahagiaan bukan sesuatu yang sudah jadi. Ia datang dari tindakanmu sendiri.",author:"Dalai Lama",cat:"Kebahagiaan"}
+    ];
+    let idx=0,favs=[];
+    const textEl=document.getElementById('quote-text');
+    const authorEl=document.getElementById('quote-author');
+    const catEl=document.getElementById('quote-cat');
+    const counterEl=document.getElementById('quote-counter');
+    const card=document.getElementById('quote-card');
+    const favList=document.getElementById('fav-list');
+    const favSection=document.getElementById('fav-section');
+
+    function show(i){
+      const q=quotes[i];
+      textEl.textContent='"'+q.text+'"';
+      authorEl.textContent='— '+q.author;
+      catEl.textContent=q.cat;
+      counterEl.textContent=(i+1)+' / '+quotes.length;
+      card.style.animation='none';
+      card.offsetHeight;
+      card.style.animation='scaleIn .4s ease';
+    }
+
+    function renderFavs(){
+      if(favs.length===0){favSection.style.display='none';return;}
+      favSection.style.display='block';
+      favList.innerHTML=favs.map((f,i)=>
+        '<div class="fav-quote" data-idx="'+i+'">"'+f.text+'" — <strong>'+f.author+'</strong></div>'
+      ).join('');
+    }
+
+    document.getElementById('next-quote').addEventListener('click',()=>{
+      idx=(idx+1)%quotes.length;
+      show(idx);
+    });
+
+    document.getElementById('fav-quote').addEventListener('click',()=>{
+      const q=quotes[idx];
+      if(!favs.find(f=>f.text===q.text)){
+        favs.push(q);
+        renderFavs();
+      }
+    });
+
+    document.getElementById('share-quote').addEventListener('click',()=>{
+      const q=quotes[idx];
+      const text='"'+q.text+'" — '+q.author;
+      navigator.clipboard.writeText(text).then(()=>{
+        document.getElementById('share-quote').textContent='Tersalin!';
+        setTimeout(()=>{document.getElementById('share-quote').textContent='📋 Salin';},1500);
+      });
+    });
+
+    show(0);
+  })();
+  </script>
+</body>
+</html>

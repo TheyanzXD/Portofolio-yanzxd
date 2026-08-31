@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Picker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter','Segoe UI',sans-serif}
+    .grad-text{background:linear-gradient(120deg,#c4b5fd,#a855f7 45%,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+    @keyframes fadeIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+    .anim-in{animation:scaleIn .5s ease}
+    .rp-item{display:flex;align-items:center;gap:.4rem;padding:.4rem .8rem;background:#1f1f2e;border-radius:8px;font-size:.85rem;color:#e8edf5;animation:fadeIn .3s ease}
+    .rp-remove{cursor:pointer;color:#ff6b6b;font-size:.7rem;opacity:.6;transition:opacity .3s}
+    .rp-remove:hover{opacity:1}
+    .rp-hist-item{padding:.3rem .6rem;background:#0a0a12;border-radius:6px;font-size:.8rem;color:#7a7899}
+    .spinning{animation:rpSpin .1s linear infinite;color:#7a7899}
+    @keyframes rpSpin{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
+  </style>
+</head>
+<body class="min-h-screen bg-[#0a0a12] text-[#e8edf5] flex flex-col items-center justify-center px-6 py-8"
+  style="background-image:radial-gradient(1200px 500px at 50% -100px,rgba(168,85,247,.12),transparent 60%),radial-gradient(900px 400px at 100% 100%,rgba(192,132,252,.08),transparent 55%)">
+
+  <a href="../index.html" class="fixed top-6 left-6 text-[#c4b5fd] bg-white/5 hover:bg-purple-500/15 hover:text-white rounded-xl px-3 py-2 text-sm inline-flex items-center gap-2 transition-transform hover:-translate-x-0.5 z-10"><i class="fas fa-arrow-left"></i> Kembali ke Portofolio</a>
+
+  <div class="w-full max-w-[500px] anim-in">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-extrabold grad-text">Random Picker</h1>
+      <p class="text-[#ffffff66] text-sm mt-1">Pilih acak dari daftar pilihanmu!</p>
+    </div>
+    <div class="bg-[#14141f] rounded-2xl p-8 border border-purple-500/10 shadow-[0_4px_20px_rgba(0,0,0,.3)]">
+      <div class="mb-6">
+        <input type="text" class="rp-input w-full px-4 py-3 rounded-xl border-2 border-purple-500/20 bg-[#0a0a12] text-[#e8edf5] text-sm focus:outline-none focus:border-purple-500 transition-colors" id="rp-input" placeholder="Ketik pilihan, lalu Enter atau koma...">
+        <p class="text-xs text-[#ffffff66] mt-1">Pisahkan dengan koma. Contoh: Merah, Biru, Hijau, Kuning</p>
+      </div>
+      <div class="flex flex-wrap gap-2 my-4 min-h-[40px]" id="rp-items"></div>
+      <div class="text-center min-h-[100px] flex flex-col items-center justify-center my-4">
+        <div class="text-4xl font-bold text-purple-500 transition-all" id="rp-result">?</div>
+      </div>
+      <div class="flex gap-4 justify-center">
+        <button id="rp-pick" class="min-w-[140px] rounded-lg px-4 py-2.5 font-semibold cursor-pointer bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-[0_4px_15px_rgba(139,92,246,.3)] hover:brightness-110 hover:-translate-y-0.5 transition-all">🎲 Pilih Acak!</button>
+        <button id="rp-clear" class="min-w-[140px] rounded-lg px-4 py-2.5 font-semibold cursor-pointer bg-[#1f1f2e] text-[#e8edf5] border border-purple-500/20 hover:bg-[#14141f] hover:text-purple-400 transition-all">Hapus Semua</button>
+      </div>
+      <div class="mt-6" id="rp-history" style="display:none">
+        <h3 class="text-purple-500 text-sm mb-2">Riwayat Pilihan</h3>
+        <div class="flex flex-wrap gap-1" id="rp-history-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    let items=[],history=[];
+    const input=document.getElementById('rp-input');
+    const itemsEl=document.getElementById('rp-items');
+    const resultEl=document.getElementById('rp-result');
+    const historyEl=document.getElementById('rp-history');
+    const historyList=document.getElementById('rp-history-list');
+
+    function renderItems(){
+      itemsEl.innerHTML=items.map((item,i)=>
+        '<div class="rp-item"><span>'+escapeHTML(item)+'</span><span class="rp-remove" data-i="'+i+'">✕</span></div>'
+      ).join('');
+    }
+
+    function escapeHTML(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+    input.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===','){
+        e.preventDefault();
+        addItems(input.value);
+        input.value='';
+      }
+    });
+
+    input.addEventListener('input',e=>{
+      if(e.data===','){addItems(input.value.replace(/,/g,''));input.value='';}
+    });
+
+    function addItems(raw){
+      raw.split(',').forEach(s=>{
+        const item=s.trim();
+        if(item && !items.includes(item))items.push(item);
+      });
+      renderItems();
+    }
+
+    itemsEl.addEventListener('click',e=>{
+      if(e.target.classList.contains('rp-remove')){
+        items.splice(parseInt(e.target.dataset.i),1);
+        renderItems();
+      }
+    });
+
+    document.getElementById('rp-pick').addEventListener('click',()=>{
+      if(items.length<2){alert('Masukkan minimal 2 pilihan!');return;}
+      resultEl.classList.add('spinning');
+      let count=0;
+      const interval=setInterval(()=>{
+        resultEl.textContent=items[Math.floor(Math.random()*items.length)];
+        count++;
+        if(count>20){
+          clearInterval(interval);
+          const picked=items[Math.floor(Math.random()*items.length)];
+          resultEl.textContent=picked;
+          resultEl.classList.remove('spinning');
+          history.unshift(picked);
+          renderHistory();
+        }
+      },80);
+    });
+
+    document.getElementById('rp-clear').addEventListener('click',()=>{
+      items=[];renderItems();resultEl.textContent='?';
+    });
+
+    function renderHistory(){
+      if(history.length===0){historyEl.style.display='none';return;}
+      historyEl.style.display='block';
+      historyList.innerHTML=history.map(h=>'<div class="rp-hist-item">'+escapeHTML(h)+'</div>').join('');
+    }
+  })();
+  </script>
+</body>
+</html>

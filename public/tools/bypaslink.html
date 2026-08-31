@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bypass Link</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter','Segoe UI',sans-serif}
+    .grad-text{background:linear-gradient(120deg,#c4b5fd,#a855f7 45%,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .dot-live{box-shadow:0 0 8px #22c55e;animation:pulse 1.8s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .anim-rise{animation:rise .5s ease both}
+    .output{display:none;margin-top:1rem;background:#0a0a12;border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:1rem;animation:rise .25s ease}
+    .output.show{display:block}
+    .output.ok{border-color:rgba(168,85,247,.45);background:linear-gradient(180deg,rgba(168,85,247,.06),rgba(0,0,0,.2))}
+    .output.err{border-color:rgba(244,63,94,.5);background:linear-gradient(180deg,rgba(244,63,94,.06),rgba(0,0,0,.2))}
+    .output.ok .olabel{color:#e9d5ff}
+    .output.err .olabel{color:#fda4af}
+    #bp-toast{position:fixed;bottom:22px;right:22px;z-index:9999;padding:14px 20px;border-radius:12px;font-weight:600;font-size:.9rem;color:#fff;max-width:330px;box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .3s,transform .3s;font-family:'Inter',sans-serif}
+    #bp-toast.show{opacity:1;transform:translateY(0)}
+    #bp-toast.ok{background:linear-gradient(135deg,#6366f1,#a855f7)}
+    #bp-toast.err{background:linear-gradient(135deg,#dc2626,#ef4444)}
+  </style>
+</head>
+<body class="min-h-screen bg-[#0a0a12] text-[#e8edf5]"
+  style="background-image:radial-gradient(1200px 500px at 50% -100px,rgba(168,85,247,.12),transparent 60%),radial-gradient(900px 400px at 100% 100%,rgba(99,102,241,.08),transparent 55%)">
+
+  <div class="max-w-[820px] mx-auto px-5 pt-6">
+    <a href="../index.html" class="inline-flex items-center gap-2 text-[#c4b5fd] bg-white/5 hover:bg-purple-500/15 hover:text-white rounded-xl px-3 py-2 text-sm transition-transform hover:-translate-x-0.5"><i class="fas fa-arrow-left"></i> Kembali ke Portofolio</a>
+  </div>
+
+  <div class="max-w-[820px] mx-auto px-5 py-8 pb-14">
+    <div class="text-center mb-8 anim-rise">
+      <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-purple-100 bg-purple-500/15 border border-purple-500/30 rounded-full px-4 py-1 mb-4"><span class="w-2 h-2 rounded-full bg-green-500 dot-live"></span> Bypass Link Shortener</span>
+      <h1 class="text-4xl font-extrabold grad-text mb-2">Bypass / Expand Link</h1>
+      <p class="text-[#ffffff8c] text-sm max-w-[560px] mx-auto">Deskripsikan link shortener yang sulit, langsung dapat URL asli — gratis &amp; tanpa ribet.</p>
+    </div>
+
+    <div class="relative bg-white/5 border border-white/10 rounded-2xl p-6 overflow-hidden hover:border-purple-500/35 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)] transition-all anim-rise"
+      style="background-image:linear-gradient(135deg,rgba(168,85,247,.08),transparent 40%,rgba(99,102,241,.06))">
+      <div class="mb-4">
+        <label for="urlInput" class="block text-[11px] font-semibold tracking-wider uppercase text-[#ffffff80] mb-1">URL Shortener</label>
+        <div class="flex gap-3">
+          <input id="urlInput" type="url" placeholder="https://sfl.gl/BawX" autocomplete="off" spellcheck="false"
+            class="flex-1 bg-[#0a0a12] border border-white/10 text-white px-4 py-3 rounded-xl text-sm min-w-0 focus:outline-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/15 placeholder-white/30 transition-all">
+          <button class="border-0 rounded-xl px-5 py-3 text-sm font-bold cursor-pointer flex items-center gap-2 flex-shrink-0 text-white bg-gradient-to-br from-indigo-500 to-purple-500 hover:brightness-110 active:scale-95 disabled:opacity-60 transition-all" id="bypassBtn" type="button"><i class="fas fa-link"></i> Bypass</button>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2 mb-5 justify-center">
+        <span class="text-[11px] text-[#ffffff66] self-center">Coba:</span>
+        <button class="pick text-[11px] px-3.5 py-1.5 rounded-full border border-purple-500/25 bg-purple-500/10 text-[#c4b5fd] cursor-pointer hover:bg-purple-500/25 hover:-translate-y-px transition-all" type="button" data-url="https://sfl.gl/BawX">sfl.gl</button>
+        <button class="pick text-[11px] px-3.5 py-1.5 rounded-full border border-purple-500/25 bg-purple-500/10 text-[#c4b5fd] cursor-pointer hover:bg-purple-500/25 hover:-translate-y-px transition-all" type="button" data-url="https://www.adf.ly/example">adf.ly</button>
+        <button class="pick text-[11px] px-3.5 py-1.5 rounded-full border border-purple-500/25 bg-purple-500/10 text-[#c4b5fd] cursor-pointer hover:bg-purple-500/25 hover:-translate-y-px transition-all" type="button" data-url="https://bit.ly/3example">bit.ly</button>
+        <button class="pick text-[11px] px-3.5 py-1.5 rounded-full border border-purple-500/25 bg-purple-500/10 text-[#c4b5fd] cursor-pointer hover:bg-purple-500/25 hover:-translate-y-px transition-all" type="button" data-url="https://tinyurl.com/example">tinyurl</button>
+      </div>
+
+      <div class="output" id="output">
+        <div class="olabel text-[11px] font-bold tracking-widest uppercase mb-2 flex items-center gap-2" id="outLabel"><i class="fas fa-circle-check"></i> Link berhasil di-bypass</div>
+        <div class="flex items-center gap-3 bg-black/35 border border-white/10 rounded-xl px-4 py-3 text-sm text-[#e9d5ff] break-all">
+          <div class="flex-1 min-w-0">
+            <div id="outOrig" class="text-[#ffffff73] text-xs line-through"></div>
+            <div id="outFinal" class="text-[#a7f3d0] font-semibold"></div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <span class="text-[11px] px-3 py-1 rounded-full border border-purple-500/25 bg-purple-500/10 text-[#c4b5fd]" id="outProvider">—</span>
+          <span class="text-[11px] px-3 py-1 rounded-full border border-purple-500/25 bg-purple-500/10 text-[#c4b5fd]" id="outStatus">—</span>
+        </div>
+        <div class="flex gap-3 mt-4 flex-wrap">
+          <button class="mini flex-1 min-w-[130px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold cursor-pointer border border-purple-500/30 bg-purple-500/15 text-[#e9d5ff] hover:bg-purple-500/30 transition-all" type="button" id="copyBtn"><i class="fas fa-copy"></i> Salin Link</button>
+          <button class="mini flex-1 min-w-[130px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold cursor-pointer text-white bg-gradient-to-br from-[#10b981] to-[#059669] hover:brightness-110 shadow-[0_6px_16px_rgba(16,185,129,.3)] transition-all" type="button" id="openBtn"><i class="fas fa-external-link-alt"></i> Buka Link</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 bg-purple-500/10 border border-dashed border-purple-500/40 rounded-2xl px-5 py-4 text-sm text-[#ffffffa6] anim-rise">
+      <b class="text-purple-100">💡 Supported platforms:</b>
+      <div class="flex flex-wrap gap-2 mt-2">
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Linkvertise</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Admaven</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Lootlabs</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Work.ink</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Adfoc.us</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Cuty.io</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Cety.io</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Boost.ink</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Adf.ly</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">AdShrink.it</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Rekonise.com</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Mboost.me</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Social-unlock</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Sub2get</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Pastebin</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Rentry.org</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Bit.ly</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">Tinyurl</span>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-xl bg-white/5 border border-purple-500/15 text-[#ffffff80]">dll</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center py-4 text-[#ffffff4d] text-xs">&copy; 2026 YanzXD · Bypass Link</footer>
+
+  <script>
+  (function(){
+
+    const $=id=>document.getElementById(id);
+
+    function toast(msg,ok){
+      let t=$('bp-toast');
+      if(!t){t=document.createElement('div');t.id='bp-toast';document.body.appendChild(t);}
+      t.textContent=msg;
+      t.className='show '+(ok?'ok':'err');
+      clearTimeout(t._h);
+      t._h=setTimeout(()=>{t.className='';},2600);
+    }
+
+    async function bypass(url){
+      const res=await fetch('/api/tools/bypaslink?url='+encodeURIComponent(url));
+      return await res.json();
+    }
+
+    async function run(){
+      const url=$('urlInput').value.trim();
+      if(!url){toast('URL wajib diisi','err');$('urlInput').focus();return;}
+      const btn=$('bypassBtn'), old=btn.innerHTML;
+      btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Membypass...';
+      const box=$('output'), label=$('outLabel');
+      box.classList.remove('show');
+      try{
+        const data=await bypass(url);
+        const ok=!!(data&&data.status==='success'&&data.data&&data.data.result_url);
+        box.className='output '+(ok?'ok':'err')+' show';
+        label.innerHTML='<i class="fas '+(ok?'fa-circle-check':'fa-triangle-exclamation')+'"></i> '+(ok?'Link berhasil di-bypass':(data.data&&data.data.status==='failed'?data.data.status:('Gagal memproses link')));
+        $('outOrig').textContent=url;
+        $('outFinal').textContent=ok?data.data.result_url:'—';
+        $('outProvider').textContent='Provider: '+(data.data&&data.data.provider||'—');
+        $('outStatus').textContent='Status: '+(data.data&&data.data.status||data.status||'—');
+        toast(ok?'Bypass berhasil!':'Gagal mem-bypass link',ok);
+      }catch(e){
+        box.className='output err show';
+        label.innerHTML='<i class="fas fa-triangle-exclamation"></i> Kesalahan';
+        $('outOrig').textContent=url;
+        $('outFinal').textContent='Error: '+(e.message||'');
+        $('outProvider').textContent='Provider: —';
+        $('outStatus').textContent='Status: error';
+        toast('Kesalahan jaringan','err');
+      }finally{ btn.disabled=false; btn.innerHTML=old; }
+    }
+
+    function finalUrl(){
+      return $('outFinal').textContent;
+    }
+
+    $('bypassBtn').addEventListener('click',run);
+    $('urlInput').addEventListener('keydown',e=>{if(e.key==='Enter')run();});
+    document.querySelectorAll('.pick').forEach(p=>{
+      p.addEventListener('click',()=>{$('urlInput').value=p.dataset.url;});
+    });
+    $('copyBtn').addEventListener('click',async()=>{
+      const u=finalUrl();
+      if(!u||u==='—')return toast('Belum ada hasil','err');
+      try{ await navigator.clipboard.writeText(u); toast('Link disalin!','ok'); }
+      catch(e){ toast('Gagal menyalin','err'); }
+    });
+    $('openBtn').addEventListener('click',()=>{
+      const u=finalUrl();
+      if(!u||u==='—')return toast('Belum ada hasil','err');
+      if(u.startsWith('http'))window.open(u,'_blank','noopener');
+    });
+  })();
+  </script>
+</body>
+</html>

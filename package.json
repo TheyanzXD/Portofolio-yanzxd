@@ -1,0 +1,26 @@
+{
+  "name": "portofolio",
+  "version": "3.3.2",
+  "description": "YanzXD personal portfolio - music player, Alight Motion tools, IP tracker, mini tools",
+  "main": "api/index.js",
+  "scripts": {
+    "dev": "node --watch api/index.js",
+    "start": "node api/index.js",
+
+    "cf:api:deploy": "npx wrangler deploy --config workers/api/wrangler.toml",
+    "cf:api:dev": "npx wrangler dev --config workers/api/wrangler.toml --remote",
+    "cf:pages:deploy": "npx wrangler pages deploy public/",
+    "cf:pages:dev": "npx wrangler pages dev public/",
+    "cf:setup": "npx wrangler kv:namespace create PAGE_PORTFOLIO --config workers/api/wrangler.toml",
+    "cf:secret": "npx wrangler secret put",
+    "cf:deploy": "npm run cf:api:deploy && npm run cf:pages:deploy"
+  },
+  "keywords": ["portfolio", "alight-motion", "spotify", "tempmail", "cloudflare-workers"],
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

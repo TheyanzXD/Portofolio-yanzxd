@@ -1,11 +1,25 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local backups
+*.bak
+
 # Object file
 *.o
 
 # Ada Library Information
 *.ali
-
-# Local backups
-*.bak
 
 # Local runtime data (Vercel uses /tmp instead)
 data/database.json
