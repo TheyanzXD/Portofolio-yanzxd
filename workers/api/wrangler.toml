@@ -9,7 +9,7 @@ compatibility_date = "2025-01-01"
 # KV Namespace for visitor DB and selfie metadata
 [[kv_namespaces]]
 binding = "KV"
-id = "YOUR_KV_NAMESPACE_ID"  # Run: npx wrangler kv:namespace create PAGE_PORTFOLIO
+id = "ee333fc4361b4e7993ee4a2bf0d54d7e"
 
 [vars]
 HAIDAR_API_KEY = "haidarapis-43ee0ef3199221b320f01c50"
